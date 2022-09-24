@@ -88,6 +88,7 @@ async function processClass(opts: TSG.ProcessClassOpts) {
   //TODO: Make sure to only generate extended class if there is no file already!!
   await Promise.all([generateAPIClass(opts), generateExtendedClass(opts)]);
 }
+
 async function generateAPIClass(opts: TSG.ProcessClassOpts) {
   let fileName = generateFileName({ ...opts, apiClass: true });
   let sourceFile = ts.createSourceFile(
