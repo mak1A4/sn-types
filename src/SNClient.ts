@@ -9,11 +9,11 @@ import {
   disallowedParamNames,
   optionalParamExceptions
 } from './SNClientConfigObjs';
-let cookie = process.env.COOKIE;
-let userToken = process.env.USER_TOKEN;
+let cookie = process.env.COOKIE as string;
+let userToken = process.env.USER_TOKEN as string;
 let client = axios.create({
   headers: {
-    Cookie: cookie,
+    'Cookie': cookie,
     'X-UserToken': userToken
   },
   baseURL: 'https://developer.servicenow.com'
