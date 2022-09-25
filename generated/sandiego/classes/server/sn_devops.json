@@ -1,0 +1,141 @@
+[
+  {
+    "children": [
+      {
+        "children": [
+          {
+            "children": null,
+            "dc_identifier": null,
+            "name": "Example",
+            "order": 10,
+            "release": "sandiego",
+            "sectionHeader": null,
+            "sectionTitle": null,
+            "tableHeader": null,
+            "text": "<code>var DevOpsOrchestrationCustomToolIntegrationHandler = Class.create(); \n\nDevOpsOrchestrationCustomToolIntegrationHandler.prototype = {     \n\n    handleTool: function(toolName) { \n        if (!gs.nil(toolName) &amp;&amp; toolName == 'sn_devops_custom_tool') \n            return true; \n        return false; \n    }, \n\n    getNativeIdForOrchestrationTask: function(payload) { \n        return payload.orchestrationTaskName; \n    }, \n\n    type: 'DevOpsOrchestrationCustomToolIntegrationHandler' \n\n}; </code>",
+            "text2": "In this , a script include named\n          <kbd class=\"ph userinput\">DevOpsOrchestrationCustomToolIntegrationHandler</kbd> implements the\n        methods <span class=\"keyword apiname\">handleTool</span> and\n        <span class=\"keyword apiname\">getNativeIdForOrchestrationTask</span>. The\n          <span class=\"keyword apiname\">getNativeIdForOrchestrationTask</span> method is implemented to return the\n        value of the <span class=\"keyword parmname\">orchestrationTaskName</span> parameter from the payload for POST\n        /devops/tool/{capability}.",
+            "type": "Example",
+            "variable": null
+          },
+          {
+            "children": null,
+            "dc_identifier": null,
+            "name": "String",
+            "order": 10,
+            "release": "sandiego",
+            "sectionHeader": "Returns",
+            "sectionTitle": null,
+            "tableHeader": "Type,Description",
+            "text": "Value of the <span class=\"keyword parmname\">orchestrationTaskName</span> parameter from the\n                payload.",
+            "text2": null,
+            "type": "Return",
+            "variable": null
+          },
+          {
+            "children": null,
+            "dc_identifier": null,
+            "name": "payload",
+            "order": 10,
+            "release": "sandiego",
+            "sectionHeader": "Parameters",
+            "sectionTitle": null,
+            "tableHeader": "Name,Type,Description",
+            "text": "Object",
+            "text2": "Payload containing data from the custom tool accepted by POST\n                /devops/tool/{capability}, where <span class=\"keyword parmname\">capability</span> is\n                  <kbd class=\"ph userinput\">orchestration</kbd>.",
+            "type": "Parameter",
+            "variable": null
+          }
+        ],
+        "dc_identifier": "DevOpsOrchToolIntH-getNIdOrchTask_O",
+        "hasExample": true,
+        "hasParameter": true,
+        "hasReturn": true,
+        "name": "getNativeIdForOrchestrationTask(Object payload)",
+        "order": 9900,
+        "parentId": "DevOpsOrchToolIntHandlerScopedAPI",
+        "parent_permalink": "class_namespace__scoped_devopsorchestrationtoolintegrationhandler_sn_devops__sandiego",
+        "release": "sandiego",
+        "sectionHeader": null,
+        "sectionTitle": null,
+        "tableHeader": null,
+        "text": "Returns the value of the <span class=\"keyword parmname\">orchestrationTaskName</span> parameter from the\n    payload for POST /devops/tool/{capability}.",
+        "text2": "<p>You must implement this method in a script include before calling <a class=\"xref\" href=\"https://developer.servicenow.com/go_to_api.do?ID=devops-POST-tool&amp;v=sandiego\" target=\"_blank\">DevOps - POST\n          /devops/tool/{capability}</a>.</p>",
+        "type": "Method",
+        "variable": null
+      },
+      {
+        "children": [
+          {
+            "children": null,
+            "dc_identifier": null,
+            "name": "Example",
+            "order": 10,
+            "release": "sandiego",
+            "sectionHeader": null,
+            "sectionTitle": null,
+            "tableHeader": null,
+            "text": "<code>var DevOpsOrchestrationCustomToolIntegrationHandler = Class.create(); \n\nDevOpsOrchestrationCustomToolIntegrationHandler.prototype = {     \n\n    handleTool: function(toolName) { \n        if (!gs.nil(toolName) &amp;&amp; toolName == 'sn_devops_custom_tool') \n            return true; \n        return false; \n    }, \n\n    getNativeIdForOrchestrationTask: function(payload) { \n        return payload.orchestrationTaskName; \n    }, \n\n    type: 'DevOpsOrchestrationCustomToolIntegrationHandler' \n\n}; </code>",
+            "text2": "In this , a script include named\n          <kbd class=\"ph userinput\">DevOpsOrchestrationCustomToolIntegrationHandler</kbd> implements the\n        methods <span class=\"keyword apiname\">handleTool</span> and\n        <span class=\"keyword apiname\">getNativeIdForOrchestrationTask</span>. The <span class=\"keyword apiname\">handleTool</span> method\n        is implemented to check that the passed in name is for the correct tool. Replace\n          <code class=\"ph codeph\">'sn_devops_custom_tool'</code> with the name of the tool that you're using.",
+            "type": "Example",
+            "variable": null
+          },
+          {
+            "children": null,
+            "dc_identifier": null,
+            "name": "Boolean",
+            "order": 10,
+            "release": "sandiego",
+            "sectionHeader": "Returns",
+            "sectionTitle": null,
+            "tableHeader": "Type,Description",
+            "text": "<p class=\"p\">Flag that indicates whether this handler is valid for the specified tool.</p>\n\n                <div class=\"p\">Possible values:<ul class=\"ul\" id=\"DevOpsOrchToolIntH-handleTool_S__ul_ovl_gb4_ctb\">\n                    <li class=\"li\">true: This handler can be used for the specified tool.</li>\n\n                    <li class=\"li\">false: This handler can't be used for the specified tool.</li>\n\n                  </ul>\n</div>",
+            "text2": null,
+            "type": "Return",
+            "variable": null
+          },
+          {
+            "children": null,
+            "dc_identifier": null,
+            "name": "toolName",
+            "order": 10,
+            "release": "sandiego",
+            "sectionHeader": "Parameters",
+            "sectionTitle": null,
+            "tableHeader": "Name,Type,Description",
+            "text": "String",
+            "text2": "Name of the tool. Located in the <span class=\"ph uicontrol\">Tool Name</span> field in the\n                DevOps Tool Integration [sn_devops_tool_integration] table.",
+            "type": "Parameter",
+            "variable": null
+          }
+        ],
+        "dc_identifier": "DevOpsOrchToolIntH-handleTool_S",
+        "hasExample": true,
+        "hasParameter": true,
+        "hasReturn": true,
+        "name": "handleTool(String toolName)",
+        "order": 12010,
+        "parentId": "DevOpsOrchToolIntHandlerScopedAPI",
+        "parent_permalink": "class_namespace__scoped_devopsorchestrationtoolintegrationhandler_sn_devops__sandiego",
+        "release": "sandiego",
+        "sectionHeader": null,
+        "sectionTitle": null,
+        "tableHeader": null,
+        "text": "Checks if this handler is valid for the specified tool.",
+        "text2": "<p>You must implement this method in a script include before calling <a class=\"xref\" href=\"https://developer.servicenow.com/go_to_api.do?ID=devops-POST-tool&amp;v=sandiego\" target=\"_blank\">DevOps - POST\n          /devops/tool/{capability}</a>.</p>",
+        "type": "Method",
+        "variable": null
+      }
+    ],
+    "dc_identifier": "DevOpsOrchToolIntHandlerScopedAPI",
+    "is_current": true,
+    "is_highlighted": true,
+    "level": "Class",
+    "name": "DevOpsOrchestrationToolIntegrationHandler",
+    "namespace_id": "sn_devops-namespace",
+    "release": "sandiego",
+    "text": "The <span class=\"keyword apiname\">DevOpsOrchestrationToolIntegrationHandler</span> API enables processing\n    of payloads from custom <span class=\"ph\">DevOps</span> tools.",
+    "text2": "A custom <span class=\"ph\">DevOps</span> tool is any tool that doesn't have an integration with <span class=\"ph\">DevOps</span>. See <a class=\"xref\" href=\"https://docs.servicenow.com/bundle/sandiego-devops/page/product/enterprise-dev-ops/concept/setting-up-dev-ops-conn.html\" target=\"_blank\">Setting up DevOps tools</a> for a\n      list of tools that have <span class=\"ph\">DevOps</span> integrations.<br/><br/>Use this API with <a class=\"xref\" href=\"https://developer.servicenow.com/go_to_api.do?ID=devops-POST-tool&amp;v=sandiego\" target=\"_blank\">DevOps - POST\n        /devops/tool/{capability}</a>. This API enables the processing of payloads that are used by\n      POST /devops/tool/{capability}. You must implement the methods from this API in a script\n      include before calling POST /devops/tool/{capability}.<br/><br/>This API is provided within the sn_devops namespace. For more information about <span class=\"ph\">DevOps</span>, see <a class=\"xref\" href=\"https://docs.servicenow.com/bundle/sandiego-devops/page/product/enterprise-dev-ops/concept/dev-ops-bundle-landing-page.html\" target=\"_blank\">DevOps</a>.",
+    "type": "Server Side Scoped",
+    "variable": ""
+  }
+]

@@ -5,12 +5,15 @@ import { comment } from './CommentGenerator';
 import prettier from 'prettier';
 import { SNC, TSG, Mod } from './common';
 export const NO_NAMESPACE = 'No namespace qualifier';
-const OUTPUT_DIR = '../';
 const _ = undefined;
 const printer = ts.createPrinter();
+let OUTPUT_DIR = '../generated';
 
 export function generateFiles(opts: TSG.Base) {
   let { hierarchy } = opts;
+  if (OUTPUT_DIR.indexOf(`/${opts.release}`) < 0) {
+    OUTPUT_DIR += `/${opts.release}`;
+  }
   let moduleMap = getModuleMap(hierarchy);
   Object.keys(hierarchy).map(namespaceName => {
     let namespace = hierarchy[namespaceName];
@@ -86,7 +89,8 @@ async function generateNamespaceFile(opts: TSG.ProcessNSOpts) {
 
 async function processClass(opts: TSG.ProcessClassOpts) {
   //TODO: Make sure to only generate extended class if there is no file already!!
-  await Promise.all([generateAPIClass(opts), generateExtendedClass(opts)]);
+  //await Promise.all([generateAPIClass(opts), generateExtendedClass(opts)]);
+  await generateAPIClass(opts);
 }
 
 async function generateAPIClass(opts: TSG.ProcessClassOpts) {
@@ -100,7 +104,7 @@ async function generateAPIClass(opts: TSG.ProcessClassOpts) {
   );
 
   const declareKW = ts.createModifier(ts.SyntaxKind.DeclareKeyword);
-  let importDecs = getImportsFromDeps({ ...opts, apiClass: false });
+  //let importDecs = getImportsFromDeps({ ...opts, apiClass: false });
   let classMembers = generateClassMembers(opts);
   let prefixedClassName = getPrefixedClassName({ ...opts, apiClass: true });
   let classDec = ts.createClassDeclaration(
@@ -112,7 +116,8 @@ async function generateAPIClass(opts: TSG.ProcessClassOpts) {
     classMembers
   );
   let exportDec = generateExport(prefixedClassName);
-  let statements = [...importDecs, classDec, exportDec];
+  //let statements = [...importDecs, classDec, exportDec];
+  let statements = [classDec, exportDec];
   sourceFile.statements = ts.createNodeArray(statements);
   let filePath = generateTypeFilePath({ ...opts, fileName });
   let parentDir = path.dirname(filePath);
@@ -158,7 +163,8 @@ async function generateExtendedClass(opts: TSG.ProcessClassOpts) {
 }
 
 function getBasePath(opts: TSG.Base) {
-  const { api, type } = opts;
+  let { api, type } = opts;
+  if (api === "server_legacy") api = "global";
   return path.resolve(__dirname, OUTPUT_DIR, api);
 }
 
@@ -184,7 +190,12 @@ async function writePrettyFile(pth: string, text: string) {
   if (prettierConfig) {
     config = Object.assign(config, prettierConfig);
   }
-  await fs.writeFile(pth, prettier.format(text, config));
+  try {
+    await fs.writeFile(pth, prettier.format(text, config));
+  } catch(err) {
+    let error = err as Error;
+    console.log("swallowed error | " + config.filepath, error.message);
+  }
 }
 
 function getPrefixedClassName(opts: TSG.GenClassNameOpts) {
@@ -197,12 +208,13 @@ function getPrefixedName(
   namespaceName: string,
   apiClass: boolean
 ) {
-  let prefix = namespaceName === NO_NAMESPACE ? '' : namespaceName + '_';
-  if (apiClass) {
-    return `${prefix}${getAPIClassName(className)}`;
-  } else {
-    return `${prefix}${className}`;
-  }
+  return `${className}`;
+  //let prefix = namespaceName === NO_NAMESPACE ? '' : namespaceName + '_';
+  // if (apiClass) {
+  //   return `${prefix}${getAPIClassName(className)}`;
+  // } else {
+  //   return `${prefix}${className}`;
+  // }
 }
 
 function generateFileName(opts: TSG.GenClassNameOpts) {
@@ -224,9 +236,11 @@ function getImportsFromDeps(opts: TSG.GenClassNameOpts): ts.Statement[] {
         return generateNamedImport(dep.name, `../${resolvedModule}`);
       }
     }
+    //BOOKMARK
     // if (namespaceName !== NO_NAMESPACE) {
     //   return generateImport(dep.name, `./${namespaceName}`);
     // }
+    //if (prefixedName.indexOf(".") >= 0) return ;
     return generateNamedImport(prefixedName, `./${prefixedName}`);
   });
 }
@@ -357,7 +371,7 @@ function generateMethods(methods: SNC.SNMethodMap, _class: SNC.SNClass) {
       let parameters = generateParameters(inst.params, _class);
       if (methodName !== 'constructor') {
         let returnType = inst.returns
-          ? generateType(inst.returns, _class)
+          ? ts.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword) //generateType(inst.returns, _class)
           : ts.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword);
         let genMethod = ts.createMethod(
           _,
@@ -409,25 +423,27 @@ function generateParameters(params: SNC.SNMethodParam[], _class: SNC.SNClass) {
   let lastNonOptional = findLastNonOptionalParam(params);
   return params.map((param, index) => {
     let paramType = generateType(param.type, _class);
+    let paramName = param.name;
+    if (paramName.indexOf("<object>") >= 0) paramName = "paramObj";
     if (param.optional && index < lastNonOptional) {
       paramType = ts.createUnionTypeNode([
         generateType(param.type),
         generateType('undefined')
       ]);
-      return ts.createParameter(_, _, _, param.name, _, paramType, _);
+      return ts.createParameter(_, _, _, paramName, _, paramType, _);
     } else if (param.optional && index > lastNonOptional) {
       let questionMarkToken = ts.createToken(ts.SyntaxKind.QuestionToken);
       return ts.createParameter(
         _,
         _,
         _,
-        param.name,
+        paramName,
         questionMarkToken,
         paramType,
         _
       );
     } else {
-      return ts.createParameter(_, _, _, param.name, _, paramType, _);
+      return ts.createParameter(_, _, _, paramName, _, paramType, _);
     }
   });
 }
@@ -462,6 +478,7 @@ function generateType(typeName: string, _class?: SNC.SNClass): ts.TypeNode {
     // if (typeName === _class.name) {
     //   return ts.createKeywordTypeNode(types.ThisKeyword);
     // }
-    return ts.createTypeReferenceNode(typeName, _);
+    //return ts.createTypeReferenceNode(typeName, _);
+    return ts.createKeywordTypeNode(types.AnyKeyword);
   }
 }

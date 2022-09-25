@@ -1,0 +1,121 @@
+[
+  {
+    "children": [
+      {
+        "children": [
+          {
+            "children": null,
+            "dc_identifier": null,
+            "name": "void",
+            "order": 10,
+            "release": "paris",
+            "sectionHeader": "Returns",
+            "sectionTitle": null,
+            "tableHeader": "Type,Description",
+            "text": "Method does not return a value",
+            "text2": null,
+            "type": "Return",
+            "variable": null
+          },
+          {
+            "children": null,
+            "dc_identifier": null,
+            "name": "messagingApplication",
+            "order": 10,
+            "release": "paris",
+            "sectionHeader": "Parameters",
+            "sectionTitle": null,
+            "tableHeader": "Name,Type,Description",
+            "text": "GlideRecord",
+            "text2": "Third-party application to send a message to from the Messaging Entities\n                [messaging_application] table.",
+            "type": "Parameter",
+            "variable": null
+          },
+          {
+            "children": null,
+            "dc_identifier": null,
+            "name": "Example",
+            "order": 10,
+            "release": "paris",
+            "sectionHeader": null,
+            "sectionTitle": null,
+            "tableHeader": null,
+            "text": "<code>//Send a message to a Teams user\nvar app = new GlideRecord('messaging_application');\napp.get('1f2d26527f4213007f005212bdfa9102');\n\nvar content = new GlideRecord('messaging_content');\ncontent.get('17f1f9617320130082999cfd7bf6a706');\n\nsn_notification.Messaging.send(app, '29:1ojsgDg1xuA_jZ70PDI2_6E7mn7P6Mc0wK7z0n2lblL-SaNXYVI1cR7i6qncllAGvdmhy2-kXh76IEVpUHXdz3w', content, null);\n\n//Send a message to a Slack user\nvar app = new GlideRecord('messaging_application');\napp.get('5d2e38c07f6113007f005212bdfa9160');\n\nvar content = new GlideRecord('messaging_content');\ncontent.get('69c48ba77310130082999cfd7bf6a7af');\n\nsn_notification.Messaging.send(app, 'U8P706QFQ', content, null);\n\n//Send a message to a Slack channel\nvar app = new GlideRecord('messaging_application');\napp.get('5d2e38c07f6113007f005212bdfa9160');\n\nvar content = new GlideRecord('messaging_content');\ncontent.get('69c48ba77310130082999cfd7bf6a7af');\n\nsn_notification.Messaging.send(app, 'CA6232N65', content, null);</code>",
+            "text2": null,
+            "type": "Example",
+            "variable": null
+          },
+          {
+            "children": null,
+            "dc_identifier": null,
+            "name": "recipient",
+            "order": 20,
+            "release": "paris",
+            "sectionHeader": "Parameters",
+            "sectionTitle": null,
+            "tableHeader": "Name,Type,Description",
+            "text": "String",
+            "text2": "Recipient of the message. When the instance receives an inbound message, you\n                can send a response to a Slack channel, Team, or individual user ID found in the\n                inbound payload.",
+            "type": "Parameter",
+            "variable": null
+          },
+          {
+            "children": null,
+            "dc_identifier": null,
+            "name": "messagingContent",
+            "order": 30,
+            "release": "paris",
+            "sectionHeader": "Parameters",
+            "sectionTitle": null,
+            "tableHeader": "Name,Type,Description",
+            "text": "GlideRecord",
+            "text2": "Message content to send from the Messaging Contents [messaging_content] table.",
+            "type": "Parameter",
+            "variable": null
+          },
+          {
+            "children": null,
+            "dc_identifier": null,
+            "name": "target",
+            "order": 40,
+            "release": "paris",
+            "sectionHeader": "Parameters",
+            "sectionTitle": null,
+            "tableHeader": "Name,Type,Description",
+            "text": "GlideRecord",
+            "text2": "Record used to define dynamic field values in the message. Table must match the\n                  <span class=\"ph uicontrol\">Target table</span> field in the Messaging Contents record. If the\n                Messaging Contents record does not use a target table, set the value to null.",
+            "type": "Parameter",
+            "variable": null
+          }
+        ],
+        "dc_identifier": "MessagingScoped-send_O_S_O_O",
+        "hasExample": true,
+        "hasParameter": true,
+        "hasReturn": true,
+        "name": "send(GlideRecord messagingApplication, String recipient, GlideRecord messagingContent, GlideRecord target)",
+        "order": 12510,
+        "parentId": "MessagingScopedAPI",
+        "parent_permalink": "class_namespace__scoped_messaging_sn_notification__paris",
+        "release": "paris",
+        "sectionHeader": null,
+        "sectionTitle": null,
+        "tableHeader": null,
+        "text": "Sends a custom message to a third-party application in response to a messaging event.\n    For example, you can send a custom welcome message to a Slack channel when the Now Actions\n    application installs.",
+        "text2": "<p>Use this method in an action script in the Message Actions [messaging_observer_handler]\n        table.</p>",
+        "type": "Method",
+        "variable": null
+      }
+    ],
+    "dc_identifier": "MessagingScopedAPI",
+    "is_current": true,
+    "is_highlighted": true,
+    "level": "Class",
+    "name": "Messaging",
+    "namespace_id": "sn_notification-namespace",
+    "release": "paris",
+    "text": "Perform actions in a third-party messaging application.",
+    "text2": "This class requires the Messaging Notification plugin (com.glide.notification.messaging) and\n      an integration with a third-party messaging application such as Slack or Teams. Use these\n      methods in an action script in the Message Actions [messaging_observer_handler] table.<br/><br/>Use the <span class=\"keyword parmname\">sn_notification</span> namespace to access the\n        <span class=\"keyword apiname\">Messaging</span> API.",
+    "type": "Server Side Scoped",
+    "variable": ""
+  }
+]

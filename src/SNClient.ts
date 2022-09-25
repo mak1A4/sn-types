@@ -1,4 +1,6 @@
+import fs from "fs";
 import axios, { AxiosResponse } from 'axios';
+import { decode } from 'html-entities';
 import striptags from 'striptags';
 import { SNC } from './common';
 import { NO_NAMESPACE } from './TSGenerator';
@@ -10,11 +12,14 @@ import {
   optionalParamExceptions
 } from './SNClientConfigObjs';
 let cookie = process.env.COOKIE as string;
+cookie = `glide_user_route=glide.e4d392e8d15c48e80e2a12017fdb4abf; JSESSIONID=69B516113E2BE6F7400E34FA528E7A54; BIGipServerpool_devportalprod=2659473674.35646.0000; glide_session_store=0377F64F1B0E1150B61055F72A4BCB1F`;
 let userToken = process.env.USER_TOKEN as string;
+userToken = "4377f64f1b0e1150b61055f72a4bcb1f3fc4dce642ba99a5e67224fc44220c6616e75e2b";
 let client = axios.create({
   headers: {
     'Cookie': cookie,
-    'X-UserToken': userToken
+    'X-UserToken': userToken,
+    'Accept': 'application/json'
   },
   baseURL: 'https://developer.servicenow.com'
 });
@@ -32,10 +37,7 @@ async function getRootConfig(opts: SNC.HierarchyOpts) {
         params: {
           sysparm_data: JSON.stringify({
             action: 'api.docs',
-            data: {
-              id: api,
-              release
-            }
+            data: { id: api, release }
           })
         }
       }
@@ -49,20 +51,12 @@ async function getRootConfig(opts: SNC.HierarchyOpts) {
 async function getClassInfo(classArgs: { release: string; id: string }) {
   let { release, id } = classArgs;
   try {
-    let res: AxiosResponse<SNC.SNResponse<SNC.DocsObj>> = await client.get(
-      '/devportal.do',
-      {
-        params: {
-          sysparm_data: JSON.stringify({
-            action: 'api.docs',
-            data: {
-              id,
-              release
-            }
-          })
-        }
-      }
-    );
+    let parmData = JSON.stringify({
+      action: 'api.docs',
+      data: { id, release }
+    });
+    let res: AxiosResponse<SNC.SNResponse<SNC.DocsObj>> = await client.get('/devportal.do?sysparm_data=' + parmData);
+    console.log('/devportal.do?sysparm_data=' + parmData);
     return res.data.result.data.class_data;
   } catch (e) {
     throw e;
@@ -76,6 +70,11 @@ function wait() {
 }
 
 export async function getAPIHierarchy(opts: SNC.HierarchyOpts) {
+  // let hierarchyPath = `./generated/${opts.api}_hierarchy.json`;
+  // if (fs.existsSync(hierarchyPath)) {
+  //   const hierarchyJSON = fs.readFileSync(hierarchyPath, "utf8");
+  //   return JSON.parse(hierarchyJSON) as SNC.SNApiHierarchy;
+  // }
   let hierarchy: SNC.SNApiHierarchy = {};
   let root = await getRootConfig(opts);
   let { navbar } = root;
@@ -106,6 +105,7 @@ export async function getAPIHierarchy(opts: SNC.HierarchyOpts) {
         hierarchy[nameSpaceName] = await namespacePromises[nameSpaceName];
       }
     }
+    // fs.writeFileSync(hierarchyPath, JSON.stringify(hierarchy, null, 2));
     return hierarchy;
   } catch (e) {
     console.error(navbarItems);
@@ -123,14 +123,17 @@ function isLegacy(opts: SNC.HierarchyOpts) {
 
 async function processLegacyNavbar(opts: SNC.LegacyNavBarOpts) {
   let { navbar, release } = opts;
-  let classPromises: Promise<SNC.ClassData>[] = [];
-  for (let _class of navbar) {
-    classPromises.push(
-      getClassInfo({ release, id: _class.dc_identifier || '' })
-    );
-    await wait();
+  const filepath = `./generated/${release}/classes/global.json`;
+  let classResults: SNC.ClassData[] = [];
+  if (fs.existsSync(filepath)) classResults = JSON.parse(fs.readFileSync(filepath, "utf8"));
+  else {
+    for (let _class of navbar) {
+      let res = await getClassInfo({ release, id: _class.dc_identifier || '' });
+      classResults.push(res);
+      await wait();
+    }
   }
-  let classResults = await Promise.all(classPromises);
+  fs.writeFileSync(filepath, JSON.stringify(classResults, null, 2));
   let classes = classResults.map(_class => {
     return processClass({
       ...opts,
@@ -149,15 +152,19 @@ async function processLegacyNavbar(opts: SNC.LegacyNavBarOpts) {
 async function processClientNavBar(opts: SNC.ClientNavBarOpts) {
   let hierarchy: SNC.SNApiHierarchy = {};
   let { navbar, release } = opts;
+  const filepath = `./generated/${release}/classes/client.json`;
   let clientSpace = navbar.client as SNC.ClassData[];
-  let classPromises: Promise<SNC.ClassData>[] = [];
-  for (let _class of clientSpace) {
-    classPromises.push(
-      getClassInfo({ release, id: _class.dc_identifier || '' })
-    );
-    await wait();
+  let classResults: SNC.ClassData[] = [];
+  if (fs.existsSync(filepath)) classResults = JSON.parse(fs.readFileSync(filepath, "utf8"));
+  else {
+    for (let _class of clientSpace) {
+      if (_class.dc_identifier === "apiAPI") continue;
+      let res = await getClassInfo({ release, id: _class.dc_identifier || '' });
+      classResults.push(res);
+      await wait();
+    }
   }
-  let classResults = await Promise.all(classPromises);
+  fs.writeFileSync(filepath, JSON.stringify(classResults, null, 2));
   let classes = classResults.map(_class => {
     return processClass({
       ...opts,
@@ -183,12 +190,21 @@ function getNamespaceName(namespace: SNC.NavbarItem) {
 
 async function processNamespace(opts: SNC.NSOpts): Promise<SNC.SNApiNamespace> {
   const { namespace, release } = opts;
-  let classes: SNC.SNClass[] = [];
-  let classPromises = [];
-  for (let item of namespace.items) {
-    classPromises.push(getClassInfo({ release, id: item.dc_identifier || '' }));
+  let filepath = `./generated/${release}/classes/server/${getNamespaceName(namespace)}.json`;
+  filepath = filepath.replace("No namespace qualifier", "@no_namespace_qualifier");
+  let classResults: SNC.ClassData[] = [];
+  if (fs.existsSync(filepath)) {
+    console.log(`Reading ${filepath}`);
+    classResults = JSON.parse(fs.readFileSync(filepath, "utf8"));
+  } else {
+    for (let item of namespace.items) {
+      let res = await getClassInfo({ release, id: item.dc_identifier || '' });
+      classResults.push(res);
+      await wait();
+    }
   }
-  let classResults = await Promise.all(classPromises);
+  fs.writeFileSync(filepath, JSON.stringify(classResults, null, 2));
+  let classes: SNC.SNClass[] = [];
   classes = classResults.map(_class => {
     return processClass({ ...opts, _class });
   });
@@ -201,7 +217,8 @@ function processClass(opts: SNC.ProcessClassOpts) {
   let properties = getProperties(_class);
   let dependencies = getDependencies({ ...opts, methods, _class, properties });
   let classObj: SNC.SNClass = {
-    name: _class.name.split(' ')[0],
+    //name: _class.name.split(' ')[0].replace(/[^a-zA-Z0-9]/g, ''),
+    name: _class.name.split(' ')[0].replace(/-/g, ''),
     methods,
     dependencies,
     properties
@@ -319,8 +336,9 @@ function processMethod(opts: SNC.ProcessMethodOpts): SNC.SNMethodInstance {
         });
       }
       if (child.type === 'Return') {
-        let stripped = striptags(child.name, ['<String>', '<GlideHTTPHeader>']);
-        returns = parseType(stripped);
+        const name = decode(child.name);
+        let stripped = striptags(name, ['<String>', '<Object>', '<GlideHTTPHeader>']);
+        returns = parseType(stripped);//BOOKMARK
       }
     }
   }
@@ -404,5 +422,5 @@ function sanitizeParamName(name: string) {
 }
 
 function sanitizeMethodName(name: string) {
-  return name.split('(')[0];
+  return name.split('(')[0].replace(/\s/g, '');
 }

@@ -1,0 +1,121 @@
+[
+  {
+    "children": [
+      {
+        "children": [
+          {
+            "children": null,
+            "dc_identifier": null,
+            "name": "None",
+            "order": 10,
+            "release": "tokyo",
+            "sectionHeader": "Returns",
+            "sectionTitle": null,
+            "tableHeader": "Type,Description",
+            "text": " ",
+            "text2": null,
+            "type": "Return",
+            "variable": null
+          },
+          {
+            "children": null,
+            "dc_identifier": null,
+            "name": "topic",
+            "order": 10,
+            "release": "tokyo",
+            "sectionHeader": "Parameters",
+            "sectionTitle": null,
+            "tableHeader": "Name,Type,Description",
+            "text": "String",
+            "text2": "Name of the topic to send the message to. A topic stores messages of the same\n                type. For example, a topic named Payments might store messages about recent\n                payments.",
+            "type": "Parameter",
+            "variable": null
+          },
+          {
+            "children": null,
+            "dc_identifier": null,
+            "name": "Example",
+            "order": 10,
+            "release": "tokyo",
+            "sectionHeader": null,
+            "sectionTitle": null,
+            "tableHeader": null,
+            "text": "<code>var message = {\n  'number': current.number.toString(),\n  'short_description': current.short_description.toString(),\n  'caller_id': current.caller_id.getDisplayValue(),\n  'priority': current.priority.toString(),\n  'state': current.state.toString()\n};\n\nvar producer = new sn_ih_kafka.Producer();\nproducer.send('changed_incidents', current.number.toString(), JSON.stringify(message), false);</code>",
+            "text2": "This  shows how to send changed incident information to the changed_incidents Kafka\n        topic.",
+            "type": "Example",
+            "variable": null
+          },
+          {
+            "children": null,
+            "dc_identifier": null,
+            "name": "key",
+            "order": 20,
+            "release": "tokyo",
+            "sectionHeader": "Parameters",
+            "sectionTitle": null,
+            "tableHeader": "Name,Type,Description",
+            "text": "String",
+            "text2": "Name of the key for a specific partition. Topics can be partitioned. Messages\n                with the same key are stored in the same partition. For example, payment messages\n                with a key of June would all be stored in the same partition of the Payments\n                topic.",
+            "type": "Parameter",
+            "variable": null
+          },
+          {
+            "children": null,
+            "dc_identifier": null,
+            "name": "message",
+            "order": 30,
+            "release": "tokyo",
+            "sectionHeader": "Parameters",
+            "sectionTitle": null,
+            "tableHeader": "Name,Type,Description",
+            "text": "String",
+            "text2": "Message text.",
+            "type": "Parameter",
+            "variable": null
+          },
+          {
+            "children": null,
+            "dc_identifier": null,
+            "name": "isSync",
+            "order": 40,
+            "release": "tokyo",
+            "sectionHeader": "Parameters",
+            "sectionTitle": null,
+            "tableHeader": "Name,Type,Description",
+            "text": "Boolean",
+            "text2": "Flag that indicates whether to require the flow to wait for the step to\n                complete before continuing.<div class=\"p\">Valid values:<ul class=\"ul\">\n                    <li class=\"li\">true: Wait for the step to complete before continuing the associated\n                      flow.</li>\n\n                    <li class=\"li\">false: Do not wait for the step to complete before continuing the associated\n                      flow.</li>\n\n                  </ul>\n</div>",
+            "type": "Parameter",
+            "variable": null
+          }
+        ],
+        "dc_identifier": "Producer-send-S_S_S_B",
+        "hasExample": true,
+        "hasParameter": true,
+        "hasReturn": true,
+        "name": "send(String topic, String key, String message, Boolean isSync)",
+        "order": 14960,
+        "parentId": "ProducerScopedAPI",
+        "parent_permalink": "class_namespace__scoped_producer_sn_ih_kafka__tokyo",
+        "release": "tokyo",
+        "sectionHeader": null,
+        "sectionTitle": null,
+        "tableHeader": null,
+        "text": "Sends the specified message to the specified Kafka topic.",
+        "text2": null,
+        "type": "Method",
+        "variable": null
+      }
+    ],
+    "dc_identifier": "ProducerScopedAPI",
+    "is_current": true,
+    "is_highlighted": true,
+    "level": "Class",
+    "name": "Producer",
+    "namespace_id": "sn_ih_kafka",
+    "release": "tokyo",
+    "text": "The <span class=\"keyword apiname\">Producer</span> API provides methods that enable you to push data from\n    a <span class=\"ph\">ServiceNow</span> instance to a Kafka topic.",
+    "text2": "<div class=\"note note\"><span class=\"notetitle\">Note:</span> This API is only supported for customers who have successfully set up Hermes on their\n        instance. Hermes is an infrastructure that enables Customer Kafka to communicate with <span class=\"ph\">ServiceNow</span> Kafka.</div>\nThis API requires the <span class=\"ph\">ServiceNow</span>\n      <span class=\"ph\">Integration Hub</span> Action Step - Kafka Producer plugin\n      (com.glide.hub.action_step.kafka) and is provided within the <span class=\"keyword parmname\">sn_ih_kafka</span>\n      namespace.",
+    "type": "Server Side Scoped",
+    "variable": ""
+  }
+]

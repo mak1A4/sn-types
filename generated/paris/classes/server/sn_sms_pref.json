@@ -1,0 +1,111 @@
+[
+  {
+    "children": [
+      {
+        "children": [
+          {
+            "children": null,
+            "dc_identifier": null,
+            "name": "provider",
+            "order": 10,
+            "release": "paris",
+            "sectionHeader": "Parameters",
+            "sectionTitle": null,
+            "tableHeader": "Name,Type,Description",
+            "text": "String",
+            "text2": "Name of the telephony service provider.",
+            "type": "Parameter",
+            "variable": null
+          },
+          {
+            "children": null,
+            "dc_identifier": null,
+            "name": "Example",
+            "order": 10,
+            "release": "paris",
+            "sectionHeader": null,
+            "sectionTitle": null,
+            "tableHeader": null,
+            "text": "<code>var handler = new sn_sms_pref.SMSPreferenceHandler('TwilioDirect'); // Pass the provider name\nvar config = handler.getConfig();</code>",
+            "text2": null,
+            "type": "Example",
+            "variable": null
+          }
+        ],
+        "dc_identifier": "SPH-SMSPreferenceHandler_S",
+        "hasExample": true,
+        "hasParameter": true,
+        "name": "SMSPreferenceHandler(String provider)",
+        "order": 2460,
+        "parentId": "SMSPreferenceHandlerAPI",
+        "parent_permalink": "class_namespace__scoped_smspreferencehandler___scoped__global_sn_sms_pref__paris",
+        "release": "paris",
+        "sectionHeader": null,
+        "sectionTitle": null,
+        "tableHeader": null,
+        "text": "Instantiates the SMSPreferenceHandler script include object.",
+        "text2": null,
+        "type": "Constructor",
+        "variable": null
+      },
+      {
+        "children": [
+          {
+            "children": null,
+            "dc_identifier": null,
+            "name": "Example",
+            "order": 10,
+            "release": "paris",
+            "sectionHeader": null,
+            "sectionTitle": null,
+            "tableHeader": null,
+            "text": "<code>var handler = new sn_sms_pref.SMSPreferenceHandler('TwilioDirect'); // Pass the provider name\nvar config = handler.getConfig();</code>",
+            "text2": null,
+            "type": "Example",
+            "variable": null
+          },
+          {
+            "children": null,
+            "dc_identifier": null,
+            "name": "GlideRecord",
+            "order": 10,
+            "release": "paris",
+            "sectionHeader": "Returns",
+            "sectionTitle": null,
+            "tableHeader": "Type,Description",
+            "text": "Preference configuration record for the current telephony service provider. If\n                no record exists, then null.",
+            "text2": null,
+            "type": "Return",
+            "variable": null
+          }
+        ],
+        "dc_identifier": "SPH-getConfig",
+        "hasExample": true,
+        "hasReturn": true,
+        "name": "getConfig()",
+        "order": 6120,
+        "parentId": "SMSPreferenceHandlerAPI",
+        "parent_permalink": "class_namespace__scoped_smspreferencehandler___scoped__global_sn_sms_pref__paris",
+        "release": "paris",
+        "sectionHeader": null,
+        "sectionTitle": null,
+        "tableHeader": null,
+        "text": "Returns the preferences configuration record for the current telephony service\n    provider.",
+        "text2": "<p>The method queries all preference configuration records from the SMS Preference\n        Configuration [sn_sms_pref_configuration] table for the current telephony service provider,\n        sorts the results by the Order field (lowest to highest), and then returns the first\n        record.</p>",
+        "type": "Method",
+        "variable": null
+      }
+    ],
+    "dc_identifier": "SMSPreferenceHandlerAPI",
+    "is_current": true,
+    "is_highlighted": true,
+    "level": "Class",
+    "name": "SMSPreferenceHandler - Scoped, Global",
+    "namespace_id": "sn_sms_pref-namespace",
+    "release": "paris",
+    "text": "The <span class=\"keyword apiname\">SMSPreferenceHandler</span> API provides methods to manage SMS\n    configurations.",
+    "text2": "This API is implemented as the script include SMSPreferenceHandlerSNC and resides in the\n        <span class=\"keyword parmname\">sn_sms_pref</span> namespace. To use this API you must install the Notify\n      plugin (com.snc.notify) which requires a separate subscription. You can activate this plugin\n      if you have the admin role.",
+    "type": "Server Side Scoped",
+    "variable": ""
+  }
+]

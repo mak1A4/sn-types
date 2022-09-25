@@ -1,0 +1,95 @@
+[
+  {
+    "children": [
+      {
+        "children": [
+          {
+            "children": null,
+            "dc_identifier": null,
+            "name": "voiceConversationJson",
+            "order": 10,
+            "release": "sandiego",
+            "sectionHeader": "Parameters",
+            "sectionTitle": null,
+            "tableHeader": "Name,Type,Description",
+            "text": "String",
+            "text2": "JSON that represents the voice conversation to store. This JSON is sent by\n                another <span class=\"ph\">ServiceNow</span> plugin, such as OpenFrame. Third-party\n                vendors, such as Amazon, send the JSON to the plugin. The associated plugin parses\n                out the voice conversation and sends the JSON in the required format to <span class=\"ph\">Virtual Agent</span>.<p class=\"p\">For example, the following is an example of an\n                  AmazonConnect conversation:</p>\n<pre class=\"pre codeblock\"><code>{ \n  \"interactionId\":\"bgr09b5a-7308-47b2-jy97-737de9f45d19\", \n  \"source\":\"AmazonConnect\", \n  \"conversationStarted\":\"2021-08-06 15:07:51\", \n  \"transcript\":[ \n    { \n      \"isEvent\":\"False\", \n      \"isInternalMessage\":\"False\", \n      \"beginOffsetMillis\":2650, \n      \"content\":\"This is John. How can I help you? Yeah,\", \n      \"endOffsetMillis\":9380, \n      \"id\":\"954c4edc-31a8-48b0-8f6e-7fa0c4ca00a8\", \n      \"participantId\":\"AGENT\", \n      \"Sentiment\":\"NEUTRAL\", \n      \"loudnessScore\":\"null,null\", \n      \"attributes\": [{ \n        \"key\":\"key1\", \n        \"value\":\"value1\" \n      },{ \n        \"key\":\"key2\", \n        \"value\":\"value2\" \n      }] \n    }, \n    { \n       \"isEvent\":\"False\", \n      \"isInternalMessage\":\"False\", \n      \"beginOffsetMillis\":9120, \n      \"content\":\"Uh, yes, John. I'm a little very frustrated right now.\", \n      \"endOffsetMillis\":22900, \n      \"id\":\"18bcf19c-4a9b-4af1-9bd7-7bfb5ba53b9f\", \n      \"participantId\":\"CUSTOMER\", \n      \"sentiment\":\"NEGATIVE\", \n      \"loudnessScore\":\"null,null\", \n      \"attributes\": [{ \n        \"key\":\"key1\", \n        \"value\":\"value1\" \n      },{ \n        \"key\":\"key2\", \n        \"value\":\"value2\" \n      } ] \n    }, \n    { \n      \"isEvent\":\"True\", \n      \"isInternalMessage\":\"True\", \n      \"beginOffsetMillis\":23590, \n      \"content\":\"Agent asked for help in chat\", \n      \"endOffsetMillis\":30610, \n      \"id\":\"ab09b3b6-23fd-4e41-be05-6b2b53c19059\", \n      \"participantId\":\"CUSTOMER\", \n      \"sentiment\":\"NEUTRAL\", \n      \"loudnessScore\":\"null,null,null,null\", \n      \"attributes\": [] \n    } \n  ] \n}</code></pre>",
+            "type": "Parameter",
+            "variable": null
+          },
+          {
+            "children": [
+              {
+                "children": null,
+                "dc_identifier": null,
+                "name": "Output",
+                "order": 10,
+                "release": "sandiego",
+                "sectionHeader": null,
+                "sectionTitle": null,
+                "tableHeader": null,
+                "text": "Voice conversation transcript has been successfully saved. Conversation id: 9c573169c611228700193229fff72400",
+                "text2": null,
+                "type": "Output",
+                "variable": null
+              }
+            ],
+            "dc_identifier": null,
+            "name": "Example",
+            "order": 10,
+            "release": "sandiego",
+            "sectionHeader": null,
+            "sectionTitle": null,
+            "tableHeader": null,
+            "text": "<code>var voiceConversationJson = \"{\\n\" +\n  \"   \\\"interactionId\\\":\\\"e67a6c30c7233010967a34c91dc26068\\\",\\n\" +\n  \"   \\\"source\\\":\\\"AmazonConnect\\\",\\n\" +\n  \"   \\\"conversationStarted\\\":\\\"2021-08-06 15:07:51\\\",\\n\" +\n  \"   \\\"transcript\\\":[\\n\" +\n  \"      {\\n\" +\n  \"         \\\"isEvent\\\":\\\"False\\\",\\n\" +\n  \"         \\\"isInternalMessage\\\":\\\"False\\\",\\n\" +\n  \"         \\\"beginOffsetMillis\\\":2650,\\n\" +\n  \"         \\\"content\\\":\\\"This is John. How can I help you? Yeah,\\\",\\n\" +\n  \"         \\\"endOffsetMillis\\\":9380,\\n\" +\n  \"         \\\"id\\\":\\\"954c4edc-31a8-48b0-8f6e-7fa0c4ca00a8\\\",\\n\" +\n  \"         \\\"participantId\\\":\\\"AGENT\\\",\\n\" +\n  \"         \\\"sentiment\\\":\\\"NEUTRAL\\\",\\n\" +\n  \"         \\\"loudnessScore\\\":\\\"null,null\\\",\\n\" +\n  \"         \\\"attributes\\\": [{\\n\" +\n  \"           \\\"key\\\":\\\"key1\\\",\\n\" +\n  \"           \\\"value\\\":\\\"value1\\\"\\n\" +\n  \"         },{\\n\" +\n  \"           \\\"key\\\":\\\"key2\\\",\\n\" +\n  \"           \\\"value\\\":\\\"value2\\\"\\n\" +\n  \"         }\\n\" +\n  \" ]\\n\" +\n  \"      },\\n\" +\n  \"      {\\n\" +\n  \"         \\\"isEvent\\\":\\\"False\\\",\\n\" +\n  \"         \\\"isInternalMessage\\\":\\\"False\\\",\\n\" +\n  \"         \\\"beginOffsetMillis\\\":9120,\\n\" +\n  \"         \\\"content\\\":\\\"Uh, yes, John. I'm a little very frustrated right now.\\\",\\n\" +\n  \"         \\\"endOffsetMillis\\\":22900,\\n\" +\n  \"         \\\"id\\\":\\\"18bcf19c-4a9b-4af1-9bd7-7bfb5ba53b9f\\\",\\n\" +\n  \"         \\\"participantId\\\":\\\"CUSTOMER\\\",\\n\" +\n  \"         \\\"sentiment\\\":\\\"NEGATIVE\\\",\\n\" +\n  \"         \\\"loudnessScore\\\":\\\"null,null\\\",\\n\" +\n  \"         \\\"attributes\\\": [{\\n\" +\n  \"           \\\"key\\\":\\\"key1\\\",\\n\" +\n  \"           \\\"value\\\":\\\"value1\\\"\\n\" +\n  \"         },{\\n\" +\n  \"           \\\"key\\\":\\\"key2\\\",\\n\" +\n  \"           \\\"value\\\":\\\"value2\\\"\\n\" +\n  \"         }\\n\" +\n  \" ]\\n\" +\n  \"      },\\n\" +\n  \"      {\\n\" +\n  \"         \\\"isEvent\\\":\\\"False\\\",\\n\" +\n  \"         \\\"isInternalMessage\\\":\\\"False\\\",\\n\" +\n  \"         \\\"beginOffsetMillis\\\":9120,\\n\" +\n  \"         \\\"content\\\":\\\"I am sorry to hear that\\\",\\n\" +\n  \"         \\\"endOffsetMillis\\\":22900,\\n\" +\n  \"         \\\"id\\\":\\\"18bcf19c-4a9b-4af1-9bd7-7bfb5ba53b9f\\\",\\n\" +\n  \"         \\\"participantId\\\":\\\"AGENT\\\",\\n\" +\n  \"         \\\"sentiment\\\":\\\"NEGATIVE\\\",\\n\" +\n  \"         \\\"loudnessScore\\\":\\\"null,null\\\",\\n\" +\n  \"         \\\"attributes\\\": [{\\n\" +\n  \"           \\\"key\\\":\\\"key1\\\",\\n\" +\n  \"           \\\"value\\\":\\\"value1\\\"\\n\" +\n  \"         },{\\n\" +\n  \"           \\\"key\\\":\\\"key2\\\",\\n\" +\n  \"           \\\"value\\\":\\\"value2\\\"\\n\" +\n  \"         }\\n\" +\n  \" ]\\n\" +\n  \"      },\\n\" +\n  \"      {\\n\" +\n  \"         \\\"isEvent\\\":\\\"false\\\",\\n\" +\n  \"         \\\"isInternalMessage\\\":\\\"false\\\",\\n\" +\n  \"         \\\"beginOffsetMillis\\\":23590,\\n\" +\n  \"         \\\"content\\\":\\\"I am having problem with my computer\\\",\\n\" +\n  \"         \\\"endOffsetMillis\\\":30610,\\n\" +\n  \"         \\\"id\\\":\\\"ab09b3b6-23fd-4e41-be05-6b2b53c19059\\\",\\n\" +\n  \"         \\\"participantId\\\":\\\"CUSTOMER\\\",\\n\" +\n  \"         \\\"sentiment\\\":\\\"NEUTRAL\\\",\\n\" +\n  \"  \\\"loudnessScore\\\":\\\"null,null,null,null\\\",\\n\" +\n  \"         \\\"attributes\\\": [\\n\" +\n  \"  ]\\n\" +\n  \"      },\\n\" +\n  \"      {\\n\" +\n  \"         \\\"isEvent\\\":\\\"True\\\",\\n\" +\n  \"         \\\"isInternalMessage\\\":\\\"True\\\",\\n\" +\n  \"         \\\"beginOffsetMillis\\\":23590,\\n\" +\n  \"         \\\"content\\\":\\\"Agent asked for help in chat\\\",\\n\" +\n  \"         \\\"endOffsetMillis\\\":30610,\\n\" +\n  \"         \\\"id\\\":\\\"ab09b3b6-23fd-4e41-be05-6b2b53c19059\\\",\\n\" +\n  \"         \\\"participantId\\\":\\\"CUSTOMER\\\",\\n\" +\n  \"         \\\"sentiment\\\":\\\"NEUTRAL\\\",\\n\" +\n  \"  \\\"loudnessScore\\\":\\\"null,null,null,null\\\",\\n\" +\n  \"         \\\"attributes\\\": [\\n\" +\n  \"  ]\\n\" +\n  \"      }\\n\" +\n  \"   ]\\n\" +\n  \"}\\n\";\nvar result = sn_cs.VoiceTranscriptObject.saveVoiceConversationTranscript(voiceConversationJson);\ngs.log(result);</code>",
+            "text2": "This  shows how to call the <span class=\"keyword apiname\">saveVoiceConversationTranscript()</span>\n        method to save an AmazonConnect transcript.",
+            "type": "Example",
+            "variable": null
+          },
+          {
+            "children": null,
+            "dc_identifier": null,
+            "name": "String",
+            "order": 10,
+            "release": "sandiego",
+            "sectionHeader": "Returns",
+            "sectionTitle": null,
+            "tableHeader": "Type,Description",
+            "text": "Results of the method call.<div class=\"p\">Possible return results:<ul class=\"ul\" id=\"VTO-saveVoiceConversationTranscript_S__ul_a1w_y3f_qrb\">\n                    <li class=\"li\">Voice conversation transcript has been successfully saved. Conversation id:\n                        <code class=\"ph codeph\">&lt;transcript_record_sys_id&gt;</code></li>\n\n                    <li class=\"li\">Voice conversation transcript could not be saved. Detail error:\n                        <code class=\"ph codeph\">&lt;error details&gt;</code></li>\n\n                    <li class=\"li\">ERROR: InteractionId is missing in the request.</li>\n\n                    <li class=\"li\">ERROR: Interaction specified in the request has already been processed.</li>\n\n                  </ul>\n</div>",
+            "text2": null,
+            "type": "Return",
+            "variable": null
+          }
+        ],
+        "dc_identifier": "VTO-saveVoiceConversationTranscript_S",
+        "hasExample": true,
+        "hasOutput": true,
+        "hasParameter": true,
+        "hasReturn": true,
+        "name": "saveVoiceConversationTranscript(String voiceConversationJson)",
+        "order": 14340,
+        "parentId": "VoiceTranscriptObjectScopedAPI",
+        "parent_permalink": "class_namespace__scoped_voicetranscriptobject_sn_cs__sandiego",
+        "release": "sandiego",
+        "sectionHeader": null,
+        "sectionTitle": null,
+        "tableHeader": null,
+        "text": "Saves third-party voice conversation transcript data to tables within a <span class=\"ph\">ServiceNow</span> instance that is then accessible through <span class=\"ph\">Customer Service Management (CSM)</span>.",
+        "text2": "<p>These voice conversations are typically generated using third-party vendor software.\n        Currently, only AmazonConnect is supported. This method parses the passed JSON and saves the\n        data into the Conversation [sys_cs_conversation], Conversation Message [sys_cs_message], and\n        Voice Transcript Conversation Message [sys_cs_message_voice_transcript] tables within the\n          <span class=\"ph\">ServiceNow</span> instance. CSM accesses the information in these tables to\n        display the voice conversation transcripts.</p>",
+        "type": "Method",
+        "variable": null
+      }
+    ],
+    "dc_identifier": "VoiceTranscriptObjectScopedAPI",
+    "is_current": true,
+    "is_highlighted": true,
+    "level": "Class",
+    "name": "VoiceTranscriptObject",
+    "namespace_id": "sn_cs-namespace",
+    "release": "sandiego",
+    "text": "The <span class=\"keyword apiname\">VoiceTranscriptObject</span> scriptable API provides the ability to\n    save third-party voice conversation transcript data to a table within a <span class=\"ph\">ServiceNow</span> instance.",
+    "text2": "<p class=\"p\">When using the <code class=\"ph codeph\">VoiceTranscriptObject</code> class, use the\n          <span class=\"keyword parmname\">sn_cs</span> namespace identifier.</p>",
+    "type": "Server Side Scoped",
+    "variable": ""
+  }
+]

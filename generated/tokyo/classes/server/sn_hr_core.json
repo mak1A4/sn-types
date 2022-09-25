@@ -1,0 +1,203 @@
+[
+  {
+    "children": [
+      {
+        "children": null,
+        "dc_identifier": "hrU-hr_Utils",
+        "name": "hr_Utils()",
+        "order": 3070,
+        "parentId": "hr_UtilsAPI",
+        "parent_permalink": "class_namespace__scoped_hr_utils_sn_hr_core__tokyo",
+        "release": "tokyo",
+        "sectionHeader": null,
+        "sectionTitle": null,
+        "tableHeader": null,
+        "text": "Instantiates an instance of the hr_Utils class.",
+        "text2": null,
+        "type": "Constructor",
+        "variable": null
+      },
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "children": null,
+                "dc_identifier": null,
+                "name": "Output",
+                "order": 10,
+                "release": "tokyo",
+                "sectionHeader": null,
+                "sectionTitle": null,
+                "tableHeader": null,
+                "text": "Result: eb3c69463cd63740964fb8b1ce04f9ae",
+                "text2": null,
+                "type": "Output",
+                "variable": null
+              }
+            ],
+            "dc_identifier": null,
+            "name": "Example",
+            "order": 10,
+            "release": "tokyo",
+            "sectionHeader": null,
+            "sectionTitle": null,
+            "tableHeader": null,
+            "text": "<code>var result = new sn_hr_core.hr_Utils().getPrimaryJob('5137153cc611227c000bbd1bd8cd2007');\ngs.info('Result: ' + result);</code>",
+            "text2": null,
+            "type": "Example",
+            "variable": null
+          },
+          {
+            "children": null,
+            "dc_identifier": null,
+            "name": "String",
+            "order": 10,
+            "release": "tokyo",
+            "sectionHeader": "Returns",
+            "sectionTitle": null,
+            "tableHeader": "Type,Description",
+            "text": "If present and active, Sys ID of the primary job from the Jobs [sn_hr_core_job]\n                table, null otherwise.",
+            "text2": null,
+            "type": "Return",
+            "variable": null
+          },
+          {
+            "children": null,
+            "dc_identifier": null,
+            "name": "userID",
+            "order": 10,
+            "release": "tokyo",
+            "sectionHeader": "Parameters",
+            "sectionTitle": null,
+            "tableHeader": "Name,Type,Description",
+            "text": "String",
+            "text2": "Sys ID of the HR user from the User [sys_user] table assigned an active or\n                future job in which Primary is true.",
+            "type": "Parameter",
+            "variable": null
+          }
+        ],
+        "dc_identifier": "hrU-getPrimaryJob_S",
+        "hasExample": true,
+        "hasOutput": true,
+        "hasParameter": true,
+        "hasReturn": true,
+        "name": "getPrimaryJob(String userId)",
+        "order": 10530,
+        "parentId": "hr_UtilsAPI",
+        "parent_permalink": "class_namespace__scoped_hr_utils_sn_hr_core__tokyo",
+        "release": "tokyo",
+        "sectionHeader": null,
+        "sectionTitle": null,
+        "tableHeader": null,
+        "text": "Gets the Sys ID of the active primary job for a provided user.",
+        "text2": null,
+        "type": "Method",
+        "variable": null
+      },
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "children": null,
+                "dc_identifier": null,
+                "name": "Output",
+                "order": 10,
+                "release": "tokyo",
+                "sectionHeader": null,
+                "sectionTitle": null,
+                "tableHeader": null,
+                "text": "Result: {&quot;message&quot;:&quot;Switched primary job for the user successfully&quot;,&quot;status&quot;:&quot;success&quot;}",
+                "text2": null,
+                "type": "Output",
+                "variable": null
+              }
+            ],
+            "dc_identifier": null,
+            "name": "Example",
+            "order": 10,
+            "release": "tokyo",
+            "sectionHeader": null,
+            "sectionTitle": null,
+            "tableHeader": null,
+            "text": "<code>var result = new sn_hr_core.hr_Utils().switchPrimaryJob('5137153cc611227c000bbd1bd8cd2007', 'bc884e723c0ebf00964fb8b1ce04f9d7');\ngs.info('Result: ' + result);</code>",
+            "text2": null,
+            "type": "Example",
+            "variable": null
+          },
+          {
+            "children": null,
+            "dc_identifier": null,
+            "name": "String",
+            "order": 10,
+            "release": "tokyo",
+            "sectionHeader": "Returns",
+            "sectionTitle": null,
+            "tableHeader": "Type,Description",
+            "text": "Encoded JSON with message and status, error otherwise.",
+            "text2": null,
+            "type": "Return",
+            "variable": null
+          },
+          {
+            "children": null,
+            "dc_identifier": null,
+            "name": "userId",
+            "order": 10,
+            "release": "tokyo",
+            "sectionHeader": "Parameters",
+            "sectionTitle": null,
+            "tableHeader": "Name,Type,Description",
+            "text": "String",
+            "text2": "Sys ID of HR user from the Users [sys_user] table.",
+            "type": "Parameter",
+            "variable": null
+          },
+          {
+            "children": null,
+            "dc_identifier": null,
+            "name": "jobId",
+            "order": 20,
+            "release": "tokyo",
+            "sectionHeader": "Parameters",
+            "sectionTitle": null,
+            "tableHeader": "Name,Type,Description",
+            "text": "String",
+            "text2": "Job Sys ID from the Jobs [sn_hr_core_job] table.",
+            "type": "Parameter",
+            "variable": null
+          }
+        ],
+        "dc_identifier": "hrU-switchPrimaryJob_S_S",
+        "hasExample": true,
+        "hasOutput": true,
+        "hasParameter": true,
+        "hasReturn": true,
+        "name": "switchPrimaryJob(String userId String jobId)",
+        "order": 18170,
+        "parentId": "hr_UtilsAPI",
+        "parent_permalink": "class_namespace__scoped_hr_utils_sn_hr_core__tokyo",
+        "release": "tokyo",
+        "sectionHeader": null,
+        "sectionTitle": null,
+        "tableHeader": null,
+        "text": "Switches the primary job of a user.",
+        "text2": null,
+        "type": "Method",
+        "variable": null
+      }
+    ],
+    "dc_identifier": "hr_UtilsAPI",
+    "is_current": true,
+    "is_highlighted": true,
+    "level": "Class",
+    "name": "hr_Utils",
+    "namespace_id": "sn_hr_core-namespace",
+    "release": "tokyo",
+    "text": "Provides basic functionality for the HR application.",
+    "text2": "The hr_Utils API requires the HR core plugin (com.sn_hr_core).",
+    "type": "Server Side Scoped",
+    "variable": ""
+  }
+]

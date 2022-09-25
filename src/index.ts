@@ -1,5 +1,6 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
+import fs from 'fs';
 import { getAPIHierarchy } from './SNClient';
 import { generateFiles } from './TSGenerator';
 import { SNC } from './common';
@@ -12,9 +13,12 @@ const configurations: SNC.HierarchyOpts[] = [
 main();
 async function main() {
   for (let conf of configurations) {
+    const pathCheck = `./generated/${release}/classes/server`;
+    if (!fs.existsSync(pathCheck)) fs.mkdirSync(pathCheck, { recursive: true });
+    
     console.log(`Loading ${conf.api}...`);
     let hierarchy = await getAPIHierarchy(conf);
     console.log(`Generating files for ${conf.api}...`);
-    await generateFiles({ ...conf, hierarchy });
+    generateFiles({ ...conf, hierarchy });
   }
 }
