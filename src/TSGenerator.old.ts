@@ -1,3 +1,7 @@
+// This file is kept as a reference since TSGenerator.ts has undergone significant changes,
+// that make it more suited to the use case of providing autocomplete.
+// The code that isn't being used right now might be helpful later.
+// So for now, we leave it here ^_^
 import ts from 'typescript';
 import path from 'path';
 import { promises as fs, default as fss } from 'fs';

@@ -1,6 +1,7 @@
+// @ts-nocheck
 /// <reference no-default-lib="true"/>
 
-declare class action {
+declare class ui_action {
   /**
    * Gets a GlideURI object to determine the user view.
    */
@@ -12429,3 +12430,6 @@ declare namespace sn_ws {
     waitForResponse(timeoutSecs: number): any;
   }
 }
+
+// @ts-nocheck
+/// <reference no-default-lib="true"/>

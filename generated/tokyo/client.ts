@@ -1,3 +1,4 @@
+// @ts-nocheck
 /// <reference no-default-lib="true"/>
 
 declare class CustomEvent {
@@ -2500,3 +2501,6 @@ declare class StopWatch {
    */
   toString(): string;
 }
+
+// @ts-nocheck
+/// <reference no-default-lib="true"/>

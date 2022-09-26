@@ -24,7 +24,7 @@ export async function generateFiles(opts: TSG.Base) {
   }
   let apiName = opts.api;
   if (apiName === "server_legacy") apiName = "global";
-  let sourceFilename = `${apiName}.d.ts`;
+  let sourceFilename = `${apiName}.ts`;
   let sourceFile = ts.createSourceFile(
     sourceFilename,
     '',
@@ -37,7 +37,7 @@ export async function generateFiles(opts: TSG.Base) {
   let filePath = path.join(getBasePath(), sourceFilename);
   let parentDir = path.dirname(filePath);
   ensurePathExists(parentDir);
-  await writePrettyFile(filePath, printer.printFile(sourceFile));
+  await writePrettyFile(filePath, printer.printFile(sourceFile), apiName);
 }
 
 function getModuleMap(hierarchy: SNC.SNApiHierarchy) {
@@ -101,18 +101,23 @@ function ensurePathExists(ensurePath: string) {
   }
 }
 
-async function writePrettyFile(pth: string, text: string) {
+async function writePrettyFile(pth: string, text: string, api: string) {
   let config: prettier.Options = {
     filepath: pth
   };
-  let prettierConfig = await prettier.resolveConfig(process.cwd());
+  const cwd = process.cwd();
+  let prettierConfig = await prettier.resolveConfig(cwd);
   if (prettierConfig) {
     config = Object.assign(config, prettierConfig);
   }
   try {
     // https://www.typescriptlang.org/docs/handbook/triple-slash-directives.html
-    let content = `/// <reference no-default-lib="true"/>\n\n`;
+    let content = `// @ts-nocheck\n/// <reference no-default-lib="true"/>\n\n`;
     content += prettier.format(text, config);
+    let appendPath = path.join(cwd, "src", "append", `${api}.ts`);
+    let appendContent = await fs.readFile(appendPath, "utf8");
+    content += `\n${appendContent}`;
+
     await fs.writeFile(pth, content);
   } catch(err) {
     let error = err as Error;
@@ -243,7 +248,8 @@ function generateType(typeName: string, _class?: SNC.SNClass): ts.TypeNode {
     // if (typeName === _class.name) {
     //   return ts.createKeywordTypeNode(types.ThisKeyword);
     // }
-    if (typeName.indexOf("Glide") === 0) {
+    // No documentation for GlideScheduleDateTime
+    if (typeName.indexOf("Glide") === 0 && typeName !== "GlideScheduleDateTime") {
       return ts.createTypeReferenceNode(typeName, _);
     }
     return ts.createKeywordTypeNode(types.AnyKeyword);
