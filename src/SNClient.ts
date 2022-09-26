@@ -123,7 +123,7 @@ function isLegacy(opts: SNC.HierarchyOpts) {
 
 async function processLegacyNavbar(opts: SNC.LegacyNavBarOpts) {
   let { navbar, release } = opts;
-  const filepath = `./generated/${release}/classes/global.json`;
+  const filepath = `./generated/${release}/docs/global.json`;
   let classResults: SNC.ClassData[] = [];
   if (fs.existsSync(filepath)) classResults = JSON.parse(fs.readFileSync(filepath, "utf8"));
   else {
@@ -134,7 +134,7 @@ async function processLegacyNavbar(opts: SNC.LegacyNavBarOpts) {
     }
   }
   fs.writeFileSync(filepath, JSON.stringify(classResults, null, 2));
-  let classes = classResults.map(_class => {
+  let classes = classResults.filter(c => c.name.indexOf("JSON") !== 0).map(_class => {
     return processClass({
       ...opts,
       _class,
@@ -152,7 +152,7 @@ async function processLegacyNavbar(opts: SNC.LegacyNavBarOpts) {
 async function processClientNavBar(opts: SNC.ClientNavBarOpts) {
   let hierarchy: SNC.SNApiHierarchy = {};
   let { navbar, release } = opts;
-  const filepath = `./generated/${release}/classes/client.json`;
+  const filepath = `./generated/${release}/docs/client.json`;
   let clientSpace = navbar.client as SNC.ClassData[];
   let classResults: SNC.ClassData[] = [];
   if (fs.existsSync(filepath)) classResults = JSON.parse(fs.readFileSync(filepath, "utf8"));
@@ -190,7 +190,7 @@ function getNamespaceName(namespace: SNC.NavbarItem) {
 
 async function processNamespace(opts: SNC.NSOpts): Promise<SNC.SNApiNamespace> {
   const { namespace, release } = opts;
-  let filepath = `./generated/${release}/classes/server/${getNamespaceName(namespace)}.json`;
+  let filepath = `./generated/${release}/docs/scoped/${getNamespaceName(namespace)}.json`;
   filepath = filepath.replace("No namespace qualifier", "@no_namespace_qualifier");
   let classResults: SNC.ClassData[] = [];
   if (fs.existsSync(filepath)) {
@@ -205,7 +205,7 @@ async function processNamespace(opts: SNC.NSOpts): Promise<SNC.SNApiNamespace> {
   }
   fs.writeFileSync(filepath, JSON.stringify(classResults, null, 2));
   let classes: SNC.SNClass[] = [];
-  classes = classResults.map(_class => {
+  classes = classResults.filter(c => c.name.indexOf("JSON") !== 0).map(_class => {
     return processClass({ ...opts, _class });
   });
   return { classes };
@@ -328,8 +328,10 @@ function processMethod(opts: SNC.ProcessMethodOpts): SNC.SNMethodInstance {
           child.name,
           strippedText2
         ]);
+        const parmName = sanitizeParamName(child.name);
+        if (params.find(p => p.name === parmName)) continue;
         params.push({
-          name: sanitizeParamName(child.name),
+          name: parmName,
           type: parseType(child.text),
           description: strippedText2,
           optional

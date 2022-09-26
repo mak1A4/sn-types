@@ -9,39 +9,34 @@ const _ = undefined;
 const printer = ts.createPrinter();
 let OUTPUT_DIR = '../generated';
 
-export function generateFiles(opts: TSG.Base) {
+export async function generateFiles(opts: TSG.Base) {
   let { hierarchy } = opts;
   if (OUTPUT_DIR.indexOf(`/${opts.release}`) < 0) {
     OUTPUT_DIR += `/${opts.release}`;
   }
   let moduleMap = getModuleMap(hierarchy);
-  Object.keys(hierarchy).map(namespaceName => {
+  let statementList: ts.Statement[] = [];
+  const hkeys = Object.keys(hierarchy);
+  for (let namespaceName of hkeys) {
     let namespace = hierarchy[namespaceName];
-    return processNamespace({ ...opts, namespaceName, namespace, moduleMap });
-  });
-  generateIndexFile({ ...opts, moduleMap });
-}
-
-async function generateIndexFile(opts: TSG.GenIndexOpts) {
-  let fileName = 'index.d.ts';
+    let result = await processNamespace({ ...opts, namespaceName, namespace, moduleMap }, opts.api);
+    statementList = statementList.concat(result);
+  }
+  let apiName = opts.api;
+  if (apiName === "server_legacy") apiName = "global";
+  let sourceFilename = `${apiName}.d.ts`;
   let sourceFile = ts.createSourceFile(
-    fileName,
+    sourceFilename,
     '',
     ts.ScriptTarget.Latest,
     false,
     ts.ScriptKind.TS
   );
-  let importDecs = await createImportsForIndex(opts);
-  let addonStatements = await processAddonsForIndex(opts);
-  let exportDecs = await createExportsForIndex(opts);
-  sourceFile.statements = ts.createNodeArray(
-    importDecs.concat(addonStatements, exportDecs)
-  );
-  let filePath = path.join(getBasePath(opts), fileName);
+  sourceFile.statements = ts.createNodeArray(statementList);
+
+  let filePath = path.join(getBasePath(), sourceFilename);
   let parentDir = path.dirname(filePath);
-  if (!fss.existsSync(parentDir)) {
-    fss.mkdirSync(parentDir, { recursive: true });
-  }
+  ensurePathExists(parentDir);
   await writePrettyFile(filePath, printer.printFile(sourceFile));
 }
 
@@ -57,123 +52,47 @@ function getModuleMap(hierarchy: SNC.SNApiHierarchy) {
   return moduleMap;
 }
 
-async function processNamespace(opts: TSG.ProcessNSOpts) {
+async function processNamespace(opts: TSG.ProcessNSOpts, api: string) {
   let { namespaceName, namespace } = opts;
+  let classDescList = [];
   for (let _class of namespace.classes) {
-    await processClass({ ...opts, _class });
+    if (namespaceName !== NO_NAMESPACE) opts.hasNamespace = true;
+    else opts.hasNamespace = false;
+    
+    let classDec = await generateAPIClass({ ...opts, _class });
+    classDescList.push(classDec);
   }
+
   if (namespaceName !== NO_NAMESPACE) {
-    await generateNamespaceFile(opts);
+    const moduleBlock = ts.createModuleBlock(classDescList);
+    const mods = [ts.createModifier(ts.SyntaxKind.DeclareKeyword)];
+    return ts.createModuleDeclaration(_, mods, ts.createIdentifier(namespaceName), moduleBlock, ts.NodeFlags.Namespace);
   }
-}
-
-async function generateNamespaceFile(opts: TSG.ProcessNSOpts) {
-  let { namespaceName } = opts;
-  let sourceFile = ts.createSourceFile(
-    `${namespaceName}.d.ts`,
-    '',
-    ts.ScriptTarget.Latest,
-    false,
-    ts.ScriptKind.TS
-  );
-  let exportDecs = generateExportsForNamespace(opts);
-  sourceFile.statements = ts.createNodeArray(exportDecs);
-  let fileName = `${namespaceName}.d.ts`;
-  let filePath = path.join(getBasePath(opts), fileName);
-  let parentDir = path.dirname(filePath);
-  if (!fss.existsSync(parentDir)) {
-    fss.mkdirSync(parentDir, { recursive: true });
-  }
-  await writePrettyFile(filePath, printer.printFile(sourceFile));
-}
-
-async function processClass(opts: TSG.ProcessClassOpts) {
-  //TODO: Make sure to only generate extended class if there is no file already!!
-  //await Promise.all([generateAPIClass(opts), generateExtendedClass(opts)]);
-  await generateAPIClass(opts);
+  return classDescList;
 }
 
 async function generateAPIClass(opts: TSG.ProcessClassOpts) {
-  let fileName = generateFileName({ ...opts, apiClass: true });
-  let sourceFile = ts.createSourceFile(
-    fileName,
-    '',
-    ts.ScriptTarget.Latest,
-    false,
-    ts.ScriptKind.TS
-  );
-
   const declareKW = ts.createModifier(ts.SyntaxKind.DeclareKeyword);
-  //let importDecs = getImportsFromDeps({ ...opts, apiClass: false });
+  const exportKW = ts.createModifier(ts.SyntaxKind.ExportKeyword);
+  let kwList = [];
+  if (opts.hasNamespace) kwList.push(exportKW);
+  else kwList.push(declareKW);
+
   let classMembers = generateClassMembers(opts);
-  let prefixedClassName = getPrefixedClassName({ ...opts, apiClass: true });
+  let prefixedClassName = opts._class.name;
   let classDec = ts.createClassDeclaration(
     _,
-    [declareKW],
+    kwList,
     prefixedClassName,
     _,
     _,
     classMembers
   );
-  let exportDec = generateExport(prefixedClassName);
-  //let statements = [...importDecs, classDec, exportDec];
-  let statements = [classDec, exportDec];
-  sourceFile.statements = ts.createNodeArray(statements);
-  let filePath = generateTypeFilePath({ ...opts, fileName });
-  let parentDir = path.dirname(filePath);
-  ensurePathExists(parentDir);
-  await writePrettyFile(filePath, printer.printFile(sourceFile));
+  return classDec;
 }
 
-async function generateExtendedClass(opts: TSG.ProcessClassOpts) {
-  const declareKW = ts.createModifier(ts.SyntaxKind.DeclareKeyword);
-  let fileName = generateFileName({ ...opts, apiClass: false });
-  let sourceFile = ts.createSourceFile(
-    fileName,
-    '',
-    ts.ScriptTarget.Latest,
-    false,
-    ts.ScriptKind.TS
-  );
-  let apiClass = getPrefixedClassName({ ...opts, apiClass: true });
-  let importDec = generateNamedImport(apiClass, `./${apiClass}`);
-  let className = getPrefixedClassName({ ...opts, apiClass: false });
-  let heritageClauses = [
-    ts.createHeritageClause(ts.SyntaxKind.ExtendsKeyword, [
-      ts.createExpressionWithTypeArguments(_, ts.createIdentifier(apiClass))
-    ])
-  ];
-  let classDec = ts.createClassDeclaration(
-    _,
-    [declareKW],
-    className,
-    _,
-    heritageClauses,
-    []
-  );
-  let exportDec = generateExport(className);
-  let statements = [importDec, classDec, exportDec];
-  sourceFile.statements = ts.createNodeArray(statements);
-  let filePath = generateTypeFilePath({ ...opts, fileName });
-  let parentDir = path.dirname(filePath);
-  ensurePathExists(parentDir);
-  if (!fss.existsSync(filePath)) {
-    await writePrettyFile(filePath, printer.printFile(sourceFile));
-  }
-}
-
-function getBasePath(opts: TSG.Base) {
-  let { api, type } = opts;
-  if (api === "server_legacy") api = "global";
-  return path.resolve(__dirname, OUTPUT_DIR, api);
-}
-
-function generateTypeFilePath(opts: TSG.GenFilePathArgs) {
-  const { fileName, namespaceName } = opts;
-  if (namespaceName !== NO_NAMESPACE) {
-    return path.join(getBasePath(opts), namespaceName, fileName);
-  }
-  return path.join(getBasePath(opts), fileName);
+function getBasePath() {
+  return path.resolve(__dirname, OUTPUT_DIR);
 }
 
 function ensurePathExists(ensurePath: string) {
@@ -191,168 +110,14 @@ async function writePrettyFile(pth: string, text: string) {
     config = Object.assign(config, prettierConfig);
   }
   try {
-    await fs.writeFile(pth, prettier.format(text, config));
+    // https://www.typescriptlang.org/docs/handbook/triple-slash-directives.html
+    let content = `/// <reference no-default-lib="true"/>\n\n`;
+    content += prettier.format(text, config);
+    await fs.writeFile(pth, content);
   } catch(err) {
     let error = err as Error;
     console.log("swallowed error | " + config.filepath, error.message);
   }
-}
-
-function getPrefixedClassName(opts: TSG.GenClassNameOpts) {
-  let { _class, namespaceName, apiClass } = opts;
-  return getPrefixedName(_class.name, namespaceName, apiClass);
-}
-
-function getPrefixedName(
-  className: string,
-  namespaceName: string,
-  apiClass: boolean
-) {
-  return `${className}`;
-  //let prefix = namespaceName === NO_NAMESPACE ? '' : namespaceName + '_';
-  // if (apiClass) {
-  //   return `${prefix}${getAPIClassName(className)}`;
-  // } else {
-  //   return `${prefix}${className}`;
-  // }
-}
-
-function generateFileName(opts: TSG.GenClassNameOpts) {
-  return `${getPrefixedClassName(opts)}.d.ts`;
-}
-
-function getImportsFromDeps(opts: TSG.GenClassNameOpts): ts.Statement[] {
-  let { _class, namespaceName, apiClass, moduleMap } = opts;
-  //TODO: Fix imports so they are namespace aware!!!
-  return _class.dependencies.map(dep => {
-    let prefixedName = getPrefixedName(dep.name, namespaceName, apiClass);
-    if (moduleMap.has(dep.name)) {
-      let resolvedModule = moduleMap.get(dep.name) as string;
-      if (resolvedModule === '' && namespaceName !== NO_NAMESPACE) {
-        return generateNamedImport(dep.name, `../${dep.name}`);
-      } else if (resolvedModule === '' && namespaceName === NO_NAMESPACE) {
-        return generateNamedImport(dep.name, `./${dep.name}`);
-      } else {
-        return generateNamedImport(dep.name, `../${resolvedModule}`);
-      }
-    }
-    //BOOKMARK
-    // if (namespaceName !== NO_NAMESPACE) {
-    //   return generateImport(dep.name, `./${namespaceName}`);
-    // }
-    //if (prefixedName.indexOf(".") >= 0) return ;
-    return generateNamedImport(prefixedName, `./${prefixedName}`);
-  });
-}
-
-function generateNamedImport(className: string, moduleName: string) {
-  let classId = ts.createIdentifier(className);
-  let importSpec = ts.createImportSpecifier(_, classId);
-  let namedImps = ts.createNamedImports([importSpec]);
-  let impClause = ts.createImportClause(_, namedImps);
-  let modSpec = ts.createStringLiteral(moduleName);
-  return ts.createImportDeclaration(_, _, impClause, modSpec);
-}
-
-function generateStarImport(namespaceName: string, modulePath: string) {
-  let nsIdentifier = ts.createIdentifier(namespaceName);
-  let namespaceImp = ts.createNamespaceImport(nsIdentifier);
-  let impClause = ts.createImportClause(_, namespaceImp);
-  let modSpec = ts.createStringLiteral(modulePath);
-  return ts.createImportDeclaration(_, _, impClause, modSpec);
-}
-
-function generateExport(className: string) {
-  let expSpec = ts.createExportSpecifier(_, className);
-  let exportClause = ts.createNamedExports([expSpec]);
-  return ts.createExportDeclaration(_, _, exportClause, _);
-}
-
-function generateExportFrom(opts: TSG.GenExportArgs) {
-  let { className, modulePath } = opts;
-  let expSpec = ts.createExportSpecifier(_, className);
-  let exportClause = ts.createNamedExports([expSpec]);
-  let moduleSpecifier = ts.createStringLiteral(`./${modulePath}`);
-  return ts.createExportDeclaration(_, _, exportClause, moduleSpecifier);
-}
-
-function generateExportsForNamespace(opts: TSG.ProcessNSOpts) {
-  let { namespace, namespaceName } = opts;
-  return namespace.classes.map(_class => {
-    let prefixedClassName = getPrefixedClassName({
-      ...opts,
-      _class,
-      apiClass: false
-    });
-    let expSpec = ts.createExportSpecifier(prefixedClassName, _class.name);
-    let exportClause = ts.createNamedExports([expSpec]);
-    let relativePath = path.relative(
-      '.',
-      path.join(namespaceName, prefixedClassName)
-    );
-    let relativeModulePath = `.${path.sep}${relativePath}`;
-    let moduleSpecifier = ts.createStringLiteral(relativeModulePath);
-    return ts.createExportDeclaration(_, _, exportClause, moduleSpecifier);
-  });
-}
-
-async function createImportsForIndex(opts: TSG.GenIndexOpts) {
-  const { hierarchy } = opts;
-  return Object.keys(hierarchy)
-    .filter(ns => ns !== NO_NAMESPACE)
-    .map(namespaceName => {
-      return generateStarImport(namespaceName, `./${namespaceName}`);
-    }) as ts.Statement[];
-}
-
-async function processAddonsForIndex(opts: TSG.GenIndexOpts) {
-  let statements: ts.Statement[] = [];
-  let { api } = opts;
-  let addonPath = path.join(__dirname, `${api}_addons.js`);
-  let hasAddons = fss.existsSync(addonPath);
-  if (hasAddons) {
-    let addonsMod = await import(addonPath);
-    let addons = addonsMod.default as Mod.AddOns;
-    const { dependencies, variables } = addons;
-    for (let dep of dependencies) {
-      statements.push(generateNamedImport(dep.name, dep.path));
-    }
-    for (let v of variables) {
-      let dec = ts.createVariableDeclaration(v.name, generateType(v.type));
-      let decList = ts.createVariableDeclarationList([dec]);
-      let declareKW = ts.createModifier(ts.SyntaxKind.DeclareKeyword);
-      let varStatement = ts.createVariableStatement([declareKW], decList);
-      statements.push(varStatement);
-      let varExport = generateExport(v.name);
-      statements.push(varExport);
-    }
-  }
-  return statements;
-}
-
-async function createExportsForIndex(opts: TSG.GenIndexOpts) {
-  const { hierarchy } = opts;
-  let exportDecs: ts.Statement[] = [];
-  for (let namespaceName in hierarchy) {
-    if (namespaceName === NO_NAMESPACE) {
-      let namespace = hierarchy[namespaceName];
-      for (let _class of namespace.classes) {
-        exportDecs.push(
-          generateExportFrom({
-            className: _class.name,
-            modulePath: _class.name
-          })
-        );
-      }
-    } else {
-      exportDecs.push(generateExport(namespaceName));
-    }
-  }
-  return exportDecs;
-}
-
-function getAPIClassName(className: string) {
-  return `SNAPI${className}`;
 }
 
 function generateClassMembers(opts: TSG.ProcessClassOpts): ts.ClassElement[] {
@@ -371,7 +136,7 @@ function generateMethods(methods: SNC.SNMethodMap, _class: SNC.SNClass) {
       let parameters = generateParameters(inst.params, _class);
       if (methodName !== 'constructor') {
         let returnType = inst.returns
-          ? ts.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword) //generateType(inst.returns, _class)
+          ? generateType(inst.returns, _class)
           : ts.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword);
         let genMethod = ts.createMethod(
           _,
@@ -478,7 +243,9 @@ function generateType(typeName: string, _class?: SNC.SNClass): ts.TypeNode {
     // if (typeName === _class.name) {
     //   return ts.createKeywordTypeNode(types.ThisKeyword);
     // }
-    //return ts.createTypeReferenceNode(typeName, _);
+    if (typeName.indexOf("Glide") === 0) {
+      return ts.createTypeReferenceNode(typeName, _);
+    }
     return ts.createKeywordTypeNode(types.AnyKeyword);
   }
 }

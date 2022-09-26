@@ -10,6 +10,8 @@
     "@types/prettier": "^1.18.2",
     "axios": "^0.27.2",
     "dotenv": "^8.1.0",
+    "dts-bundle-generator": "^6.13.0",
+    "esbuild": "^0.15.9",
     "html-entities": "^2.3.3",
     "prettier": "^1.18.2",
     "striptags": "^3.1.1",

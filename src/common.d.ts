@@ -173,6 +173,7 @@ export module TSG {
     namespaceName: string;
     namespace: SNC.SNApiNamespace;
     moduleMap: Map<string, string>;
+    hasNamespace?: boolean;
   }
 
   interface ProcessClassOpts extends ProcessNSOpts {

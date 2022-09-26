@@ -13,7 +13,7 @@ const configurations: SNC.HierarchyOpts[] = [
 main();
 async function main() {
   for (let conf of configurations) {
-    const pathCheck = `./generated/${release}/classes/server`;
+    const pathCheck = `./generated/${release}/docs/server`;
     if (!fs.existsSync(pathCheck)) fs.mkdirSync(pathCheck, { recursive: true });
     
     console.log(`Loading ${conf.api}...`);
