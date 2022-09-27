@@ -4,6 +4,7 @@ import fs from 'fs';
 import { getAPIHierarchy } from './SNClient';
 import { generateFiles } from './TSGenerator';
 import { SNC } from './common';
+
 const release = 'tokyo';
 const NO_NAMESPACE = 'No namespace qualifier';
 const configurations: SNC.HierarchyOpts[] = [
@@ -22,16 +23,10 @@ async function main() {
     hierarchyList.push({ conf, hierarchy });
   }
 
-  // give global scope some of the scoped classes
   let scopedHierarchy = hierarchyList.find((h: any) => h.conf.api === 'server').hierarchy;
   let globalHierarchy = hierarchyList.find((h: any) => h.conf.api === 'server_legacy').hierarchy;
 
-  // some workarounds for static stuff
-  scopedHierarchy[NO_NAMESPACE].classes = scopedHierarchy[NO_NAMESPACE].classes.map((c: SNC.SNClass) => {
-    if (c.name === "action") c.name = "ui_action";
-    return c;
-  });
-
+  // give global scope some of the scoped classes
   let nnAvailableForGlobal = scopedHierarchy[NO_NAMESPACE].classes.filter((c: SNC.SNClass) => {
     return globalHierarchy[NO_NAMESPACE].classes.find((gc: any) => gc.name === c.name) === undefined;
   });

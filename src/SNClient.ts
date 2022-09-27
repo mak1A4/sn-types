@@ -4,6 +4,7 @@ import { decode } from 'html-entities';
 import striptags from 'striptags';
 import { SNC } from './common';
 import { NO_NAMESPACE } from './TSGenerator';
+import { RenameAPIClasses, StaticAPIClasses, IgnoreAPIClasses } from './constants';
 import {
   incorrectTypesMap,
   typeConversionMap,
@@ -12,9 +13,7 @@ import {
   optionalParamExceptions
 } from './SNClientConfigObjs';
 let cookie = process.env.COOKIE as string;
-cookie = `glide_user_route=glide.e4d392e8d15c48e80e2a12017fdb4abf; JSESSIONID=69B516113E2BE6F7400E34FA528E7A54; BIGipServerpool_devportalprod=2659473674.35646.0000; glide_session_store=0377F64F1B0E1150B61055F72A4BCB1F`;
 let userToken = process.env.USER_TOKEN as string;
-userToken = "4377f64f1b0e1150b61055f72a4bcb1f3fc4dce642ba99a5e67224fc44220c6616e75e2b";
 let client = axios.create({
   headers: {
     'Cookie': cookie,
@@ -70,11 +69,6 @@ function wait() {
 }
 
 export async function getAPIHierarchy(opts: SNC.HierarchyOpts) {
-  // let hierarchyPath = `./generated/${opts.api}_hierarchy.json`;
-  // if (fs.existsSync(hierarchyPath)) {
-  //   const hierarchyJSON = fs.readFileSync(hierarchyPath, "utf8");
-  //   return JSON.parse(hierarchyJSON) as SNC.SNApiHierarchy;
-  // }
   let hierarchy: SNC.SNApiHierarchy = {};
   let root = await getRootConfig(opts);
   let { navbar } = root;
@@ -105,7 +99,6 @@ export async function getAPIHierarchy(opts: SNC.HierarchyOpts) {
         hierarchy[nameSpaceName] = await namespacePromises[nameSpaceName];
       }
     }
-    // fs.writeFileSync(hierarchyPath, JSON.stringify(hierarchy, null, 2));
     return hierarchy;
   } catch (e) {
     console.error(navbarItems);
@@ -134,6 +127,7 @@ async function processLegacyNavbar(opts: SNC.LegacyNavBarOpts) {
     }
   }
   fs.writeFileSync(filepath, JSON.stringify(classResults, null, 2));
+  classResults = filterClassResults(classResults);
   let classes = classResults.filter(c => c.name.indexOf("JSON") !== 0).map(_class => {
     return processClass({
       ...opts,
@@ -165,6 +159,7 @@ async function processClientNavBar(opts: SNC.ClientNavBarOpts) {
     }
   }
   fs.writeFileSync(filepath, JSON.stringify(classResults, null, 2));
+  classResults = filterClassResults(classResults);
   let classes = classResults.map(_class => {
     return processClass({
       ...opts,
@@ -188,6 +183,12 @@ function getNamespaceName(namespace: SNC.NavbarItem) {
   return namespace.name.split('-')[0].trim();
 }
 
+function filterClassResults(classResults: SNC.ClassData[]) {
+  return classResults.filter((c) => {
+    return IgnoreAPIClasses.find(i => i === c.dc_identifier) === undefined;
+  });
+}
+
 async function processNamespace(opts: SNC.NSOpts): Promise<SNC.SNApiNamespace> {
   const { namespace, release } = opts;
   let filepath = `./generated/${release}/docs/scoped/${getNamespaceName(namespace)}.json`;
@@ -204,6 +205,7 @@ async function processNamespace(opts: SNC.NSOpts): Promise<SNC.SNApiNamespace> {
     }
   }
   fs.writeFileSync(filepath, JSON.stringify(classResults, null, 2));
+  classResults = filterClassResults(classResults);
   let classes: SNC.SNClass[] = [];
   classes = classResults.filter(c => c.name.indexOf("JSON") !== 0).map(_class => {
     return processClass({ ...opts, _class });
@@ -217,12 +219,19 @@ function processClass(opts: SNC.ProcessClassOpts) {
   let properties = getProperties(_class);
   let dependencies = getDependencies({ ...opts, methods, _class, properties });
   let classObj: SNC.SNClass = {
-    //name: _class.name.split(' ')[0].replace(/[^a-zA-Z0-9]/g, ''),
     name: _class.name.split(' ')[0].replace(/-/g, ''),
+    isStatic: false,
     methods,
     dependencies,
     properties
   };
+  let cstatic = StaticAPIClasses.find(c => c.dc_identifier === _class.dc_identifier);
+  if (cstatic) {
+    classObj.isStatic = true;
+    classObj.staticName = cstatic.static_name;
+  }
+  let rename = RenameAPIClasses.find(c => c.dc_identifier === _class.dc_identifier);
+  if (rename) classObj.name = rename.correct_name;
   return classObj;
 }
 
@@ -240,6 +249,7 @@ function getMethods(opts: SNC.ProcessClassOpts) {
       }
       if (!methods.hasOwnProperty(methodName)) {
         let method: SNC.SNClassMethod = {
+          dc_identifier: curMethod.dc_identifier as string,
           description: striptags(curMethod.text) || '',
           instances: []
         };

@@ -3,7 +3,9 @@ import path from 'path';
 import { promises as fs, default as fss } from 'fs';
 import { comment } from './CommentGenerator';
 import prettier from 'prettier';
-import { SNC, TSG, Mod } from './common';
+import { SNC, TSG } from './common';
+import { OverrideReturnTypes } from './constants';
+
 export const NO_NAMESPACE = 'No namespace qualifier';
 const _ = undefined;
 const printer = ts.createPrinter();
@@ -59,8 +61,20 @@ async function processNamespace(opts: TSG.ProcessNSOpts, api: string) {
     if (namespaceName !== NO_NAMESPACE) opts.hasNamespace = true;
     else opts.hasNamespace = false;
     
-    let classDec = await generateAPIClass({ ...opts, _class });
-    classDescList.push(classDec);
+    // Currently not generating static stuff as module, kept for reference
+    // maybe we need to use it in the future ... we'll see
+    // if (_class.isStatic) {
+    //   classDescList.push(await generateAPIStaticClass({ ...opts, _class }));
+    // } else {
+    //   classDescList.push(await generateAPIClass({ ...opts, _class }));
+    // }
+    classDescList.push(await generateAPIClass({ ...opts, _class }));
+    if (_class.isStatic) {
+      let newClass = ts.createNew(ts.createIdentifier(_class.name), _, _);
+      let mod = [ts.createModifier(ts.SyntaxKind.DeclareKeyword)];
+      let varDec = ts.createVariableDeclaration(_class.staticName!, _, newClass);
+      classDescList.push(ts.createVariableStatement(mod, [varDec]));
+    }
   }
 
   if (namespaceName !== NO_NAMESPACE) {
@@ -71,6 +85,28 @@ async function processNamespace(opts: TSG.ProcessNSOpts, api: string) {
   return classDescList;
 }
 
+async function generateAPIStaticClass(opts: TSG.ProcessClassOpts) {
+  //const declareKW = ts.createModifier(ts.SyntaxKind.DeclareKeyword);
+  //const exportKW = ts.createModifier(ts.SyntaxKind.ExportKeyword);
+  const _class = opts._class;
+
+  let memberList: any[] = [];
+  memberList = memberList.concat(generateStaticProperties(_class.properties));
+  memberList = memberList.concat(generateStaticMethods(_class.methods, _class));
+
+  const moduleBlock = ts.createModuleBlock(memberList);
+  const mods = [ts.createModifier(ts.SyntaxKind.DeclareKeyword)];
+  return ts.createModuleDeclaration(_, mods, ts.createIdentifier(_class.staticName!), moduleBlock, _);
+}
+
+function generateStaticProperties(properties: SNC.Property[]) {
+  return properties.map(prop => {
+    let mod = ts.createModifier(ts.SyntaxKind.DeclareKeyword);
+    let varDec = ts.createVariableDeclaration(prop.name, generateType(prop.type));
+    return ts.createVariableStatement([mod], [varDec]);
+  });
+}
+
 async function generateAPIClass(opts: TSG.ProcessClassOpts) {
   const declareKW = ts.createModifier(ts.SyntaxKind.DeclareKeyword);
   const exportKW = ts.createModifier(ts.SyntaxKind.ExportKeyword);
@@ -78,12 +114,13 @@ async function generateAPIClass(opts: TSG.ProcessClassOpts) {
   if (opts.hasNamespace) kwList.push(exportKW);
   else kwList.push(declareKW);
 
+  let _class = opts._class;
   let classMembers = generateClassMembers(opts);
-  let prefixedClassName = opts._class.name;
+  if (_class.name === _class.staticName) _class.name += "_static";
   let classDec = ts.createClassDeclaration(
     _,
     kwList,
-    prefixedClassName,
+    _class.name,
     _,
     _,
     classMembers
@@ -114,10 +151,6 @@ async function writePrettyFile(pth: string, text: string, api: string) {
     // https://www.typescriptlang.org/docs/handbook/triple-slash-directives.html
     let content = `// @ts-nocheck\n/// <reference no-default-lib="true"/>\n\n`;
     content += prettier.format(text, config);
-    let appendPath = path.join(cwd, "src", "append", `${api}.ts`);
-    let appendContent = await fs.readFile(appendPath, "utf8");
-    content += `\n${appendContent}`;
-
     await fs.writeFile(pth, content);
   } catch(err) {
     let error = err as Error;
@@ -132,6 +165,47 @@ function generateClassMembers(opts: TSG.ProcessClassOpts): ts.ClassElement[] {
   return properties.concat(methods);
 }
 
+function generateStaticMethods(methods: SNC.SNMethodMap, _class: SNC.SNClass) {
+  let tsFunctions: ts.Statement[] = [];
+  for (let methodName in methods) {
+    let method = methods[methodName];
+    for (let inst of method.instances) {
+      let methodId = ts.createIdentifier(methodName);
+      let parameters = generateParameters(inst.params, _class);
+      if (methodName !== 'constructor') {
+        let returnType = getReturnType(inst, method, _class);
+        let genMethod = ts.createFunctionDeclaration(
+          _,
+          [ts.createModifier(ts.SyntaxKind.DeclareKeyword)],
+          _,
+          methodId,
+          _,
+          parameters,
+          returnType,
+          _
+        );
+        ts.addSyntheticLeadingComment(
+          genMethod,
+          ts.SyntaxKind.MultiLineCommentTrivia,
+          generateMethodComment(method, inst),
+          true
+        );
+        tsFunctions.push(genMethod);
+      }
+    }
+  }
+  return tsFunctions;
+}
+
+function getReturnType(inst: SNC.SNMethodInstance, method: SNC.SNClassMethod, _class: SNC.SNClass) {
+  let ort = OverrideReturnTypes.find(t => t.dc_identifier === method.dc_identifier);
+  let instReturns = ort ? ort.correct_type : inst.returns;
+  let returnType = instReturns
+    ? generateType(instReturns, _class)
+    : ts.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword);
+  return returnType;
+}
+
 function generateMethods(methods: SNC.SNMethodMap, _class: SNC.SNClass) {
   let tsMethods: ts.ClassElement[] = [];
   for (let methodName in methods) {
@@ -140,9 +214,7 @@ function generateMethods(methods: SNC.SNMethodMap, _class: SNC.SNClass) {
       let methodId = ts.createIdentifier(methodName);
       let parameters = generateParameters(inst.params, _class);
       if (methodName !== 'constructor') {
-        let returnType = inst.returns
-          ? generateType(inst.returns, _class)
-          : ts.createKeywordTypeNode(ts.SyntaxKind.VoidKeyword);
+        let returnType = getReturnType(inst, method, _class);
         let genMethod = ts.createMethod(
           _,
           _,
@@ -175,9 +247,13 @@ function generateMethodComment(
   instance: SNC.SNMethodInstance
 ) {
   let c = comment();
-  c.description(method.description);
+  let methodDesc = method.description || "";
+  methodDesc = methodDesc.replace(/\$\{/g, '{');
+  c.description(methodDesc);
   for (let p of instance.params) {
-    c.param(p.name, p.description);
+    let parmDesc = p.description || "";
+    parmDesc = parmDesc.replace(/\$\{/g, '{');
+    c.param(p.name, parmDesc);
   }
   return c.render();
 }

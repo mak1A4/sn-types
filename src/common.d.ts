@@ -63,6 +63,8 @@ export module SNC {
     dependencies: SNClassDependency[];
     methods: SNMethodMap;
     properties: Property[];
+    isStatic: boolean;
+    staticName?: string;
   }
   interface SNResponse<T> {
     result: {
@@ -134,6 +136,7 @@ export module SNC {
 
   interface SNClassMethod {
     description: string;
+    dc_identifier: string;
     instances: SNMethodInstance[];
   }
 
@@ -172,7 +175,7 @@ export module TSG {
   interface ProcessNSOpts extends Base {
     namespaceName: string;
     namespace: SNC.SNApiNamespace;
-    moduleMap: Map<string, string>;
+    moduleMap?: Map<string, string>;
     hasNamespace?: boolean;
   }
 
@@ -198,22 +201,5 @@ export module CG {
   interface Param {
     name: string;
     description: string;
-  }
-}
-
-export module Mod {
-  interface AddOns {
-    dependencies: Dependency[];
-    variables: Variable[];
-  }
-
-  interface Variable {
-    name: string;
-    type: string;
-  }
-
-  interface Dependency {
-    name: string;
-    path: string;
   }
 }

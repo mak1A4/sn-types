@@ -256,7 +256,7 @@ declare class ActivityHistoryRecord {
    */
   getUnSatisfiedJoinActivities(): string;
   /**
-   * Determines if this activity is one of the rollback activities.
+   * Determines if this activity is one of the Rollback activities.
    */
   isARollback(): boolean;
   /**
@@ -283,7 +283,7 @@ declare class ActivityHistoryRecord {
    */
   isRolledBack(): boolean;
   /**
-   * Determines if the current activity is a turnstile.
+   * Determines if this activity is a turnstile.
    */
   isTurnstile(): boolean;
 }
@@ -414,15 +414,15 @@ declare class ArrayUtil {
    */
   ensureArray(object: any): any[];
   /**
-   * Searches the array for the element. Returns the element index or -1 if not
-   * found.
-   * @param array Array to search.
-   * @param element Element to search for.
+   * Searches the array for the element. Returns the element index if found, -1
+   * otherwise.
+   * @param array The array to search
+   * @param element The element to search for
    */
   indexOf(array: any[], element: any): number;
   /**
-   * Searches the array for the element. Returns the element index or -1 if not
-   * found.
+   * Searches the array for the element. Returns the element index if found, -1
+   * otherwise.
    * @param array Array to search.
    * @param element Element to search for.
    * @param startIndex Index to start searching from.
@@ -481,9 +481,9 @@ declare class BusinessServiceManager {
    * @param service_id Sys ID of the application service to add a CI to. Must be of type
    * cmdb_ci_service_discovered.
    * @param source_id Sys ID of the CI whose outgoing connection joins the target CI.
-   * @param target_id Sys ID of the CI to add to the service. Cannot be an excluded item. Excluded
-   * items are CIs configured in the Manual CI Inclusions / Exclusions
-   * [svc_manual_ci_exclusions_inclusions.list] table.
+   * @param target_id Sys ID of the CI to add to the service. Cannot be a blacklisted item.
+   * Blacklisted items are CIs added to the sa.mapping.user.manual.citype.blacklist
+   * system property that are excluded from specific operations.
    */
   addCI(service_id: string, source_id: string, target_id: string): any;
   /**
@@ -522,10 +522,12 @@ declare class BusinessServiceManager {
    *
    * Note: Passing a GlideRecord object is also supported.
    *
+   *
    * @param target_id Sys ID of the CI to remove from the application service.
    *
    *
    * Note: Passing a GlideRecord object is also supported.
+   *
    *
    */
   removeCI(service_id: string, target_id: string): any;
@@ -624,7 +626,7 @@ declare class CIData {
   constructor(debugFlag: string);
   /**
    * Adds the specified related list to this instance.
-   * @param relatedList Related list to add.
+   * @param relatedList The related list
    */
   addRelatedList(relatedList: any[]): any;
   /**
@@ -642,7 +644,7 @@ declare class CIData {
   ): any;
   /**
    * Initializes the current CIData instance from the specified XML string.
-   * @param xml An XML string.
+   * @param xml An XML string
    */
   fromXML(xml: string): any;
   /**
@@ -686,7 +688,7 @@ declare class CIData {
    */
   loadFromCI(cmdb_ci: string): any;
   /**
-   * Converts the name of this CIData instance to a string.
+   * Converts the name of this instance to a string.
    */
   toString(): string;
   /**
@@ -713,10 +715,10 @@ declare class CIIdentifierResult {
 }
 declare class CimCIData {
   /**
-   * Adds a serial number to the current configuration item (CI), by type.
-   * @param type Serial number type. For the base system, use the CimCIData.serialType
+   * Adds a serial number to the current CI, by type.
+   * @param type The serial number type. If out-of-box, use the CimCIData.serialType
    * enum.
-   * @param serial Serial number to add.
+   * @param serial The serial number
    */
   addSerial(type: string, serial: string): string;
   /**
@@ -727,9 +729,9 @@ declare class CimCIData {
    */
   SerialRecord(type: string, serial: string): any;
   /**
-   * Sets the make and model for the current configuration item (CI).
-   * @param make Name of the manufacturer to set for the CI.
-   * @param model Name of the model to set for the CI.
+   * Sets the make and model for the current CI.
+   * @param make The manufacturer
+   * @param model The model
    */
   setMakeAndModel(make: string, model: string): any;
 }
@@ -816,20 +818,14 @@ declare class CIRelatedList {
   );
   /**
    * Adds the specified record to the related list.
-   * @param record Each member in the object is a column name in the associated table. For
-   * example, if referencing the cmdb_serial_number table this value may contain
-   * something similar to the
-   * following:{"serial_number_type":"bios","serial_number":"1BC5E4z89246","valid":"true"}
+   * @param record The record to add
    */
-  addRec(record: any): any;
+  addRec(record: string): any;
   /**
    * Sets the given records to the related list.
-   * @param records Each object represents a record in the associated table. Each member in the
-   * object is a column name in that table. For example, if referencing the
-   * cmdb_serial_number table this value may contain something similar to the
-   * following:[{"serial_number_type":"bios","serial_number":"1BC5E4z89246","valid":"true"},{"serial_number_type":"baseboard","serial_number":"w4z89246","valid":"true"}]
+   * @param records The records to set
    */
-  addRecs(records: any[]): any;
+  addRecs(records: string): any;
   /**
    * Appends an XML child to a field.
    * @param parent The parent element
@@ -967,14 +963,8 @@ declare class ClassificationSolutionStore {
   /**
    * Gets the names of all solution definition
    * records in the store.
-   * @param options Options for restricting results within the specified
-   * properties.{
-   * "label": "String",
-   * "domainName": "String",
-   * "scope": "String"
-   * };
    */
-  getAllNames(options: any): any[];
+  getAllNames(): any[];
   /**
    * Replaces an existing object in the store with the
    * object passed as a parameter. The object name provided must be empty or
@@ -1135,14 +1125,8 @@ declare class ClusteringSolutionStore {
   /**
    * Gets the names of all solution definition
    * records in the store.
-   * @param options Options for restricting results within the specified
-   * properties.{
-   * "label": "String",
-   * "domainName": "String",
-   * "scope": "String"
-   * };
    */
-  getAllNames(options: any): any[];
+  getAllNames(): any[];
   /**
    * Replaces an existing object in the store with the
    * object passed as a parameter. The object name provided must be empty or
@@ -1172,34 +1156,31 @@ declare class ClusteringSolutionVersion {
    * update times, and table row number within a clustering solution. Minimum of one
    * argument must be
    * specified.{
-   * "cluster_id": "String",
-   * "group_by": "String",
-   * "limit": Number,
-   * "sequenceSince": Number,
-   * "sequenceUntil": Number,
-   * "topNPerCluster": Number,
-   * "updatedSince": "String",
-   * "updatedUntil": "String"
+   * "cluster_id" : "String",
+   * "group_by" : "String",
+   * "limit" : "String",
+   * "sequenceSince" : "String",
+   * "sequenceUntil" : "String",
+   * "topNPerCluster" : "String",
+   * "updatedSince" : "String",
+   * "updatedUntil" : "String"
    * }
    */
   getClusterAssignments(options: any): any;
   /**
    * Gets information for a specified clustering
-   * solution in the store. The purity measurement provides insights as a percentage for the clustering
-   * fields on which the purity is based.
+   * solution in the store.
    * @param options Optional. Object containing properties that enable filtering results within a
-   * clustering
-   * solution.{
-   * "clusterId": "String",
-   * "groupBy": "String",
-   * "limit": "String",
-   * "recSysId": "String",
-   * "sequenceSince": Number,
-   * "sequenceUntil": Number,
-   * "updatedSince": "String",
-   * "updatedUntil": "String"
-   * }Default: Return cluster memberships for all
+   * clustering solution.Default: Return cluster memberships for all
    * clusters.
+   * {
+   * "clusterId" : "String",
+   * "groupBy" : "String",
+   * "limit" : "String",
+   * "sequenceSince" : "String",
+   * "updatedSince" : "String",
+   * "updatedUntil" : "String"
+   * }
    */
   getClusterInfo(options?: any): any;
   /**
@@ -1223,19 +1204,6 @@ declare class ClusteringSolutionVersion {
    * Default: False
    */
   getStatus(includeDetails: boolean): any;
-  /**
-   * Gets the top purity results for a clustering solution. The purity measurement provides
-   * insights as a percentage for the clustering fields on which the purity is based.
-   * @param options Options that determine the number and format of the top cluster purity
-   * results.{
-   * "clusterIds": [Array],
-   * "groupBy": [Array],
-   * "purityFields": [Array],
-   * "topN": Number,
-   * "topNFields": Number
-   * }
-   */
-  getTopNPurityInfo(options: any): any;
   /**
    * Gets the status of the most recent clustering solution update job.
    */
@@ -1277,7 +1245,8 @@ declare class CMDBDuplicateTaskUtils {
 }
 declare class CMDBQueryBuilderAPI {
   /**
-   * Returns the execution details for a specified Configuration Management Database (CMDB) Query Builder saved query.
+   * Returns the execution details for a specified CMDB Query Builder saved
+   * query.
    * @param executeQuery Optional. Flag that indicates whether to execute the specified query or
    * not.Valid values:
    *
@@ -1303,32 +1272,23 @@ declare class CMDBQueryBuilderAPI {
 declare class CMDBTransformUtil {
   constructor();
   /**
-   * Returns any errors generated by the previous identifyAndReconcile()
-   * or identifyAndReconcileEnhanced() method call.
+   * Use this method in onBefore transform map scripts to get the error when  the
+   * identifyAndReconcile() method was called.
    */
   getError(): string;
   /**
-   * Returns the JSON payload from the previous identifyAndReconcile() or
-   * identifyAndReconcileEnhanced() method call.
+   * Use this method in onBefore transform map scripts to get the JSON payload after the
+   * identifyAndReconcile() method is called.
    */
   getOutputPayload(): any;
   /**
-   * Returns the sys_id of the configuration item (CI) that was inserted or updated.
+   * Use this method in onBefore transform map scripts to get the sys_id of the CI that was
+   * inserted/updated.
    */
   getOutputRecordSysId(): string;
   /**
-   * Returns the JSON payload generated from the specified input.
-   * @param source Global object available in transform map scripts that holds the incoming
-   * record.
-   * @param map Map object available in transform map scripts that holds the current transform
-   * map record.
-   * @param log Log object available in transform map scripts.
-   */
-  getPayload(source: any, map: any, log: any): any;
-  /**
-   * Determines if an error occurred in the previous
-   * identifyAndReconcile() or identifyAndReconcileEnhanced()
-   * method call.
+   * Use this method in onBefore transform map scripts to determine if there was an error
+   * when  the identifyAndReconcile() method was called.
    */
   hasError(): boolean;
   /**
@@ -1341,55 +1301,18 @@ declare class CMDBTransformUtil {
    */
   identifyAndReconcile(source: any, map: any, log: any): any;
   /**
-   * Inserts or updates a configuration item (CI) in the Configuration Management Database (CMDB).
-   * @param source Global object available in transform map scripts that holds the incoming
-   * record.
-   * @param map Map object available in transform map scripts that holds the current transform
-   * map record.
-   * @param log Log object available in transform map scripts.
-   */
-  identifyAndReconcileEnhanced(source: any, map: any, log: any): any;
-  /**
-   * Logs the number of configuration items (CI) inserted, updated, skipped, or that had
-   * errors.
-   * @param log Log object available in transform map scripts.
+   * Use this method in onComplete transform map scripts to log the number of CIs inserted,
+   * updated, skipped, or had errors.
+   * @param log This is the log object available in transform map scripts.
    */
   logTransformStats(log: any): any;
   /**
-   * Sets the data source to use when the identifyAndReconcile() or
-   * identifyAndReconcileEnhanced() method is called.
-   * @param source Data source for the source configuration item record.
+   * Use this method in onBefore transform map scripts to set the data source to be used
+   * when  the identifyAndReconcile() method is called. If this method is not
+   * called, the default value 'ImportSet' is used.
+   * @param source The data source for the source CI record.
    */
   setDataSource(source: string): any;
-  /**
-   * Sets the payload to use when the identifyAndReconcile() or
-   * identifyAndReconcileEnhanced() method is called.
-   * @param input Required. Input payload. A JSON formatted string of
-   * configuration items to add or update.
-   * "input" {
-   * "items": [Array],
-   * "referenceItems": [Array],
-   * "relations": [Array]
-   * }
-   * @param options Optional, but {} or null must be passed-in. Options to enable
-   * or disable features.Note: By default or if partial_payloads is
-   * set to true, both partial_commits and
-   * deduplicate_payloads are enabled, even if they are set to
-   * false, as those features are essential for partial payloads
-   * functionality.
-   * "options": {
-   * "deduplicate_payloads": "Boolean",
-   * "generate_summary": "Boolean",
-   * "partial_commits": "Boolean",
-   * "partial_payloads": "Boolean",
-   * "skip_updating_last_scan_to_now": "Boolean",
-   * "skip_updating_source_last_discovered_to_now": "Boolean"
-   * }
-   * @param source Data source of the CI information. This value must be one of
-   * the choice values defined for the discovery_source field of the Configuration Item
-   * [cmdb_ci] table.
-   */
-  setPayload(input: string, options: any | undefined, source: string): any;
 }
 declare class CMDBUtil {
   /**
@@ -1575,40 +1498,6 @@ declare class DateTimeUtils {
    * @param milliseconds The number of milliseconds
    */
   msToGlideDateTime(milliseconds: number): GlideDateTime;
-}
-declare class DCManager {
-  /**
-   * Assigns pre-defined or user-defined data classifications
-   * to existing dictionary entries.
-   * @param dictEntries The sys_ids of the records you want to classify. The
-   * sys_ids are from the Dictionary [sys_dictionary] table. Entered as a comma-separated list
-   * enclosed in a string.
-   * @param dataClasses The sys_ids of the data classifications you want to assign. The
-   * sys_ids are from the Data Classification [data_classification] table. Entered as a
-   * comma-separated list enclosed in a string.
-   */
-  classify(dictEntries: string, dataClasses: string): string;
-  /**
-   * Removes all data classifications for the specified
-   * dictionary entries.
-   * @param dictEntries The sys_ids of the records you want to remove
-   * classifications from. The sys_ids are from the Dictionary [sys_dictionary] table. Entered
-   * as a comma-separated list enclosed in a string.
-   */
-  clearClassification(dictEntries: string): string;
-  /**
-   * Returns a list of all data classifications
-   * available in the current domain.
-   */
-  getAllDataClasses(): any;
-  /**
-   * Retrieves all data classifications for the specified
-   * dictionary entries.
-   * @param dictEntries The sys_ids of the records you want to retrieve
-   * classifications for. The sys_ids are from the Dictionary [sys_dictionary] table. Entered as
-   * a comma-separated list enclosed in a string.
-   */
-  getClassification(dictEntries: string): any;
 }
 declare class Discovery {
   constructor();
@@ -2082,10 +1971,10 @@ declare class DiscoveryFunctions {
   /**
    * Deletes a virtual machine by record (cmdb_ci_computer) and workflow application
    * (cmdb_ci_appl).
-   * @param now_GR The cmdb_ci_computer for the virtual machine
+   * @param gr The cmdb_ci_computer for the virtual machine
    * @param workflow The workflow application cmdb_ci_appl
    */
-  deleteCI(now_GR: GlideRecord, workflow: GlideRecord): any;
+  deleteCI(gr: GlideRecord, workflow: GlideRecord): any;
   /**
    * Deletes virtual machines by traversing through the relationship tree.
    * @param appList The application list
@@ -2141,9 +2030,9 @@ declare class DiscoveryFunctions {
   getDiscoveryType(statusID: string): GlideRecord;
   /**
    * Gets the fields that have changed for the specified device.
-   * @param now_GR The device
+   * @param gr The device
    */
-  getFieldsThatChanged(now_GR: GlideRecord): any[];
+  getFieldsThatChanged(gr: GlideRecord): any[];
   /**
    * Gets the schedule record.
    */
@@ -2201,11 +2090,11 @@ declare class DiscoveryFunctions {
   ): GlideRecord;
   /**
    * Updates the history of the current device.
-   * @param now_GR The device
+   * @param gr The device
    * @param sensor The sensor
    * @param eccID The External Communication Channel (ECC) queue ID.
    */
-  updatedHistory(now_GR: GlideRecord, sensor: string, eccID: string): any;
+  updatedHistory(gr: GlideRecord, sensor: string, eccID: string): any;
   /**
    * Updates the process ID.
    * @param pids The process ID
@@ -3208,14 +3097,8 @@ declare class EncoderStore {
   get(name: string): any;
   /**
    * Gets the names of all encoder definition records in the store.
-   * @param options Options for restricting results within the specified
-   * properties.{
-   * "label": "String",
-   * "domainName": "String",
-   * "scope": "String"
-   * };
    */
-  getAllNames(options: any): any[];
+  getAllNames(): any[];
   /**
    * Updates an encoder object in a store.
    * @param name Name of the encoder to update.
@@ -3474,27 +3357,19 @@ declare class GenericUPSOutputsReconciler {
 }
 declare class GlideAggregate {
   /**
-   * Adds an aggregate to a database
-   * query.
-   * @param agg Name of an aggregate to use.Valid values:
-   * AVG: Average value of the expression.
+   * Adds an aggregate to a database query.
+   * @param agg Name of an aggregate to include in a database query.Valid values:
+   * AVG
    *
-   * COUNT: Count of the number of non-null values.
+   * COUNT
    *
-   * GROUP_CONCAT: Concatenates all non-null values of the group in ascending
-   * order, joins them with a comma (‘,’), and returns the result as a String.
+   * MIN
    *
-   * GROUP_CONCAT_DISTINCT: Concatenates all non-null values of the group in
-   * ascending order, removes duplicates, joins them with a comma (‘,’), and returns
-   * the result as a String.
+   * MAX
    *
-   * MAX: Largest, or maximum, value.
+   * STDDEV
    *
-   * MIN: Minimum value.
-   *
-   * STDDEV: Population standard deviation.
-   *
-   * SUM: Sum of all values.
+   * SUM
    *
    *
    *
@@ -3505,7 +3380,7 @@ declare class GlideAggregate {
   /**
    * Adds an encoded query to the other queries that may have been set for this
    * aggregate.
-   * @param query Encoded query string to add to the aggregate.
+   * @param query An encoded query string to add to the aggregate.
    */
   addEncodedQuery(query: string): any;
   /**
@@ -3538,32 +3413,22 @@ declare class GlideAggregate {
    *
    *
    *
-   * @param numUnits Optional. Only valid when timeInterval =
-   * minute. Number of minutes to include in the trend.Default:
-   * 1
    */
-  addTrend(fieldName: string, timeInterval: string, numUnits?: number): any;
+  addTrend(fieldName: string, timeInterval: string): any;
   /**
    * Gets the value of an aggregate from the current record.
    * @param agg Type of the aggregate.Valid values:
-   * AVG: Average value of the expression.
+   * AVG
    *
-   * COUNT: Count of the number of non-null values.
+   * COUNT
    *
-   * GROUP_CONCAT: Concatenates all non-null values of the group in ascending
-   * order, joins them with a comma (‘,’), and returns the result as a String.
+   * MIN
    *
-   * GROUP_CONCAT_DISTINCT: Concatenates all non-null values of the group in
-   * ascending order, removes duplicates, joins them with a comma (‘,’), and returns
-   * the result as a String.
+   * MAX
    *
-   * MAX: Largest, or maximum, value.
+   * STDDEV
    *
-   * MIN: Minimum value.
-   *
-   * STDDEV: Population standard deviation.
-   *
-   * SUM: Sum of all values.
+   * SUM
    *
    *
    *
@@ -3577,24 +3442,17 @@ declare class GlideAggregate {
   /**
    * Returns the number of records by summing an aggregate.
    * @param agg Name of an aggregate to use.Valid values:
-   * AVG: Average value of the expression.
+   * AVG
    *
-   * COUNT: Count of the number of non-null values.
+   * COUNT
    *
-   * GROUP_CONCAT: Concatenates all non-null values of the group in ascending
-   * order, joins them with a comma (‘,’), and returns the result as a String.
+   * MIN
    *
-   * GROUP_CONCAT_DISTINCT: Concatenates all non-null values of the group in
-   * ascending order, removes duplicates, joins them with a comma (‘,’), and returns
-   * the result as a String.
+   * MAX
    *
-   * MAX: Largest, or maximum, value.
+   * STDDEV
    *
-   * MIN: Minimum value.
-   *
-   * STDDEV: Population standard deviation.
-   *
-   * SUM: Sum of all values.
+   * SUM
    *
    *
    *
@@ -3619,28 +3477,7 @@ declare class GlideAggregate {
   orderBy(name: string): any;
   /**
    * Orders the aggregates based on the specified aggregate and field.
-   * @param agg Type of aggregation.Valid values:
-   * AVG: Average value of the expression.
-   *
-   * COUNT: Count of the number of non-null values.
-   *
-   * GROUP_CONCAT: Concatenates all non-null values of the group in ascending
-   * order, joins them with a comma (‘,’), and returns the result as a String.
-   *
-   * GROUP_CONCAT_DISTINCT: Concatenates all non-null values of the group in
-   * ascending order, removes duplicates, joins them with a comma (‘,’), and returns
-   * the result as a String.
-   *
-   * MAX: Largest, or maximum, value.
-   *
-   * MIN: Minimum value.
-   *
-   * STDDEV: Population standard deviation.
-   *
-   * SUM: Sum of all values.
-   *
-   *
-   *
+   * @param agg Type of aggregation, for example SUM, COUNT, MIN, MAX.
    * @param fieldName Name of the field to aggregate.
    */
   orderByAggregate(agg: string, fieldName: string): any;
@@ -3649,23 +3486,8 @@ declare class GlideAggregate {
    */
   query(): any;
   /**
-   * Limits the number of rows from the table
-   * to include in the aggregate query.
-   * @param firstRow Zero-based index of the first row to include in the aggregate query,
-   * inclusive.
-   * @param lastRow Zero-based index of the last row to include in the aggregate query,
-   * exclusive.
-   */
-  setAggregateWindow(firstRow: number, lastRow: number): any;
-  /**
-   * Sets whether to group the results.
-   * @param b Flag that indicates whether to group the results.Valid values:
-   * true: Group the results.
-   *
-   * false: Do not group the results.
-   *
-   *
-   *
+   * Sets whether the results are to be grouped.
+   * @param b Set to true if grouping is true, otherwise set to false.
    */
   setGroup(b: boolean): any;
 }
@@ -3747,50 +3569,6 @@ declare class GlideConversation {
   sys_id: string;
   table: string;
   type: string;
-}
-declare class GlideDate {
-  constructor();
-  /**
-   * Gets the date in the specified date format.
-   * @param format Desired date format using Java SimpleDateFormat. For example,
-   * "dd-MM-yyyy" to get the day, month, and year, or
-   * "EEEE" to get the day of the week.
-   */
-  getByFormat(format: string): string;
-  /**
-   * Gets the day of the month stored by the GlideDate object, expressed in the UTC time
-   * zone.
-   */
-  getDayOfMonthNoTZ(): number;
-  /**
-   * Gets the date in the current user's display format and time zone.
-   */
-  getDisplayValue(): string;
-  /**
-   * Gets the date in the internal format (yyyy-MM-dd) and current user's timezone.
-   */
-  getDisplayValueInternal(): string;
-  /**
-   * Gets the month stored by the GlideDate object, expressed in the UTC time zone.
-   */
-  getMonthNoTZ(): number;
-  /**
-   * Gets the year stored by the GlideDate object, expressed in the UTC time zone.
-   */
-  getYearNoTZ(): number;
-  /**
-   * Sets a date value using the current user's display format and time zone.
-   * @param asDisplayed Date in the current user's display format and time zone. Format: Must be
-   * formatted using the current user's preferred display format, such as yyyy-MM-dd.
-   */
-  setDisplayValue(asDisplayed: string): any;
-  /**
-   * Sets the date of the current GlideDate object in internal format (yyyy-MM-dd) and the
-   * system time zone (UTC by default)..
-   * @param o Date and time to set in the current GlideDate object.Format:
-   * yyyy-MM-dd
-   */
-  setValue(o: string): any;
 }
 declare class GlideDateTime {
   constructor();
@@ -3897,10 +3675,10 @@ declare class GlideDateTime {
    */
   equals(GDT: any): boolean;
   /**
-   * Returns the date stored by the GlideDateTime object. Expressed in the standard format,
-   * yyyy-MM-dd, and in the system time zone, GMT by default.
+   * Gets the date stored by the GlideDateTime object, expressed in the standard format,
+   * yyyy-MM-dd, and the system time zone, UTC by default.
    */
-  getDate(): string;
+  getDate(): GlideDate;
   /**
    * Gets the current day of the month in the UTC time zone.
    */
@@ -4223,21 +4001,18 @@ declare class GlideDateTime {
    */
   setYearUTC(year: number): any;
   /**
-   * Returns the duration difference between two specified GlideDateTime
-   * objects.
-   * @param start Start date object.
-   * @param end End date object.
+   * Gets the duration difference between two GlideDateTime values.
+   * @param start The start value
+   * @param end The end value
    */
   subtract(start: GlideDateTime, end: GlideDateTime): GlideDuration;
   /**
-   * Returns the duration difference between two specified GlideDateTime
-   * objects.
+   * Gets the duration difference between two GlideDateTime values.
    * @param time The time to subtract
    */
   subtract(time: GlideTime): any;
   /**
-   * Returns the duration difference between two specified GlideDateTime
-   * objects.
+   * Gets the duration difference between two GlideDateTime values.
    * @param milliseconds The number of milliseconds to subtract
    */
   subtract(milliseconds: number): any;
@@ -4249,7 +4024,7 @@ declare class GlideDateTime {
 }
 declare class GlideElement {
   /**
-   * Determines if the user's role permits the creation of new entries in the associated
+   * Determines if the user's role permits the creation of new records in this
    * field.
    */
   canCreate(): boolean;
@@ -4331,21 +4106,19 @@ declare class GlideElement {
    */
   getDependentTable(): string;
   /**
-   * Returns the formatted display value of the field.
-   * @param maxChar Optional. Maximum number of characters to return.
+   * Gets the formatted display value of the field.
+   * @param maxChar Optional, maximum number of characters to return.
    */
   getDisplayValue(maxChar?: number): string;
   /**
-   * Returns the formatted display value of a field, or a specified substitute value if the
+   * Gets the formatted display value of a field, or a specified substitute value if the
    * display value is null or empty.
-   * @param maxChar Optional. Maximum number of characters to be returned.Default:
-   * All
-   * @param nullSub Value to return if the display value is null or empty.
+   * @param maxChar Optional, the maximum number of characters to be returned.
+   * @param nullSub The value to return if the display value is null or empty.
    */
   getDisplayValueExt(maxChar: number | undefined, nullSub: string): string;
   /**
-   * Returns an element descriptor, which provides information about specific fields, rather
-   * than the data inside of those fields.
+   * Returns an element descriptor.
    */
   getED(): any;
   /**
@@ -4412,13 +4185,9 @@ declare class GlideElement {
    */
   getTableName(): string;
   /**
-   * Retrieves the display value for the associated field and escapes the HTML.
+   * Retrieves the value and escapes the HTML.
    */
   getTextAreaDisplayValue(): string;
-  /**
-   * Returns the value of the field in the database.
-   */
-  getValue(): string;
   /**
    * Retrieves the XHTML value of a field.
    */
@@ -4574,6 +4343,7 @@ declare class GlideHTTPRequest {
    * Note: For performance reasons, in production it is advisable to leave HTTP request
    * logging at basic.
    *
+   *
    * Valid values:
    *
    * basic: Covers many of the attributes of the HTTP transaction including host,
@@ -4655,7 +4425,7 @@ declare class GlideImpersonate {
   /**
    * Sets the user ID for the current administrator to the passed-in user ID, enabling the
    * administrator to act as that user.
-   * @param userSysId Sys_id of the user to impersonate.
+   * @param userSysId sys_id of the user to impersonate
    */
   impersonate(userSysId: string): string;
   /**
@@ -4775,7 +4545,7 @@ declare class GlideListProperties {
    */
   setContextMenus(onOff: boolean): any;
   /**
-   * Determine whether the Actions on select rows options display at
+   * Determine whether the Actions on select rows  options display at
    * the bottom of a list.
    * @param onOff If true displays action options for a list.
    */
@@ -5129,8 +4899,8 @@ declare class GlideRecord {
    * Returns true if any record has a matching value in the specified column. If found, it
    * also moves to the first record that matches, essentially executing next()
    * until the record is returned.
-   * @param columnName Field name to search.
-   * @param value Value to check for in the specified field.
+   * @param columnName Specifies the field name.
+   * @param value Specifies the value to check for in the specified field.
    */
   find(columnName: string, value: string): boolean;
   /**
@@ -5182,16 +4952,10 @@ declare class GlideRecord {
   getLabel(): string;
   /**
    * Retrieves the link for the current record.
-   * @param noStack Flag that indicates whether to append the generated link to the end of the URL.
-   * For example: &amp;sysparm_stack=[tablename]_list.do?
-   * sysparm_query=active=true.Valid values:
-   * true: Append link.
-   *
-   * false: Do not append link.
-   *
-   *
-   *
-   * Default: false
+   * @param noStack If true, the link generated will not append
+   * &amp;sysparm_stack=[tablename]_list.do? sysparm_query=active=true
+   * to the end of the URL; if false, the link will. Leaving the parameter empty defaults
+   * to false.
    */
   getLink(noStack: boolean): string;
   /**
@@ -5217,12 +4981,11 @@ declare class GlideRecord {
    */
   getRelatedTables(): any;
   /**
-   * Retrieves the number of rows (records) in the current GlideRecord object.
+   * Retrieves the number of rows in the GlideRecord object.
    */
   getRowCount(): number;
   /**
-   * Retrieves the row number set by saveLocation() or
-   * setLocation().
+   * Retrieves the row number set by saveLocation() or setLocation().
    */
   getRowNumber(): number;
   /**
@@ -5230,17 +4993,12 @@ declare class GlideRecord {
    */
   getTableName(): string;
   /**
-   * Gets the primary key of the record, which is usually the sys_id unless otherwise
-   * specified.
-   */
-  getUniqueValue(): string;
-  /**
-   * Retrieves the string value of a specified field.
-   * @param fieldName Name of a field for which to retrieve its value.
+   * Retrieves the string value of an underlying element in a field.
+   * @param fieldName Name of a field
    */
   getValue(fieldName: string): string;
   /**
-   * Determines if the current GlideRecord has any attachments.
+   * Determines if the current record has any attachments.
    */
   hasAttachments(): boolean;
   /**
@@ -5248,12 +5006,11 @@ declare class GlideRecord {
    */
   hasNext(): boolean;
   /**
-   * Creates an empty record within the current GlideRecord that is suitable for population
-   * before an insert.
+   * Creates an empty record suitable for population before an insert.
    */
   initialize(): any;
   /**
-   * Inserts a new record with the field values that have been set for the current
+   * Inserts a new record using the field values that have been set for the current
    * record.
    */
   insert(): string;
@@ -5268,11 +5025,14 @@ declare class GlideRecord {
    */
   instanceOf(className: string): boolean;
   /**
-   * Determines whether the current record has been inserted into the database.
+   * Determines whether the current record has been inserted into the database. This method
+   * returns true only if the newRecord() method has been called. This method is
+   * useful for scripted ACL, and in the condition of UI actions, but should not be used in
+   * background scripts.
    */
   isNewRecord(): boolean;
   /**
-   * Determines if the current GlideRecord table exists.
+   * Determines if the table exists.
    */
   isValid(): boolean;
   /**
@@ -5286,8 +5046,8 @@ declare class GlideRecord {
    */
   isValidRecord(): boolean;
   /**
-   * Creates a GlideRecord, sets the default values for the fields, and assigns a unique ID
-   * to the record.
+   * Creates a GlideRecord, set the default values for the fields and assign a unique id to
+   * the record.
    */
   newRecord(): any;
   /**
@@ -5295,8 +5055,8 @@ declare class GlideRecord {
    */
   next(): boolean;
   /**
-   * Determines if an operation is insert, update, or
-   * delete.
+   * Retrieves the current operation being performed, such as insert, update, delete,
+   * etc.
    */
   operation(): string;
   /**
@@ -5321,6 +5081,7 @@ declare class GlideRecord {
    * parameters are specified, the "name=value" condition is added to the
    * query.
    *
+   *
    * @param value Optional - must also specify field parameter. Value to search for in the
    * specified field parameter.
    */
@@ -5335,6 +5096,7 @@ declare class GlideRecord {
    * name-value pair to filter records containing the specified values. If the
    * parameters are specified, the "name=value" condition is added to the
    * query.
+   *
    *
    * @param value Optional - must also specify field parameter. Value to search for in the
    * specified field parameter.
@@ -5359,7 +5121,7 @@ declare class GlideRecord {
   setAbortAction(b: boolean): any;
   /**
    * Sets the specified field to the specified display value.
-   * @param name Name of the field for which to set the display value.
+   * @param name Field name
    * @param value Display value for the specified field.
    */
   setDisplayValue(name: string, value: any): any;
@@ -5369,8 +5131,7 @@ declare class GlideRecord {
    */
   setForceUpdate(force: boolean): any;
   /**
-   * Sets the maximum number of records to return in the GlideRecord from a
-   * query.
+   * Sets the limit for how many records are in the GlideRecord.
    * @param limit Limit for records to fetch.
    */
   setLimit(limit: number): any;
@@ -5384,55 +5145,36 @@ declare class GlideRecord {
    */
   setNewGuid(): string;
   /**
-   * Generates a new GUID and sets it as the unique ID for the current record, when
+   * Generates a new GUID and sets it as the unique id for the current record, when
    * inserting a new record.
-   * @param guid Value for the new GUID.
+   * @param guid A string value for the new GUID
    */
   setNewGuidValue(guid: string): any;
   /**
    * Enables or disables using the reference field's display name when querying a reference
    * field.
-   * @param queryReferences Flag indicating what time of data to generate.Valid values:
-   * true: Generate a string of display names.
-   *
-   * false: Generate a string of sys_ids.
-   *
-   *
-   *
+   * @param queryReferences If true, will generate a string of display names. If false, will generate a
+   * string of sys_ids.
    */
   setQueryReferences(queryReferences: boolean): any;
   /**
-   * Disables or enables the running of any engines (approval rules / assignment
+   * Disable or enable the running of any engines (approval rules / assignment
    * rules).
-   * @param e Flag that indicates whether to enable or disable the running of any
-   * engines.Valid values:
-   * true: Enable engines
-   *
-   * false: Disable engines
-   *
-   *
-   *
+   * @param e If true, enables engines. If false disables engines.
    */
   setUseEngines(e: boolean): any;
   /**
    * Sets the specified field to the specified value.
-   * @param name Name of the field whose value you want to set.
-   * @param value Value to set in the specified field.
+   * @param name Field name
+   * @param value A value to be assigned.
    */
   setValue(name: string, value: any): any;
   /**
    * Enables or disables the running of business rules that might normally be triggered by
-   * subsequent actions. If the e parameter is set to false, an insert/update
-   * will not be audited. Auditing only happens when the parameter is set to true for a GlideRecord
-   * operation.
-   * @param e Flag that indicates whether to enable or disable the running of business
-   * rules.Valid values:
-   * true: Enable business rules
-   *
-   * false: Disable business rules
-   *
-   *
-   *
+   * subsequent actions. If the e parameter is set to false, an insert/update will not be audited.
+   * Auditing only happens when the parameter is set to true for a GlideRecord operation.
+   * @param e If true (default), enables business rules. If false, disables business
+   * rules.
    */
   setWorkflow(e: boolean): any;
   /**
@@ -5449,7 +5191,8 @@ declare class GlideRecord {
   /**
    * Updates a record and also inserts or updates any related records with the information
    * provided.
-   * @param reason Reason for the updates. The reason is displayed in the audit record.
+   * @param reason A string designating the reasons for the updates. The reason is displayed in
+   * the audit record.
    */
   updateWithReferences(reason: any): string;
   /**
@@ -5471,6 +5214,7 @@ declare class GlideRecord {
    * name-value pair to filter records containing the specified values. If the
    * parameters are specified, the "name=value" condition is added to the
    * query.
+   *
    *
    * @param value Optional - must also specify field parameter. Value to search for in the
    * specified field parameter.
@@ -5504,20 +5248,20 @@ declare class GlideRecordUtil {
   /**
    * Sets the fields in the specified GlideRecord with the field values contained in the
    * specified hashmap, unless that field name is in the ignore hashmap.
-   * @param hashMap An Object instance (being used as a hashmap), with properties named for fields
-   * and containing the fields' value.
-   * @param GlideRecord The GlideRecord instance to receive the field values.
-   * @param ignore An optional hashmap of field names to ignore.
+   * @param hashMap An Object instance (used as a hashmap), with properties named for fields and
+   * containing the fields' value.
+   * @param GlideRecord GlideRecord instance to receive the field values.
+   * @param ignore Optional. Hashmap of field names to ignore.
    */
   mergeToGR(hashMap: any, GlideRecord: any, ignore?: any): any;
   /**
    * Populates the given hashmap from the given GlideRecord instance. Each field in the
    * GlideRecord becomes a property in the hashmap.
    * @param hashMap An object being used as a hashmap.
-   * @param now_GR A GlideRecord instance positioned to a valid record.
+   * @param gr A GlideRecord instance positioned to a valid record.
    * @param ignore An optional hashmap of file names not to populate.
    */
-  populateFromGR(hashMap: any, now_GR: GlideRecord, ignore?: any): any;
+  populateFromGR(hashMap: any, gr: GlideRecord, ignore?: any): any;
 }
 declare class GlideScopedEvaluator {
   constructor();
@@ -5588,17 +5332,14 @@ declare class GlideSession {
 }
 declare class GlideSPSearchAnalytics {
   /**
-   * Sends search data to the Search Event [sys_search_event], Search Event per source
-   * [sys_search_source_event], and Search Signal Event [sys_search_signal_event] tables for search
-   * results, or to the Search Result Clicked [sys_search_result_clicked] and Search Signal Result
-   * Event [sys_search_signal_result_event] tables when a user clicks a search result.
+   * Sends search data to the Search Events [sys_search_event] and Search Source Events
+   * [sys_search_source_event] tables for search results, or to the Search Result Clicked
+   * [sys_search_result_clicked] table when a user clicks a search result.
    * @param payload JSON payload in String format containing the search data to send to the Search
-   * Event [sys_search_event], Search Event per source [sys_search_source_event], and
-   * Search Signal Event [sys_search_signal_event] tables for search results, or to the
-   * Search Result Clicked [sys_search_result_clicked] and Search Signal Result Event
-   * [sys_search_signal_result_event] tables when a user clicks a search result.
-   * Structure the payload as key-value pairs according to the type of search data you
-   * would like to collect.
+   * Events [sys_search_event] and Search Source Events [sys_search_source_event] tables
+   * for search results, or the Search Result Clicked [sys_search_result_clicked] table
+   * when a user clicks a search result. Structure the payload as key-value pairs
+   * according to the type of search data you would like to collect.
    * Collect data when the user searches for a term:
    * query: String. The query being
    * searched.
@@ -5620,8 +5361,7 @@ declare class GlideSPSearchAnalytics {
    *
    *
    *
-   * ais_profile: String. Sys_id of the search profile applied
-   * to the search. Only applicable for searches made with the AI Search engine.
+   *
    *
    * search_results: Array. Results returned in the first page
    * of search results.
@@ -5636,6 +5376,7 @@ declare class GlideSPSearchAnalytics {
    *
    * refinement_occurred: Boolean. True if the
    * user filtered the search results; otherwise false.
+   *
    *
    *
    *
@@ -5714,13 +5455,6 @@ declare class GlideSPSearchAnalytics {
    * source_table: String. Name of the source table containing
    * the selected result.
    *
-   * ais_doc_id: String. Underscore-separated name of the
-   * source table and sys_id of the result record for each result the user
-   * selected. For example, if the user clicked a result from the Knowledge
-   * [kb_knowledge] table, the value is of the form
-   * kb_knowledge_3020c9b14843210e9db4b5b08b9a712d. Only
-   * applicable for searches made with the AI Search engine.
-   *
    *
    *
    *
@@ -5746,8 +5480,7 @@ declare class GlideSPSearchAnalytics {
    *
    *
    *
-   * ais_profile: String. Sys_id of the search profile applied
-   * to the search. Only applicable for searches made with the AI Search engine.
+   *
    *
    * search_results: Array. Summary of records returned in the
    * first page of search results.
@@ -5764,12 +5497,6 @@ declare class GlideSPSearchAnalytics {
    * user selected. For example, if the user clicked the third item in a list of search
    * results, the value is 3.
    *
-   * ais_doc_id: String. Underscore-separated name of the
-   * source table and sys_id of the result record for each result the user
-   * selected. For example, if the user clicked a result from the Knowledge
-   * [kb_knowledge] table, the value is of the form
-   * kb_knowledge_3020c9b14843210e9db4b5b08b9a712d. Only
-   * applicable for searches made with the AI Search engine.
    *
    *
    *
@@ -5777,66 +5504,6 @@ declare class GlideSPSearchAnalytics {
    *
    */
   publish(payload: string): any;
-}
-declare class GlideSysAttachment {
-  constructor();
-  /**
-   * Copies attachments from the source record to the target record.
-   * @param sourceTable Name of the table with the attachments to be copied.
-   * @param sourceID Source table's sys_id.
-   * @param targetTable Name of the table on which to add the attachments.
-   * @param targetID Target table's sys_id.
-   */
-  copy(
-    sourceTable: string,
-    sourceID: string,
-    targetTable: string,
-    targetID: string,
-  ): string;
-  /**
-   * Deletes the specified attachment.
-   * @param attachmentID Attachment's sys_id.
-   */
-  deleteAttachment(attachmentID: string): any;
-  /**
-   * Returns a GlideRecord containing the matching attachment metadata such as name, type,
-   * or size.
-   * @param tableName Name of the table to which the attachment belongs; for example, incident.
-   * @param sys_id The sys_id of record to which the attachment belongs.
-   */
-  getAttachments(tableName: string, sys_id: string): GlideRecord;
-  /**
-   * Returns a GlideScriptableInputStream object given the sys_id of an
-   * attachment.
-   * @param sysID Attachment sys_id.
-   */
-  getContentStream(sysID: string): GlideScriptableInputStream;
-  /**
-   * Attaches a specified attachment to the specified record.
-   * @param record Record to which to attach the attachment.
-   * @param fileName Attachment file name.
-   * @param contentType Attachment content type.
-   * @param content Attachment content.
-   */
-  write(
-    record: GlideRecord,
-    fileName: string,
-    contentType: string,
-    content: string,
-  ): string;
-  /**
-   * Inserts an attachment using the input stream.
-   * @param now_GR Record to which the attachment is to be attached.
-   * @param fileName Attachment's file name.
-   * @param contentType Attachment's content type.
-   * @param content Attachment content.
-   */
-  writeContentStream(
-    now_GR: GlideRecord,
-    fileName: string,
-    contentType: string,
-    content: GlideScriptableInputStream,
-  ): string;
 }
 declare class GlideSystem {
   /**
@@ -5869,7 +5536,7 @@ declare class GlideSystem {
    */
   beginningOfNextMonth(): string;
   /**
-   * Returns the date and time for the beginning of next week in GMT.
+   * Gets the date and time for the beginning of next week in GMT.
    */
   beginningOfNextWeek(): string;
   /**
@@ -5877,11 +5544,11 @@ declare class GlideSystem {
    */
   beginningOfNextYear(): string;
   /**
-   * Returns the date and time for the beginning of the current month in GMT.
+   * Returns the date and time for the beginning of this month in GMT.
    */
   beginningOfThisMonth(): string;
   /**
-   * Returns the date and time for the beginning of the current quarter in GMT.
+   * Returns the date and time for the beginning of this quarter in GMT.
    */
   beginningOfThisQuarter(): string;
   /**
@@ -5907,15 +5574,10 @@ declare class GlideSystem {
   beginningOfYesterday(): string;
   /**
    * Calculate the difference between two dates using the default calendar.
-   * @param startDate Starting date to compare in the current user's date format.
-   * @param endDate Ending date to compare in the current user's date format.
-   * @param numericValue Flag that indicates ther format of the returned time value.Valid values:
-   *
-   * true: Return value is formatted in number of seconds
-   *
-   * false: Return value is formatted ddd hh:mm:ss.
-   *
-   *
+   * @param startDate The starting date to compare in the current user's date format.
+   * @param endDate The ending date to compare in the current user's date format.
+   * @param numericValue If true, the return value will be formatted in number of seconds; if false the
+   * return value will be formatted ddd hh:mm:ss.
    */
   calDateDiff(
     startDate: string,
@@ -5932,8 +5594,8 @@ declare class GlideSystem {
   dateDiff(startDate: string, endDate: string, numericValue: boolean): string;
   /**
    * Generates a date and time for the specified date in GMT.
-   * @param date Date to generate in GMT.Format: yyyy-mm-dd
-   * @param range Start, end, or a time. Format: 24-hour hh:mm:ss
+   * @param date Format: yyyy-mm-dd.
+   * @param range Start, end, or a time in the 24-hour format hh:mm:ss.
    */
   dateGenerate(date: string, range: string): string;
   /**
@@ -5977,7 +5639,7 @@ declare class GlideSystem {
    */
   endOfNextMonth(): string;
   /**
-   * Returns the date and time for the end of next week in GMT.
+   * Gets the date and time for the end of next week in GMT.
    */
   endOfNextWeek(): string;
   /**
@@ -6052,7 +5714,7 @@ declare class GlideSystem {
    */
   getAvatar(): string;
   /**
-   * Returns the name of the current application scope.
+   * Gets the name of the current scope.
    */
   getCurrentScopeName(): string;
   /**
@@ -6061,10 +5723,10 @@ declare class GlideSystem {
    */
   getDisplayColumn(tableName: string): string;
   /**
-   * Returns the display value for a specified field on a specified record.
-   * @param tableName Name of the table.
-   * @param recordID Sys_id for the record.
-   * @param fieldName Name of the field whose display value to return.
+   * Returns the display value for a specified field on a record.
+   * @param tableName Name of the table
+   * @param recordID sysid for the record
+   * @param fieldName Name of the field
    */
   getDisplayValueFor(
     tableName: string,
@@ -6079,9 +5741,9 @@ declare class GlideSystem {
   /**
    * Retrieves the property and escapes it for XML parsing.
    * @param key Key for the property whose value should be returned.
-   * @param substituteObject Optional. Object to return if the property is not found.
+   * @param substituteObject Object to be returned if the property is not found.
    */
-  getEscapedProperty(key: string, substituteObject?: any): string;
+  getEscapedProperty(key: string, substituteObject: any): string;
   /**
    * Returns the display name of the impersonating user.
    */
@@ -6105,12 +5767,12 @@ declare class GlideSystem {
    * @param messageID Message identifier. You can locate
    * this value in the Key field of the Message [sys_ui_message] table. Note the Key
    * field may look exactly like the actual message string.
-   * @param args Optional. List of strings or other values defined by
-   * java.text.MessageFormat that replace the variables within the specified message.
-   * For example: gs.getMessage("Abort adding action '{0}', same subflow
-   * can't be added twice in this subflow.", current.action.name);
-   * In
-   * this example '{0}' is replaced with the content of
+   * @param args Optional. List of strings or other values defined by java.text.MessageFormat
+   * that replace the variables within the specified message. For example:
+   * gs.getMessage("Abort adding action '{0}', same subflow can't be added
+   * twice in this subflow.", current.action.name);
+   * In this example
+   * '{0}' is replaced with the content of
    * current.action.name.
    * Note: The passed in values are not
    * translated. They are inserted verbatim in the message.
@@ -6121,45 +5783,51 @@ declare class GlideSystem {
    * @param MessageID Message identifier. You can locate
    * this value in the Key field of the Message [sys_ui_message] table. Note the Key
    * field may look exactly like the actual message string.
-   * @param args Optional. List of strings or other values defined by
-   * java.text.MessageFormat that replace the variables within the specified message.
-   * For example: gs.getMessage("Abort adding action '{0}', same subflow
-   * can't be added twice in this subflow.", current.action.name);
-   * In
-   * this example '{0}' is replaced with the content of
+   * @param args Optional. List of strings or other values defined by java.text.MessageFormat
+   * that replace the variables within the specified message. For example:
+   * gs.getMessage("Abort adding action '{0}', same subflow can't be added
+   * twice in this subflow.", current.action.name);
+   * In this example
+   * '{0}' is replaced with the content of
    * current.action.name.
    * Note: The passed in values are not
    * translated. They are inserted verbatim in the message.
    */
   getMessageS(MessageID: string, args?: any): string;
   /**
-   * Returns the node name for the specified index.
-   * @param obj Object to examine.
-   * @param index Index from which to obtain the node name.
+   * Returns the list of messages of the specified type for the session that were added by
+   * addMessage().
+   * @param type The type of message
+   */
+  getMessages(type: string): any;
+  /**
+   * Returns the node name for specified index.
+   * @param obj Object to examine
+   * @param index Index from which to get the node name
    */
   getNodeName(obj: any, index: number): string;
   /**
-   * Returns the node value for the specified index.
-   * @param obj Object to examine.
-   * @param index Index from which to get the node valu.e
+   * Returns the node value for specified index.
+   * @param obj Object to examine
+   * @param index Index from which to get the node value
    */
   getNodeValue(obj: any, index: number): any;
   /**
-   * Returns the specified user preference.
-   * @param key Key for the preference.
-   * @param _default Default value to use if the specified preference is not found.
+   * Returns a user preference.
+   * @param key The key for the preference
+   * @param _default The default value
    */
   getPreference(key: string, _default: any): string;
   /**
-   * Returns the value of a Glide property. If the property is not found, returns the
-   * specified alt value.
-   * @param key Key for the property whose value should be returned.
-   * @param alt Optional. Alternate object to return if the property is not found.
+   * Gets the value of a Glide property. If the property is not found, returns the alternate
+   * value.
+   * @param key The key for the property whose value should be returned.
+   * @param alt (Optional) Alternate object to return if the property is not found.
    */
   getProperty(key: string, alt?: any): string;
   /**
    * Returns the script error found in the specified script, if there is one.
-   * @param script Script to check for errors.
+   * @param script The script to check for errors.
    */
   getScriptError(script: string): string;
   /**
@@ -6167,14 +5835,14 @@ declare class GlideSystem {
    */
   getSession(): GlideSession;
   /**
-   * Returns the GlideSession session ID.
+   * Returns the GlideSession Session ID.
    */
   getSessionID(): string;
   /**
-   * Returns the style defined for the table, field, and field value.
-   * @param tableName Table name
-   * @param fieldName Field name
-   * @param fieldValue Field value
+   * Returns the style defined for the table, field and value.
+   * @param tableName The table name
+   * @param fieldName The field name
+   * @param fieldValue The field value
    */
   getStyle(tableName: string, fieldName: string, fieldValue: string): string;
   /**
@@ -6191,76 +5859,69 @@ declare class GlideSystem {
    */
   getUserID(): string;
   /**
-   * Returns the name of the current user, such as jsmith.
+   * Returns the username of the current user (e.g., jsmith).
    */
   getUserName(): string;
   /**
-   * Returns the user display name based on a provided user login name.
-   * @param user_id Login name of the user from which to retrieve the associated display
-   * name.
+   * Returns the username based on a user ID.
+   * @param sys_id A sys_id for a user
    */
-  getUserNameByUserID(user_id: string): string;
+  getUserNameByUserID(sys_id: string): string;
   /**
-   * Constructs an array of all the nodes and values in an XML document.
-   * @param xml XML document to parse.
+   * Constructs an Array of all the nodes and values in an XML document.
+   * @param xml The XML document to parse
    */
   getXMLNodeList(xml: string): any[];
   /**
-   * Returns the XML text for the first element in the XML string that matches the XPath
+   * Returns the XML text for the first node in the XML string that matches the XPath
    * query.
-   * @param xml XML string to search.
-   * @param xpathQuery XPath query to match.
+   * @param xml An XML string
+   * @param xpathQuery The XPath query to match
    */
   getXMLText(xml: string, xpathQuery: string): string;
   /**
    * Determines if the current user has at least one of the passed-in roles.
-   * @param roleName Comma-separated list of roles.
+   * @param roleName Comma separated list of roles
    */
   hasRole(roleName: string): boolean;
   /**
    * Determines if the current user has the specified role within a specified
    * group.
-   * @param roleName Name of the role.
-   * @param group Sys_id of the group to check for the specified role.
+   * @param roleName Name of the role
+   * @param group sys_id of the group to check for the specified role
    */
   hasRoleInGroup(roleName: any, group: any): boolean;
   /**
-   * Returns a date and time for the specified number of hours ago. The returned value is
-   * adjusted for the time zone of the instance.
-   * @param hours Number of hours ago.
+   * Returns a date and time for a certain number of hours ago.
+   * @param hours Number of hours
    */
   hoursAgo(hours: number): string;
   /**
-   * Returns a date and time for the end of the hour for the specified number of hours ago.
-   * The returned value is adjusted for the time zone of the instance.
-   * @param hours Number of hours ago.
+   * Returns a date and time for the end of the hour a certain number of hours
+   * ago.
+   * @param hours An integer number of hours
    */
   hoursAgoEnd(hours: number): string;
   /**
-   * Returns a date and time for the start of the hour for the specified number of hours
-   * ago. The returned value is adjusted for the time zone of the instance.
-   * @param hours Number of hours ago.
+   * Returns a date and time for the start of the hour a certain number of hours
+   * ago.
+   * @param hours An integer number of hours
    */
   hoursAgoStart(hours: number): string;
   /**
-   * Checks whether the date in the specified date object is the first day of the
-   * month.
-   * @param date Date object on which to check the date, such as GlideDateTime or
-   * GlideDate.
+   * Checks whether the date is the first day of the month.
+   * @param date date object
    */
   isFirstDayOfMonth(date: any): boolean;
   /**
-   * Checks whether the date in the specified date object is the first day of the week. This
-   * method uses the ISO standard of Monday being the first day of the week.
-   * @param date Date object on which to check the date, such as GlideDateTime or
-   * GlideDate.
+   * Checks whether the date is the first day of the week. This uses the ISO standard of
+   * Monday being the first day of the week.
+   * @param date date object
    */
   isFirstDayOfWeek(date: any): boolean;
   /**
-   * Checks whether the date in the specified date object is the first day of the
-   * year.
-   * @param date Date object on which to check the date, such as GlideDateTime or
-   * GlideDate.
+   * Checks whether the date is the first day of the year.
+   * @param date date object
    */
   isFirstDayOfYear(date: any): boolean;
   /**
@@ -6268,24 +5929,18 @@ declare class GlideSystem {
    */
   isInteractive(): boolean;
   /**
-   * Checks whether the date in the specified date object is the last day of the
-   * month.
-   * @param date Date object on which to check the date, such as GlideDateTime or
-   * GlideDate.
+   * Checks whether the date is the last day of the month.
+   * @param date date object
    */
   isLastDayofMonth(date: any): boolean;
   /**
-   * Checks whether the date in the specified date object is the last day of the week. This
-   * method uses the ISO standard of Sunday being the last day of the week.
-   * @param date Date object on which to check the date, such as GlideDateTime or
-   * GlideDate.
+   * Checks whether the date is the last day of the week.
+   * @param date date object
    */
   isLastDayOfWeek(date: any): boolean;
   /**
-   * Checks whether the date in the specified date object is the last day of the
-   * year.
-   * @param date Date object on which to check the date, such as GlideDateTime or
-   * GlideDate.
+   * Checks whether the date is the last day of the year.
+   * @param date date object
    */
   isLastDayOfYear(date: any): boolean;
   /**
@@ -6293,7 +5948,7 @@ declare class GlideSystem {
    */
   isLoggedIn(): boolean;
   /**
-   * Determines whether the request came from a mobile device.
+   * Determines whether a request comes from a mobile device.
    */
   isMobile(): boolean;
   /**
@@ -6302,25 +5957,25 @@ declare class GlideSystem {
   lastWeek(): string;
   /**
    * Logs a message to the system log and saves it to the syslog table.
-   * @param message Message to log.
-   * @param source Optional. Source of the message.
+   * @param message The message to log.
+   * @param source (optional) The source of the message.
    */
   log(message: string, source?: string): any;
   /**
    * Logs an error to the system log and saves it to the syslog table.
-   * @param message Error message to log.
-   * @param source Optional. Source of the message.
+   * @param message The message to log.
+   * @param source (optional) The source of the message
    */
   logError(message: string, source?: string): any;
   /**
    * Logs a warning to the system log and saves it to the syslog table.
-   * @param message Message to log.
-   * @param source Optional. Source of the message.
+   * @param message The message to log.
+   * @param source (optional) The source of the message
    */
   logWarning(message: string, source?: string): any;
   /**
-   * Returns a date and time for the specified number of minutes ago.
-   * @param minutes Number of minutes in the past to return.
+   * Returns a date and time for a certain number of minutes ago
+   * @param minutes An integer number of minutes
    */
   minutesAgo(minutes: number): string;
   /**
@@ -6349,7 +6004,7 @@ declare class GlideSystem {
   /**
    * Returns a date and time for the start of the month a certain number of months
    * ago.
-   * @param months Integer number of months ago, such as 5 or 14.
+   * @param months Integer number of months ago, such as 5 or 11.
    */
   monthsAgoStart(months: number): string;
   /**
@@ -6363,7 +6018,7 @@ declare class GlideSystem {
    */
   now(): string;
   /**
-   * Returns the current date and time in the user-defined format.
+   * Gets the current date and time in the user-defined format.
    */
   nowDateTime(): string;
   /**
@@ -6442,19 +6097,6 @@ declare class GlideSystem {
    */
   yesterday(): string;
 }
-declare class GlideSystemRunLevel {
-  /**
-   * Retrieves the current system run level.
-   */
-  getCurrentLevel(): string;
-  /**
-   * Switches the system run level.
-   * @param newLevel The ID value of the new system run level. This value is from the
-   * ID field in the System Run Level [sys_run_level]
-   * table.
-   */
-  switchLevel(newLevel: string): string;
-}
 declare class GlideTimeline {
   /**
    * Specifies whether or not to group timeline items by their parent.
@@ -6486,7 +6128,9 @@ declare class GlideTimeline {
    *
    * elementTimeAdjustEnd
    *
+   *
    * inputBox
+   *
    *
    * itemMove
    *
@@ -6697,8 +6341,8 @@ declare class GlideTimelineItem {
   /**
    * Creates a new TimelineSpan object associated with the current instance
    * object.
-   * @param tableName Name of the table associated with current object
-   * @param sys_id Sys_id for the object.
+   * @param tableName The name of the table associated with current object
+   * @param sys_id The sys ID for the object.
    */
   createTimelineSpan(tableName: string, sys_id: string): any;
   /**
@@ -6725,30 +6369,24 @@ declare class GlideTimelineItem {
    */
   getTimelineSpans(): any;
   /**
-   * Indicates if the left pane text is set to display using a bold style.
+   * Indicates if the left pane text is set to be displayed using a bold style.
    */
   isTextBold(): boolean;
   /**
    * Sets the name of the image file (including it's path) to use as the icon for the item in the left pane.
-   * @param strImageName Name of the image, including its path.
+   * @param strImageName The name of the image, including its path.
    */
   setImage(strImageName: string): any;
   /**
    * Sets whether or not the current instance object can be clicked and dragged into another
    * GlideTimelineItem.
-   * @param b Flag that indicates whether the item can be moved using click and drag.
-   * Valid values:
-   * true: Item can be moved using click and drag.
-   *
-   * false: Item cannot be moved using click and drag.
-   *
-   *
-   *
+   * @param b True if item should be able to be moved with click and drag. Otherwise,
+   * false.
    */
   setIsDraggable(b: boolean): any;
   /**
    * Specifies the text to display in the left pane for this item.
-   * @param strText Text to display in the left pane for this item.
+   * @param strText The text to display in the left pane for this item.
    */
   setLeftLabelText(strText: string): any;
   /**
@@ -6759,14 +6397,7 @@ declare class GlideTimelineItem {
   setParent(sysId: string): any;
   /**
    * Specifies whether or not to bold the text style of the item in the left pane.
-   * @param b Flag that indicates whether the text in left pane should be bold.Valid
-   * values:
-   * true: Text should be bold.
-   *
-   * false: Text should not be bold.
-   *
-   *
-   *
+   * @param b True if text in left pane should be bolded; otherwise false.
    */
   setTextBold(b: boolean): any;
 }
@@ -6902,7 +6533,6 @@ declare class HostnameJS {
    */
   getSysName(): string;
 }
-declare class ICalUtil {}
 declare class ICalUtilSNC {
   /**
    * Generates a formatted VCALENDAR component.
@@ -6941,9 +6571,9 @@ declare class ICalUtilSNC {
 declare class IdentificationEngineScriptableApi {
   /**
    * Inserts or updates
-   * configuration items (CI) and non-Configuration Management Database (CMDB) CIs
-   * (classes not extending from cmdb_ci) in the CMDB based on identification and reconciliation rules. Use this API instead of
-   * updating the CMDB directly.
+   * configuration items and non-Configuration Management Database (CMDB)
+   * configuration items (classes not extending from cmdb_ci) in the CMDB based on identification and reconciliation
+   * rules. Use this API instead of updating the CMDB directly.
    * @param input Required. Input payload. A JSON formatted string of
    * configuration items to add or update.
    * "input" {
@@ -6957,9 +6587,9 @@ declare class IdentificationEngineScriptableApi {
   createOrUpdateCI(input: string, source: string): any;
   /**
    * Inserts or updates
-   * configuration items (CI) and non-Configuration Management Database (CMDB) CIs
-   * (classes not extending from cmdb_ci) in the CMDB based on identification and reconciliation rules. Use this API instead of
-   * updating the CMDB directly.
+   * configuration items and non-Configuration Management Database (CMDB)
+   * configuration items (classes not extending from cmdb_ci) in the CMDB based on identification and reconciliation
+   * rules. Use this API instead of updating the CMDB directly.
    * @param input Required. Input payload. A JSON formatted string of
    * configuration items to add or update.
    * "input" {
@@ -6977,9 +6607,7 @@ declare class IdentificationEngineScriptableApi {
    * "deduplicate_payloads": "Boolean",
    * "generate_summary": "Boolean",
    * "partial_commits": "Boolean",
-   * "partial_payloads": "Boolean",
-   * "skip_updating_last_scan_to_now": "Boolean",
-   * "skip_updating_source_last_discovered_to_now": "Boolean"
+   * "partial_payloads": "Boolean"
    * }
    * @param source Data source of the CI information. This value must be one of
    * the choice values defined for the discovery_source field of the Configuration Item
@@ -6997,22 +6625,22 @@ declare class IdentificationEngineScriptableApi {
    * input string is in the format  'items: [{}], relations:[{}]', where each item within
    * the items and relations lists contains name-value pairs. The possible name-value
    * pairs within the items list are:
-   * className - Sys_class_name of the CI to be created or updated.
+   * className - the sys_class_name of the CI to be created or updated.
    *
-   * values:{} - Field information for the CI as name-value pairs, where the name
-   * is the field name.
+   * values:{} - the field information for the CI as name-value pairs, where the
+   * name is the field name.
    *
-   * lookup:[{}] - List of records with each item having name-value pairs like
+   * lookup:[{}] - a list of records with each item having name-value pairs like
    * the items list.
    *
    *
    *
    * The possible name-value pairs within the relations list are:
-   * parent - Index of the parent item in the dependency relation
+   * parent - index of the parent item in the dependency relation
    *
-   * child - Index of the child item in the dependency relation
+   * child - index of the child item in the dependency relation
    *
-   * type - Relationship type. This is one of the name field values from the
+   * type - the relationship type. This is one of the name field values from the
    * cmdb_rel_type table.
    *
    *
@@ -7040,9 +6668,7 @@ declare class IdentificationEngineScriptableApi {
    * "deduplicate_payloads": "Boolean",
    * "generate_summary": "Boolean",
    * "partial_commits": "Boolean",
-   * "partial_payloads": "Boolean",
-   * "skip_updating_last_scan_to_now": "Boolean",
-   * "skip_updating_source_last_discovered_to_now": "Boolean"
+   * "partial_payloads": "Boolean"
    * }
    * @param source Data source of the CI information. This value must be one of
    * the choice values defined for the discovery_source field of the Configuration Item
@@ -7054,12 +6680,11 @@ declare class IdentificationEngineScriptableApi {
     source: string,
   ): any;
   /**
-   * Runs an identification audit against the specified configuration item (CI) to detect
-   * duplicates.
-   * @param now_GR CI on which to run the audit to detect duplicates. The CI must have independent
-   * identification rules.
+   * Run an identification audit against the specified CI to detect duplicates.
+   * @param gr The CI on which to run the audit to detect duplicates. The CI must have
+   * independent identification rules.
    */
-  runIdentificationAudit(now_GR: GlideRecord): any;
+  runIdentificationAudit(gr: GlideRecord): any;
 }
 declare class IDResult {
   constructor(explore: boolean, sysID: string);
@@ -7082,8 +6707,8 @@ declare class IEventSender {
 declare class IPAddressFixup {
   /**
    * Removes duplicates of the specified IP address in the specified table.
-   * @param tableName Table to check for duplicates.
-   * @param ip IP address to check for.
+   * @param tableName The table to check for duplicates
+   * @param ip The IP address to check for
    */
   dedupe(tableName: string, ip: string): any;
   /**
@@ -7092,7 +6717,7 @@ declare class IPAddressFixup {
   dedupeAll(): any;
   /**
    * Removes all duplicate IP addresses and ensures that the parent ip_address record is set
-   * to one of the network interface card's (NIC) IP addresses.
+   * to one of the NIC's IP addresses.
    */
   fix(): any;
   /**
@@ -7100,8 +6725,8 @@ declare class IPAddressFixup {
    */
   getParentIP(): string;
   /**
-   * Sets the parent IP address field for the current CI.
-   * @param ip Parent IP address for the current CI.
+   * Sets the IP address field for the current CI.
+   * @param ip The IP address for the current CI.
    */
   setParentIP(ip: string): any;
   /**
@@ -7180,10 +6805,10 @@ declare class JSUtil {
   escapeText(text: string): string;
   /**
    * Returns the value in a boolean GlideRecord field.
-   * @param now_GR A GlideRecord
+   * @param gr A GlideRecord
    * @param field The field from which to retrieve the boolean value.
    */
-  getBooleanValue(now_GR: GlideRecord, field: string): boolean;
+  getBooleanValue(gr: GlideRecord, field: string): boolean;
   /**
    * Checks if item is not null and is not undefined.
    * @param item The Object to check
@@ -7236,6 +6861,178 @@ declare class JSUtil {
    * @param text The text to process.
    */
   unescapeText(text: string): string;
+}
+declare class Legacy {
+  /**
+   * Adds ad-hoc users to an ongoing conference call.
+   * @param conferenceCall The sys_id or GlideRecord of an active conference call.
+   * @param participant The sys_id or GlideRecord of a user with an E.164-compliant phone number, or an
+   * E.164-compliant phone number.
+   */
+  addConferenceCallParticipant(
+    conferenceCall: string,
+    participant: string,
+  ): GlideRecord;
+  /**
+   * Converts a local phone number to an E.164-compliant phone number based on a user's
+   * location.
+   * @param userID The sys_id of a sys_user record to get location information from.
+   * @param phoneNumber The phone number.
+   */
+  convertLocalPhoneNumberToE164(userID: string, phoneNumber: string): string;
+  /**
+   * Returns all participants for a conference call.
+   * @param conferenceCallId The ID of the conference call.
+   * @param isCallable An optional flag to return either only the users you can call (true) or those
+   * you cannot call (false).
+   */
+  getConferenceCallParticipants(
+    conferenceCallId: string,
+    isCallable?: boolean,
+  ): GlideRecord;
+  /**
+   * Returns a number of frequently-called users, up to the limit parameter, in alphabetical
+   * order.
+   * @param limit The maximum number of results.
+   */
+  getFrequentlyCalledUsers(limit: number): GlideRecord;
+  /**
+   * Returns a user's preferred E.164-compliant phone number for SMS messages.
+   * @param user The user record or the sys_id of a user to get the E.164-compliant phone number
+   * from.
+   */
+  getPreferredE164SMSNumber(user: GlideRecord): string;
+  /**
+   * Returns a user's preferred E.164-compliant phone number for voice calls.
+   * @param user The user record or the sys_id of a user to get the E.164-compliant phone number
+   * from.
+   */
+  getPreferredE164VoiceNumber(user: GlideRecord): string;
+  /**
+   * Returns a user's preferred email address
+   * @param user The user record or the sys_id of a user to get the email address from.
+   */
+  getPreferredEmailAddress(user: GlideRecord): string;
+  /**
+   * Indicates whether Notify is set up correctly or not.
+   */
+  getReadyState(): boolean;
+  /**
+   * Returns the current status of Notify configuration.
+   */
+  getStatus(): string;
+  /**
+   * Initiate a new conference call.
+   * @param conferenceCallParticipants One or more users, conference call participants, identified by the sys_ids from
+   * the sys_user table or E.164-compliant phone numbers.
+   * @param conferenceCallTitle Title of the conference call. This parameter has a maximum length of 40
+   * characters.
+   */
+  initiateConferenceCall(
+    conferenceCallParticipants: string,
+    conferenceCallTitle: string,
+  ): GlideRecord;
+  /**
+   * Initiate a new conference call.
+   * @param conferenceCallParticipants One or more users, conference call participants, identified by the sys_ids from
+   * the sys_user table or E.164-compliant phone numbers.
+   * @param conferenceCallTitle Title of the conference call. This parameter has a maximum length of 40
+   * characters.
+   * @param sourceRecord Source record to associate to the conference call such as an incident or
+   * problem number.
+   * @param private Value to control if a conference call is private. This value defaults to
+   * false.
+   */
+  initiateConferenceCall(
+    conferenceCallParticipants: string,
+    conferenceCallTitle: string,
+    sourceRecord: GlideRecord,
+    private: boolean,
+  ): GlideRecord;
+  /**
+   * Determines whether a user is callable or not.
+   * @param participant A sys_user or notifynow_participant record, or an E.164-compliant phone
+   * number.
+   */
+  isCallable(participant: string): boolean;
+  /**
+   * Checks if the telephone number associated with the Twilio account is capable of sending
+   * SMS messages.
+   */
+  isSMSCapable(): boolean;
+  /**
+   * Checks if the telephone number associated with the Twilio account is capable of sending
+   * SMS messages.
+   * @param userID The sys_id of the user you want to check for an SMS-capable phone
+   * number.
+   */
+  isSMSCapable(userID: string): boolean;
+  /**
+   * Checks if the telephone number associated with the Twilio account is capable of setting
+   * up phone calls.
+   */
+  isVoiceCapable(): boolean;
+  /**
+   * Checks if the telephone number associated with the Twilio account is capable of setting
+   * up phone calls.
+   * @param userID The sys_id of the user you want to check for a voice-call capable phone
+   * number.
+   */
+  isVoiceCapable(userID: string): boolean;
+  /**
+   * Removes a participant from a conference call.
+   * @param participant The conference call participant to remove from the call.
+   */
+  kick(participant: GlideRecord): boolean;
+  /**
+   * Mutes a participant on a conference call.
+   * @param participant The conference call participant to mute.
+   */
+  mute(participant: GlideRecord): boolean;
+  /**
+   * Send an email question to an email address.
+   * @param emailAddress Email address to send the question to.
+   * @param question The question record to send or the sys_id of a question record.
+   * @param sourceRecord An optional source record to associate to the SMS question, such as an
+   * incident.
+   * @param emailSubject Optional text to override the default email subject.
+   */
+  sendEmailQuestion(
+    emailAddress: string,
+    question: string,
+    sourceRecord?: GlideRecord,
+    emailSubject?: string,
+  ): string;
+  /**
+   * Sends an SMS message to an E.164-compliant mobile phone number.
+   * @param phoneNumber The E.164-compliant phone number to send the message to.
+   * @param smsBody The message to send, maximum 1600 characters.
+   */
+  sendSMS(phoneNumber: string, smsBody: string): any;
+  /**
+   * Sends an SMS message to an E.164-compliant mobile phone number.
+   * @param phoneNumber The E.164-compliant phone number to send the message to.
+   * @param smsBody The message to send, maximum 1600 characters.
+   * @param source The source record to associate with this SMS message.
+   */
+  sendSMS(phoneNumber: string, smsBody: string, source: GlideRecord): any;
+  /**
+   * Sends an SMS question.
+   * @param phoneNumber An E.164-compliant phone number to send the message to.
+   * @param question The question record to send or the sys_id of a question record.
+   * @param sourceRecord An optional source record to associate to the SMS question, such as an
+   * incident.
+   */
+  sendSMSQuestion(
+    phoneNumber: any,
+    question: string,
+    sourceRecord?: any,
+  ): string;
+  /**
+   * Unmutes a participant on a conference call.
+   * @param participant The muted conference call participant to unmute.
+   */
+  umute(participant: GlideRecord): boolean;
 }
 declare class Logger {
   /**
@@ -7490,18 +7287,18 @@ declare class MLPredictor {
   /**
    * Sets predicted values from an array of specified solutions to a specified
    * record.
-   * @param now_GR The record on which to apply the array of predicted solutions.
+   * @param gr The record on which to apply the array of predicted solutions.
    * @param solutions Specified solution objects associated with the GlideRecord.
    */
-  applyPrediction(now_GR: GlideRecord, solutions: any[]): any;
+  applyPrediction(gr: GlideRecord, solutions: any[]): any;
   /**
    * Applies a predicted value from a specified classification solution to the specified
    * GlideRecord.
-   * @param now_GR GlideRecord object containing values on which to run a prediction and apply the
+   * @param gr GlideRecord object containing values on which to run a prediction and apply the
    * results.
    * @param solution Classification solution object to be executed.
    */
-  applyPredictionForSolution(now_GR: GlideRecord, solution: any): boolean;
+  applyPredictionForSolution(gr: GlideRecord, solution: any): boolean;
   /**
    * Gets the solution object.
    * @param solutionName Name of the ml_solution record.
@@ -7509,9 +7306,9 @@ declare class MLPredictor {
   findActiveSolution(solutionName: string): any;
   /**
    * Gets active solutions for a table in a specified GlideRecord.
-   * @param now_GR GlideRecord from which to collect active solution objects.
+   * @param gr GlideRecord from which to collect active solution objects.
    */
-  findActiveSolutionsForRecord(now_GR: GlideRecord): any[];
+  findActiveSolutionsForRecord(gr: GlideRecord): any[];
   /**
    * Gets the predicted value for a specified solution based on the specified prediction
    * outcome.
@@ -7522,7 +7319,7 @@ declare class MLPredictor {
   getPredictedValue(solution: any, outcome: any): any;
   /**
    * Gets predictions for a specified solution.
-   * @param now_GR GlideRecord to be predicted.
+   * @param gr GlideRecord to be predicted.
    * @param solution Solution object to be executed.
    * @param options Optional JSON object key value pair with the following properties:
    * options.top_n: If provided, returns results up to the expected number of
@@ -7535,7 +7332,7 @@ declare class MLPredictor {
    *
    *
    */
-  getPredictions(now_GR: GlideRecord, solution: any, options?: any): any[];
+  getPredictions(gr: GlideRecord, solution: any, options?: any): any[];
   /**
    * Identifies if a solution object is a classification type.
    * @param solution Name of the ML solution.
@@ -7549,22 +7346,19 @@ declare class MLPredictor {
   /**
    * Sets final prediction result values to a specified GlideRecord with an optionally
    * specified reason.
-   * @param now_GR GlideRecord on which to set the final prediction result values.
+   * @param gr GlideRecord on which to set the final prediction result values.
    * @param reason Optional. Reason for applying results.
    */
-  recordFinalValuesInPredictionResults(
-    now_GR: GlideRecord,
-    reason?: string,
-  ): any;
+  recordFinalValuesInPredictionResults(gr: GlideRecord, reason?: string): any;
 }
 declare class MLSolution {
   /**
    * Gets the prediction result for a classification solution and applies it to the input
    * GlideRecord if the confidence value is higher than the threshold.
-   * @param now_GR GlideRecord object containing values on which to run a prediction and apply the
+   * @param gr GlideRecord object containing values on which to run a prediction and apply the
    * results.
    */
-  applyPrediction(now_GR: GlideRecord): boolean;
+  applyPrediction(gr: GlideRecord): boolean;
   /**
    * Gets the capability information of a trained solution.
    */
@@ -7579,9 +7373,9 @@ declare class MLSolution {
   getClusterAssignments(options?: any): any;
   /**
    * Gets the cluster information for a clustering solution.
-   * @param now_GR Name of the input GlideRecord.
+   * @param gr Name of the input GlideRecord.
    */
-  getClusterForRecord(now_GR: GlideRecord): string;
+  getClusterForRecord(gr: GlideRecord): string;
   /**
    * Gets information for a specified clustering
    * solution.
@@ -7891,7 +7685,7 @@ declare class Notify {
    * @param source Source record that prompted this SMS message, such as an incident.
    */
   sendSMS(
-    notifyPhoneNumber: string,
+    notifyPhoneNumber: any,
     toPhoneNumber: string,
     messageBody: string,
     source: GlideRecord,
@@ -7969,278 +7763,6 @@ declare class NotifyAction {
    * Serialize the NotifyAction object to a JSON string.
    */
   toJson(): string;
-}
-declare class NotifyJsTelephonyDriver {
-  /**
-   * Calls a specified telephone number.
-   * @param notifyPhoneNumber NotifyPhoneNumber record that contains the Notify phone number from which to
-   * make the call. Located in the Notify Phone Number [notify_number] table.
-   * @param toPhoneNumber Telephone number to call.Format: E.164
-   */
-  call(notifyPhoneNumber: any, toPhoneNumber: string): any;
-  /**
-   * Returns a list of the capabilities of the telephony driver.
-   */
-  getCapabilities(): any;
-  /**
-   * Returns the maximum number of telephone numbers to which the telephony driver
-   * associated with the passed in Notify telephone number can send an SMS message to at one
-   * time.
-   * @param phoneNumber Notify telephone number to check for the maximum number of telephone numbers
-   * that the associated driver is able to send to in one bulk SMS message.
-   */
-  getMaxSizeForBulkSms(phoneNumber: string): number;
-  /**
-   * Returns the Notify phone number record for the specified phone number.
-   */
-  getPhoneNumber(): any;
-  /**
-   * Returns a list of all Notify telephone numbers associated with the current telephony
-   * driver.
-   */
-  getPhoneNumbers(): string;
-  /**
-   * Checks whether the current telephony driver is active.
-   */
-  isActive(): boolean;
-  /**
-   * Removes the specified caller from the current Notify conference call.
-   * @param participantRecord GlideRecord object containing the Notify Participant [notify_participant]
-   * record of the caller to remove from the conference call.
-   */
-  kick(participantRecord: GlideRecord): string;
-  /**
-   * Mutes the specified caller in the current Notify conference call.
-   * @param participantRecord GlideRecord object containing the Notify Participant [notify_participant]
-   * record of the caller to mute in the conference call.
-   */
-  mute(participantRecord: GlideRecord): string;
-  /**
-   * Sends the specified Short Message Service (SMS) message to the specified list of
-   * telephone numbers.
-   * @param message Message to send.
-   * @param notifyPhoneNumber Record that contains the phone number that is sending the bulk SMS
-   * message.
-   * @param source Optional. Incident GlideRecord to store in the Source field of the associated
-   * SMS message record in the Notify Message [notify message] table. This links the
-   * Incident record that caused the SMS message to be generated to that SMS
-   * message.Default: None. If this parameter is not passed in, this information is
-   * not tracked.
-   * @param toPhoneNumbers List of telephone numbers of the devices to receive the SMS message.
-   */
-  sendAutonomousBulkSms(
-    message: string,
-    notifyPhoneNumber: any,
-    source: GlideRecord | undefined,
-    toPhoneNumbers: any[],
-  ): any;
-  /**
-   * Sends a specified Short Message Service (SMS) message to a specified telephone
-   * number.
-   * @param notifyPhoneNumber Notify phone number record that contains the telephone number that is sending
-   * the SMS message. Located in the Notify Phone Number [notify_number] table.
-   * @param toPhoneNumber Phone number to send the SMS message to. Format: E.164 compliant
-   * @param message Text to send in the SMS message.
-   */
-  sendSMS(notifyPhoneNumber: any, toPhoneNumber: string, message: string): any;
-  /**
-   * Checks whether the specified Notify telephone number is capable of handling autonomous
-   * bulk Short Message Service (SMS) messages.
-   */
-  supportsAutonomousBulkSms(): boolean;
-  /**
-   * Checks whether the current telephony driver is capable of handling telephone
-   * calls.
-   */
-  supportsCall(): boolean;
-  /**
-   * Checks whether the specified Notify telephone number is capable of calls to a browser
-   * using WebRTC (Real-Time Communications.)
-   */
-  supportsCallOverWebRtc(): boolean;
-  /**
-   * Checks whether the current telephony driver is capable of handling Short Message
-   * Service (SMS) messages.
-   */
-  supportsSMS(): boolean;
-  /**
-   * Unmutes the specified caller in the current Notify conference call.
-   * @param participantRecord GlideRecord object containing the Notify Participant [notify_participant]
-   * record of the caller to mute in the conference call.
-   */
-  unmute(participantRecord: GlideRecord): string;
-}
-declare class NotifyNow {
-  /**
-   * Adds ad-hoc users to an ongoing conference call.
-   * @param conferenceCall The sys_id or GlideRecord of an active conference call.
-   * @param participant The sys_id or GlideRecord of a user with an E.164-compliant phone number, or an
-   * E.164-compliant phone number.
-   */
-  addConferenceCallParticipant(
-    conferenceCall: string,
-    participant: string,
-  ): GlideRecord;
-  /**
-   * Converts a local phone number to an E.164-compliant phone number based on a user's
-   * location.
-   * @param userID The sys_id of a sys_user record to get location information from.
-   * @param phoneNumber The phone number.
-   */
-  convertLocalPhoneNumberToE164(userID: string, phoneNumber: string): string;
-  /**
-   * Returns all participants for a conference call.
-   * @param conferenceCallId The ID of the conference call.
-   * @param isCallable An optional flag to return either only the users you can call (true) or those
-   * you cannot call (false).
-   */
-  getConferenceCallParticipants(
-    conferenceCallId: string,
-    isCallable?: boolean,
-  ): GlideRecord;
-  /**
-   * Returns a number of frequently-called users, up to the limit parameter, in alphabetical
-   * order.
-   * @param limit The maximum number of results.
-   */
-  getFrequentlyCalledUsers(limit: number): GlideRecord;
-  /**
-   * Returns a user's preferred E.164-compliant phone number for SMS messages.
-   * @param user The user record or the sys_id of a user to get the E.164-compliant phone number
-   * from.
-   */
-  getPreferredE164SMSNumber(user: GlideRecord): string;
-  /**
-   * Returns a user's preferred E.164-compliant phone number for voice calls.
-   * @param user The user record or the sys_id of a user to get the E.164-compliant phone number
-   * from.
-   */
-  getPreferredE164VoiceNumber(user: GlideRecord): string;
-  /**
-   * Returns a user's preferred email address
-   * @param user The user record or the sys_id of a user to get the email address from.
-   */
-  getPreferredEmailAddress(user: GlideRecord): string;
-  /**
-   * Indicates whether Notify is set up correctly or not.
-   */
-  getReadyState(): boolean;
-  /**
-   * Returns the current status of Notify configuration.
-   */
-  getStatus(): string;
-  /**
-   * Initiate a new conference call.
-   * @param conferenceCallParticipants One or more users, conference call participants, identified by the sys_ids from
-   * the sys_user table or E.164-compliant phone numbers.
-   * @param conferenceCallTitle Title of the conference call. This parameter has a maximum length of 40
-   * characters.
-   */
-  initiateConferenceCall(
-    conferenceCallParticipants: string,
-    conferenceCallTitle: string,
-  ): GlideRecord;
-  /**
-   * Initiate a new conference call.
-   * @param conferenceCallParticipants One or more users, conference call participants, identified by the sys_ids from
-   * the sys_user table or E.164-compliant phone numbers.
-   * @param conferenceCallTitle Title of the conference call. This parameter has a maximum length of 40
-   * characters.
-   * @param sourceRecord Source record to associate to the conference call such as an incident or
-   * problem number.
-   * @param private Value to control if a conference call is private. This value defaults to
-   * false.
-   */
-  initiateConferenceCall(
-    conferenceCallParticipants: string,
-    conferenceCallTitle: string,
-    sourceRecord: GlideRecord,
-    private: boolean,
-  ): GlideRecord;
-  /**
-   * Determines whether a user is callable or not.
-   * @param participant A sys_user or notifynow_participant record, or an E.164-compliant phone
-   * number.
-   */
-  isCallable(participant: string): boolean;
-  /**
-   * Checks if the telephone number associated with the Twilio account is capable of sending
-   * SMS messages.
-   */
-  isSMSCapable(): boolean;
-  /**
-   * Checks if the telephone number associated with the Twilio account is capable of sending
-   * SMS messages.
-   * @param userID The sys_id of the user you want to check for an SMS-capable phone
-   * number.
-   */
-  isSMSCapable(userID: string): boolean;
-  /**
-   * Checks if the telephone number associated with the Twilio account is capable of setting
-   * up phone calls.
-   */
-  isVoiceCapable(): boolean;
-  /**
-   * Checks if the telephone number associated with the Twilio account is capable of setting
-   * up phone calls.
-   * @param userID The sys_id of the user you want to check for a voice-call capable phone
-   * number.
-   */
-  isVoiceCapable(userID: string): boolean;
-  /**
-   * Removes a participant from a conference call.
-   * @param participant The conference call participant to remove from the call.
-   */
-  kick(participant: GlideRecord): boolean;
-  /**
-   * Mutes a participant on a conference call.
-   * @param participant The conference call participant to mute.
-   */
-  mute(participant: GlideRecord): boolean;
-  /**
-   * Send an email question to an email address.
-   * @param emailAddress Email address to send the question to.
-   * @param question The question record to send or the sys_id of a question record.
-   * @param sourceRecord An optional source record to associate to the SMS question, such as an
-   * incident.
-   * @param emailSubject Optional text to override the default email subject.
-   */
-  sendEmailQuestion(
-    emailAddress: string,
-    question: string,
-    sourceRecord?: GlideRecord,
-    emailSubject?: string,
-  ): string;
-  /**
-   * Sends an SMS message to an E.164-compliant mobile phone number.
-   * @param phoneNumber The E.164-compliant phone number to send the message to.
-   * @param smsBody The message to send, maximum 1600 characters.
-   */
-  sendSMS(phoneNumber: string, smsBody: string): any;
-  /**
-   * Sends an SMS message to an E.164-compliant mobile phone number.
-   * @param phoneNumber The E.164-compliant phone number to send the message to.
-   * @param smsBody The message to send, maximum 1600 characters.
-   * @param source The source record to associate with this SMS message.
-   */
-  sendSMS(phoneNumber: string, smsBody: string, source: GlideRecord): any;
-  /**
-   * Sends an SMS question.
-   * @param phoneNumber An E.164-compliant phone number to send the message to.
-   * @param question The question record to send or the sys_id of a question record.
-   * @param sourceRecord An optional source record to associate to the SMS question, such as an
-   * incident.
-   */
-  sendSMSQuestion(
-    phoneNumber: any,
-    question: string,
-    sourceRecord?: any,
-  ): string;
-  /**
-   * Unmutes a participant on a conference call.
-   * @param participant The muted conference call participant to unmute.
-   */
-  umute(participant: GlideRecord): boolean;
 }
 declare class NotifyPhoneNumber {
   /**
@@ -8982,7 +8504,7 @@ declare class OnCallContactPreferenceUtil {
   /**
    * Gets a list of contacts with the escalatee object. Each returned contact contains a
    * list of user contact preferences.
-   * @param escalatee Mandatory. Escalatee object returned by the getEscalationPlan() method.
+   * @param escalatee Mandatory. Escalatee object returned by the getEscalationPlan()  method.
    * @param contactAttempt Optional. The attempt you are trying to contact [ default value = 1 ].
    * 1: First attempt
    *
@@ -9051,7 +8573,7 @@ declare class OnCallRotation {
    */
   cancelEscalations(escalationGr: GlideRecord): any;
   /**
-   * Continue the escalations for a document(incident now_GR) and group. This API is applicable
+   * Continue the escalations for a document(incident gr) and group. This API is applicable
    * for a single shift, overlapping shifts, and custom escalation.
    * @param escalationGr GlideRecord of Rotation escalation(cmn_rota_escalation
    */
@@ -9185,46 +8707,32 @@ declare class OnCallRotation {
    */
   spansOverlap(parent: any, child: any, timeZone: string): boolean;
   /**
-   * Start the escalations for a document(incident now_GR) and group, and specify the event name
+   * Start the escalations for a document(incident gr) and group, and specify the event name
    * for the escalation notifications. In addition, specify the name of the business rule to call
    * when an escalation occurs. This method should be used after a succesful call to
    * who or whoAt methods. This API is applicable for a
    * single shift, overlapping shifts, and custom escalation.
-   * @param now_GR Document glide record. For example, Incident now_GR.
+   * @param gr Document glide record. For example, Incident GlideRecord.
    * @param eventName Event name for the escalation notifications.
    * @param escalationScriptName Business rule to call when escalation occurs
    */
   startEscalations(
-    now_GR: GlideRecord,
+    gr: GlideRecord,
     eventName: string,
     escalationScriptName: string,
   ): any;
   /**
-   * Specifies if there is an on-call user, group, or device. This method is applicable for
-   * a single shift, overlapping shifts, and custom escalation.
-   * @param groupSysId Sys_id of the group to check for.
-   * @param gdt Date and time.Format: yyyy-MM-dd HH:mm:ss in the UTC time zone
-   * Default:
-   * Current date and time
-   * @param nullifyOverrideRoster Flag that indicates whether the notification list for the group is for a
-   * specific roster.Valid values:
-   * true: Not for a specific roster.
-   *
-   * false: For a specific roster.
-   *
-   *
-   *
+   * Specifies if there is an on-call user, group, or device. This API is applicable for a
+   * single shift, overlapping shifts, and custom escalation.
+   * @param groupSysId Sys ID of the group to check for.
+   * @param gdt yyyy-MM-dd HH:mm:ss format in the UTC timezone. Default is now.
+   * @param nullifyOverrideRoster True if notification list for this group is not for a specific roster, false
+   * otherwise.
    * @param rotaSysIds Comma-separated list of cmn_rota sys_ids to filter the records by.
-   * @param overrideCustomEscalation Flag that indicates whether to override the default escalation policy with the
-   * custom escalation. Valid values:
-   * true: Override the default escalation policy.
-   *
-   * false: Do not override the default escalation policy.
-   *
-   *
-   *
-   * @param taskGR Optional. Current task record. If passed, the method populates the escalatees
-   * based on the escalation conditions.
+   * @param overrideCustomEscalation True to override default escalation policy with custom escalation, false
+   * otherwise.
+   * @param taskGR Optional. Current task record. If invoked with the optional taskGr parameter,
+   * this method populates escalatees  based on escalation conditions.
    */
   who(
     groupSysId: string,
@@ -9232,7 +8740,7 @@ declare class OnCallRotation {
     nullifyOverrideRoster: boolean,
     rotaSysIds: string,
     overrideCustomEscalation: boolean,
-    taskGR?: GlideRecord,
+    taskGR?: string,
   ): boolean;
   /**
    * Specifies if there is an on-call user, group, or device. This API is applicable for a
@@ -9272,7 +8780,8 @@ declare class PADomainUtils {
   constructor();
   constructor(domainFrom: string);
   /**
-   * Copies Performance Analytics records to a different domain.
+   * Copies Performance Analytics
+   * configuration records to a different domain.
    * @param runAs The user whose domain you want to copy records to.
    */
   copy(runAs: string): any;
@@ -9298,14 +8807,15 @@ declare class PADomainUtils {
    */
   isWriteable(table: string, id: string): boolean;
   /**
-   * Moves Performance Analytics records to a different domain.
+   * Moves Performance Analytics
+   * configuration records to a different domain.
    * @param runAs The user whose domain you want to copy records to.
    */
   move(runAs: string): any;
   /**
-   * Use this method to move or copy only foundational records in a hybrid domain
+   * Use this method to move or copy only foundation records in a hybrid domain
    * configuration.
-   * @param foundation Indicates if only foundational records should be copied or moved by this
+   * @param foundation Indicates if only foundation records should be copied or moved by this
    * PADomainUtils object.
    */
   setFoundation(foundation: boolean): any;
@@ -9382,14 +8892,8 @@ declare class PredictabilityEstimateStore {
   /**
    * Gets the names of all predictability estimate definition records in the
    * store.
-   * @param options Options for restricting results within the specified
-   * properties.{
-   * "label": "String",
-   * "domainName": "String",
-   * "scope": "String"
-   * };
    */
-  getAllNames(options: any): any[];
+  getAllNames(): any[];
   /**
    * Updates a predictability estimate object in a store.
    * @param name Name of the predictability estimate to update.
@@ -9676,14 +9180,8 @@ declare class RegressionSolutionStore {
   /**
    * Gets the names of all solution definition
    * records in the store.
-   * @param options Options for restricting results within the specified
-   * properties.{
-   * "label": "String",
-   * "domainName": "String",
-   * "scope": "String"
-   * };
    */
-  getAllNames(options: any): any[];
+  getAllNames(): any[];
   /**
    * Replaces an existing object in the store with the
    * object passed as a parameter. The object name provided must be empty or
@@ -9800,7 +9298,7 @@ declare class SerialNumberManager {
   /**
    * Returns the serial number.
    */
-  getSerialNumber(): number;
+  get(): number;
   /**
    * Returns serial number information for CI Data, including the type, serial number, and
    * validity.
@@ -9999,14 +9497,8 @@ declare class SimilaritySolutionStore {
   /**
    * Gets the names of all solution definition
    * records in the store.
-   * @param options Options for restricting results within the specified
-   * properties.{
-   * "label": "String",
-   * "domainName": "String",
-   * "scope": "String"
-   * };
    */
-  getAllNames(options: any): any[];
+  getAllNames(): any[];
   /**
    * Replaces an existing object in the store with the
    * object passed as a parameter. The object name provided must be empty or
@@ -10066,10 +9558,10 @@ declare class SLARepair {
   repairByFilter(filter: string, sourceTable: string): any;
   /**
    * Repair the task SLAs associated with the passed in GlideRecord.
-   * @param now_GR Specify a GlideRecord for a table that is (or extends) contract_sla, task_sla,
+   * @param gr Specify a GlideRecord for a table that is (or extends) contract_sla, task_sla,
    * or task.
    */
-  repairByGlideRecord(now_GR: GlideRecord): any;
+  repairByGlideRecord(gr: GlideRecord): any;
   /**
    * Repair the task SLAs associated with the passed in sys_id and source table.
    * @param sysId Specify the ID of a table that is (or extends) contract_sla, task_sla, or
@@ -10206,8 +9698,8 @@ declare class StartDiscovery {
    */
   getCancelScript(): string;
   /**
-   * If the schedule specifies a cancel time, if necessary, schedules a job to cancel the
-   * discovery.
+   * If the schedule specifies a cancel time, schedules a job to cancel if
+   * necessary.
    */
   scheduleCancelJob(): any;
   /**
@@ -10262,12 +9754,12 @@ declare class StateManagementScriptableApi {
   ): string;
   /**
    * Returns a list of active CI actions for the specified CI.
-   * @param ciSysId Sys_id of the CI.
+   * @param ciSysId The sys_id of the CI
    */
   getCIActions(ciSysId: string): string;
   /**
-   * Returns the operational state of the CI.
-   * @param ciSysId Sys_id of the CI.
+   * Returns the CI's operational state.
+   * @param ciSysId Sys_id of the CI
    */
   getOperationalState(ciSysId: string): string;
   /**
@@ -10314,14 +9806,14 @@ declare class StateManagementScriptableApi {
     transitionOpsLabel: string,
   ): boolean;
   /**
-   * Determines if the specified requestor is a valid active workflow user or a registered
+   * Determine if the specified requestor is a valid active workflow user or a registered
    * user.
-   * @param requestorId Sys_id of a workflow context or the GUID returned from the
+   * @param requestorId A sys_id of a workflow context, or the GUID returned from the
    * registerOperator() method.
    */
   isValidRequestor(requestorId: string): string;
   /**
-   * Registers an operator for a non-workflow user.
+   * Register an operator for a non-workflow user.
    */
   registerOperator(): string;
   /**
@@ -10352,8 +9844,8 @@ declare class StateManagementScriptableApi {
     opsStateListOld?: string,
   ): string;
   /**
-   * Unregisters an operator for non-workflow users.
-   * @param requestorId Sys_id of a workflow context or the GUID returned from the
+   * Unregister an operator for non-workflow users.
+   * @param requestorId A sys_id of a workflow context, or the GUID returned from the
    * registerOperator() method.
    */
   unregisterOperator(requestorId: string): string;
@@ -10818,6 +10310,7 @@ declare class UserSkillRanking {
    *
    *
    *
+   *
    * @param isSkillLevelEnforced True if user must have minimum skill level for all required mandatory skills,
    * false otherwise. Default: false.
    */
@@ -11094,7 +10587,7 @@ declare class Workflow {
    */
   hasWorkflow(record: GlideRecord): boolean;
   /**
-   * Recalculates the approvals and tasks for a workflow by adding new approvals and tasks,
+   * Recalculates the approvals and tasks for a workflow by adding new approvals and tasks
    * while not resetting current approvals and tasks.
    * @param current GlideRecord of the record this workflow is executing. This
    * can by any record on any table.
@@ -11247,9 +10740,9 @@ declare class WorkflowDuration {
 declare class WorkflowModelManager {
   constructor(contextId: string);
   /**
-   * Retrieves the history activity that is cached by the
-   * wf_history.sys_id provided in the argument.
-   * @param haRecordSysId Sys_id of the desired Activity History  [wf_history] record.
+   * Retrieves the history activity that is cached by the wf_history.sys_id
+   * provided in the argument.
+   * @param haRecordSysId The sys_id of the activity history (table wf_history).
    */
   getActivityHistoryRecordById(haRecordSysId: string): any;
   /**
@@ -11295,7 +10788,8 @@ declare class WorkflowModelManager {
    */
   getFinalExecutedActivityList(): any;
   /**
-   * Retrieves the history activity that executed just after the one provided in the argument.
+   * Retrieves the history activity that executed just after to the one provided in the
+   * argument.
    * @param haRecord ActivityHistoryRecord JavaScript object.
    */
   getNextByExecutedOrder(haRecord: any): any;
@@ -11307,9 +10801,15 @@ declare class WorkflowModelManager {
    */
   getNextByExecutedOrderId(haRecordSysId: string): any;
   /**
-   * Retrieves the history activity that executed just after the one identified by the sys_id
-   * provided in the argument.
-   * @param haRecordSysId Sys_id of the desired Activity History  [wf_history] record.
+   * Retrieves the history activity that executed just after to the one identified by the
+   * sys_id provided in the argument. This function retreives the cached history record associated with the provided
+   * wf_history.sys_id and then calls
+   * getNextByTransition. The return values are based on which transitions
+   * came before the haRecord submitted and not necessarily the activities
+   * that executed just prior to the haRecord in time. To get the activity
+   * that executed prior to this activity in time, use
+   * getNextByExecutedOrder.
+   * @param haRecordSysId sys_id of the activity history (table wf_history).
    */
   getNextByTransitionId(haRecordSysId: string): any;
   /**
@@ -11334,7 +10834,7 @@ declare class WorkflowModelManager {
   /**
    * Retrieves the history activities that executed just prior to the one provided in the
    * argument.
-   * @param haRecordSysId Sys_id of the activity history. Located in the wf_history table.
+   * @param haRecordSysId The sys_id of the activity history (table wf_history).
    */
   getPreviousByTransitionId(haRecordSysId: string): any;
 }
@@ -11345,7 +10845,8 @@ declare class WorkflowModelManagerAjax {
    */
   getExecutedHistory(): any;
   /**
-   * Returns the final execution activity list based on a query string.
+   * Puts the final execution activity list into the return parameter based on the query
+   * string.
    */
   getFinalExecutedActivityIdList(): any;
   /**
@@ -11375,7 +10876,7 @@ declare class XMLUtilJS {
   escapeForXMLText(text: string): string;
   /**
    * Converts a string to an XML value.
-   * @param str The string to convert.
+   * @param str The string to convert
    */
   stringToValue(str: string): string;
   /**
@@ -11457,7 +10958,7 @@ declare class CertificateEncryption {
   /**
    * Generates a hash (SHA-1, SHA-256, and so on) for the certificate from Trust Store
    * Cert.
-   * @param certificateID Sys_id of the certificate record in the X.509 Certificate [sys_certificate]
+   * @param certificateID sys_id of the certificate record in the X.509 Certificate [sys_certificate]
    * table.
    * @param algorithm Algorithm to use to create the hash, such as SHA-1, SHA-256, and so on.
    */
@@ -11465,12 +10966,12 @@ declare class CertificateEncryption {
   /**
    * Generates a hash (SHA-1, SHA-256, and so on) for the certificate from the keystore
    * entry.
-   * @param certificateID Sys_id of the certificate record in the X.509 Certificate [sys_certificate]
+   * @param certificateID sys_id of the certificate record in the X.509 Certificate [sys_certificate]
    * table.
    * @param alias Alias name for the certificate.
-   * @param algorithm Algorithm to use to create the hash, such as SHA-1, SHA-256, and so on.
+   * @param algorithm SHA-1, SHA-256, and so on.
    */
-  getThumbPrintFromKeyStore(
+  getThumbPrintFromKeystore(
     certificateID: string,
     alias: string,
     algorithm: string,
@@ -11557,7 +11058,410 @@ declare class GlideApplicationProperty {
    */
   setValue(name: string, value: string, domainSysId?: string): boolean;
 }
-declare class GlideCalendarDateTime {}
+declare class GlideCalendarDateTime {
+  constructor();
+  constructor(gcDT: GlideCalendarDateTime);
+  constructor(dateTime: string);
+  /**
+   * Adds a GlideTime object to the current GlideCalendarDateTime object.
+   * @param time Time to add.
+   */
+  add(time: GlideTime): any;
+  /**
+   * Adds a GlideTime object to the current GlideCalendarDateTime object.
+   * @param milliseconds Number of milliseconds to add
+   */
+  add(milliseconds: number): any;
+  /**
+   * Adds a specified number of days to the current GlideCalendarDateTime object. A negative
+   * parameter subtracts days.
+   * @param days Number of days to add. Use a negative value to subtract.
+   */
+  addDaysLocalTime(days: number): any;
+  /**
+   * Adds a specified number of days to the current GlideCalendarDateTime object. A negative
+   * parameter subtracts days.
+   * @param days Number of days to add. Use a negative value to subtract.
+   */
+  addDaysUTC(days: number): any;
+  /**
+   * Adds a specified number of months to the current GlideCalendarDateTime object. A
+   * negative parameter subtracts months.
+   * @param months Number of months to add. Use a negative value to subtract.
+   */
+  addMonthsLocalTime(months: number): any;
+  /**
+   * Adds a specified number of months to the current GlideCalendarDateTime object. A
+   * negative parameter subtracts months.
+   * @param months Number of months to add. Use a negative number to subtract.
+   */
+  addMonthsUTC(months: number): any;
+  /**
+   * Adds a specified number of seconds to the GlideCalendarDateTime object.
+   * @param seconds Number of seconds to add
+   */
+  addSeconds(seconds: number): any;
+  /**
+   * Adds a specified number of weeks to the current GlideCalendarDateTime object. A
+   * negative parameter subtracts weeks.
+   * @param weeks Number of weeks to add. Use a negative number to subtract.
+   */
+  addWeeksLocalTime(weeks: number): any;
+  /**
+   * Adds a specified number of weeks to the current GlideCalendarDateTime object. A
+   * negative parameter subtracts weeks.
+   * @param weeks Number of weeks to add. Use a negative number to subtract.
+   */
+  addWeeksUTC(weeks: number): any;
+  /**
+   * Adds a specified number of years to the current GlideCalendarDateTime object. A
+   * negative parameter subtracts years.
+   * @param years Number of years to add. To subtract use a negative value.
+   */
+  addYearsLocalTime(years: number): any;
+  /**
+   * Adds a specified number of years to the current GlideCalendarDateTime object. A
+   * negative parameter subtracts years.
+   * @param years Number of years to add. Use a negative value to subtract.
+   */
+  addYearsUTC(years: number): any;
+  /**
+   * Compares two date and time objects to determine whether one occurs before the other or
+   * if they are equivalent.
+   * @param dateTime Date time in a GlideCalendarDateTime object.
+   */
+  compareTo(dateTime: any): number;
+  /**
+   * Compares an object with an existing value for equality.
+   * @param GCDT Object to compare. Can be a GlideCalendarDateTime object or a valid date time
+   * string.
+   */
+  equals(GCDT: any): boolean;
+  /**
+   * Returns the date stored by the GlideCalendarDateTime object, expressed in the standard
+   * format, yyyy-MM-dd, and the system time zone, UTC by default.
+   */
+  getDate(): GlideDate;
+  /**
+   * Returns the day of the month stored by the GlideCalendarDateTime object, expressed in
+   * the current user's time zone.
+   */
+  getDayOfMonthLocalTime(): number;
+  /**
+   * Gets the day of the month stored by the GlideCalendarDateTime object, expressed in the
+   * UTC time zone.
+   */
+  getDayOfMonthUTC(): number;
+  /**
+   * Returns the day of the week stored by the GlideCalendarDateTime object, expressed in
+   * the user's time zone.
+   */
+  getDayOfWeekLocalTime(): number;
+  /**
+   * Returns the day of the week stored by the GlideCalendarDateTime object, expressed in
+   * the UTC time zone.
+   */
+  getDayOfWeekUTC(): number;
+  /**
+   * Returns the number of days in the month stored by the GlideCalendarDateTime object,
+   * expressed in the current user's time zone.
+   */
+  getDaysInMonthLocalTime(): number;
+  /**
+   * Returns the number of days in the month stored by the GlideCalendarDateTime object,
+   * expressed in the UTC time zone.
+   */
+  getDaysInMonthUTC(): number;
+  /**
+   * Returns the date and time value in the current user's display format and time zone.
+   * Referring to the GlideCalendarDateTime object directly returns the date and time value in the
+   * GMT time zone.
+   */
+  getDisplayValue(): string;
+  /**
+   * Returns the display value in the internal format (yyyy-MM-dd HH:mm:ss).
+   */
+  getDisplayValueInternal(): string;
+  /**
+   * Returns the amount of time that daylight saving time is offset.
+   */
+  getDSTOffset(): number;
+  /**
+   * Returns the current error message.
+   */
+  getErrorMsg(): string;
+  /**
+   * Returns the object's time in the local time zone and in the internal
+   * format.
+   */
+  getInternalFormattedLocalTime(): string;
+  /**
+   * Returns the date stored by the GlideCalendarDateTime object, expressed in the standard
+   * format, yyyy-MM-dd, and the current user's time zone.
+   */
+  getLocalDate(): GlideDate;
+  /**
+   * Returns the month stored by the GlideCalendarDateTime object, expressed in the current
+   * user's time zone.
+   */
+  getMonthLocalTime(): number;
+  /**
+   * Returns the month stored by the GlideCalendarDateTime object, expressed in the UTC time
+   * zone.
+   */
+  getMonthUTC(): number;
+  /**
+   * Returns the number of milliseconds since January 1, 1970, 00:00:00 GMT.
+   */
+  getNumericValue(): number;
+  /**
+   * Returns the Unix duration stamp.
+   */
+  getTime(): GlideTime;
+  /**
+   * Returns the time zone offset in milliseconds.
+   */
+  getTZOffset(): number;
+  /**
+   * Returns the object's time in local time zone in the user's format.
+   */
+  getUserFormattedLocalTime(): string;
+  /**
+   * Returns the date and time value stored by the GlideCalendarDateTime object in the
+   * internal format, yyyy-MM-dd HH:mm:ss, and the system time zone; UTC by default.
+   */
+  getValue(): string;
+  /**
+   * Returns the number of the week stored by the GlideCalendarDateTime object, expressed in
+   * the current user's time zone.
+   */
+  getWeekOfYearLocalTime(): number;
+  /**
+   * Returns the number of the week stored by the GlideCalendarDateTime object, expressed in
+   * the UTC time zone.
+   */
+  getWeekOfYearUTC(): number;
+  /**
+   * Returns the year stored by the GlideCalendarDateTime object, expressed in the current
+   * user's time zone.
+   */
+  getYearLocalTime(): number;
+  /**
+   * Returns the year stored by the GlideCalendarDateTime object, expressed in the UTC time
+   * zone.
+   */
+  getYearUTC(): number;
+  /**
+   * Determines if an object's date is set.
+   */
+  hasDate(): boolean;
+  /**
+   * Determines if the object's time uses a daylight saving offset
+   */
+  isDST(): boolean;
+  /**
+   * Determines if a value is a valid date and time.
+   */
+  isValid(): boolean;
+  /**
+   * Sets the day of the month to a specified value in the current user's time zone.
+   * @param day Day of month to change to, from 1 to 31. If this value is greater than the
+   * maximum number of days in the month, the value is set to the last day of the
+   * month.
+   */
+  setDayOfMonthLocalTime(day: number): any;
+  /**
+   * Sets the day of the month to a specified value in the UTC time zone.
+   * @param day Day of month to change to, from 1 to 31. If this value is greater than the
+   * maximum number of days in the month, the value is set to the last day of the
+   * month.
+   */
+  setDayOfMonthUTC(day: number): any;
+  /**
+   * Sets a date and time value using the current user's display format and time
+   * zone.
+   * @param asDisplayed Date and time in the current user's display format and time zone. The
+   * parameter must be formatted using the current user's preferred display format,
+   * such as MM-dd-yyyy HH:mm:ss.
+   * To assign the current date and time to a
+   * variable in a workflow script, use
+   * &lt;variable&gt;.setDisplayValue(gs.nowDateTime).
+   */
+  setDisplayValue(asDisplayed: string): any;
+  /**
+   * Sets a date and time value using the current user's display format and time
+   * zone.
+   * @param dateTime Date and time in the current user's time zone.
+   * @param format Format to use to parse the dateTime parameter.
+   */
+  setDisplayValue(dateTime: string, format: string): any;
+  /**
+   * Sets a date and time value using the internal format (yyyy-MM-dd HH:mm:ss) and the
+   * current user's time zone.
+   * @param dateTime Date and time in internal format
+   */
+  setDisplayValueInternal(dateTime: string): any;
+  /**
+   * Sets the date and time of the current object using an existing GlideCalendarDateTime
+   * object.
+   * @param gcDT GlideCalendarDateTime object
+   */
+  setGlideCalendarDateTime(gcDT: GlideCalendarDateTime): any;
+  /**
+   * Sets the month stored by the GlideCalendarDateTime object to a specified value using
+   * the current user's time zone.
+   * @param month Month to change to.
+   */
+  setMonthLocalTime(month: number): any;
+  /**
+   * Sets the month stored by the GlideCalendarDateTime object to a specified value using
+   * the UTC time zone.
+   * @param month Month to change to.
+   */
+  setMonthUTC(month: number): any;
+  /**
+   * Sets the date and time of the GlideCalendarDateTime object.
+   * @param dateTime Date and time to use. This parameter may be one of several types.
+   * A string in the UTC time zone and the internal format of yyyy-MM-dd HH:mm:ss:
+   * sets the value of the object to the specified date and time. Using the method
+   * this way is equivalent to instantiating a new GlideCalendarDateTime object using the
+   * GlideCalendarDateTime(value) constructor.
+   * If the date and
+   * time format used does not match the internal format, the method attempts to
+   * set the date and time using other available formats. Resolving the date and
+   * time this way can lead to inaccurate data due to ambiguity in the day and
+   * month values. When using a non-standard date and time format, use
+   * setValue(dt, format) instead.
+   *
+   *
+   * A GlideCalendarDateTime object: sets the value of the object to the date and
+   * time stored by the GlideCalendarDateTime passed in the parameter. Using the
+   * method this way is equivalent to instantiating a new GlideCalendarDateTime
+   * object using the GlideCalendarDateTime(g)
+   * constructor.
+   *
+   *
+   * A Java Date object: sets the value of the object using the value stored by the
+   * Java Date object. Using the method this way is equivalent to passing the
+   * value returned by the Java Date object getTime() to the
+   * GlideCalendarDateTime setNumericValue() method. This method
+   * does not accept JavaScript Date objects.
+   *
+   *
+   * A JavaScript Number: sets the value of the object using the Number value as
+   * milliseconds past January 1, 1970 00:00:00 GMT. Using the method this way is
+   * equivalent to the setNumericValue(milliseconds)
+   * method.
+   *
+   *
+   * A Java Integer or Long: sets the value of the object using the Integer or Long
+   * value as milliseconds past January 1, 1970 00:00:00 GMT. Using the method
+   * this way is equivalent to the setNumericValue(milliseconds)
+   * method.
+   *
+   *
+   *
+   */
+  setValue(dateTime: any): any;
+  /**
+   * Sets a date and time value using the UTC time zone and the specified date and time
+   * format.
+   * @param dateTime Date and time to use.
+   * @param format Format to use.
+   */
+  setValueUTC(dateTime: string, format: string): any;
+  /**
+   * Sets the year stored by the GlideCalendarDateTime object to a specified value using the
+   * current user's time zone.
+   * @param year Year to change to.
+   */
+  setYearLocalTime(year: number): any;
+  /**
+   * Sets the year stored by the GlideCalendarDateTime object to a specified value using the
+   * UTC time zone.
+   * @param year Year to change to.
+   */
+  setYearUTC(year: number): any;
+  /**
+   * Returns the duration difference between two GlideCalendarDateTime values.
+   * @param start Start value.
+   * @param end End value.
+   */
+  subtract(
+    start: GlideCalendarDateTime,
+    end: GlideCalendarDateTime,
+  ): GlideDuration;
+  /**
+   * Returns the duration difference between two GlideCalendarDateTime values.
+   * @param time Time to subtract.
+   */
+  subtract(time: GlideTime): any;
+  /**
+   * Returns the duration difference between two GlideCalendarDateTime values.
+   * @param milliseconds Number of milliseconds to subtract.
+   */
+  subtract(milliseconds: number): any;
+  /**
+   * Returns the date and time value stored by the GlideCalendarDateTime object in the
+   * internal format, yyyy-MM-dd HH:mm:ss, and the system time zone; UTC by default.
+   */
+  toString(): string;
+}
+declare class GlideDate {
+  constructor();
+  /**
+   * Gets the date in the specified date format.
+   * @param format Desired date format using Java SimpleDateFormat. For example,
+   * "dd-MM-yyyy" to get the day, month, and year, or
+   * "EEEE" to get the day of the week.
+   */
+  getByFormat(format: string): string;
+  /**
+   * Gets the day of the month stored by the GlideDate object, expressed in the UTC time
+   * zone.
+   */
+  getDayOfMonthNoTZ(): number;
+  /**
+   * Gets the date in the current user's display format and time zone.
+   */
+  getDisplayValue(): string;
+  /**
+   * Gets the display value in the internal format (yyyy-MM-dd).
+   */
+  getDisplayValueInternal(): string;
+  /**
+   * Gets the month stored by the GlideDate object, expressed in the UTC time zone.
+   */
+  getMonthNoTZ(): number;
+  /**
+   * Gets the date value stored in the database by the GlideDate object in the internal
+   * format, yyyy-MM-dd, and the system time zone, UTC by default.
+   */
+  getValue(): string;
+  /**
+   * Gets the year stored by the GlideDate object, expressed in the UTC time zone.
+   */
+  getYearNoTZ(): number;
+  /**
+   * Sets a date value using the current user's display format and time zone.
+   * @param asDisplayed The date in the current user's display format and time zone. The parameter must
+   * be formatted using the current user's preferred display format, such as yyyy-MM-dd.
+   */
+  setDisplayValue(asDisplayed: string): any;
+  /**
+   * Sets the date of the current GlideDate object in internal format (yyyy-MM-dd) and the
+   * system time zone (UTC by default).
+   * @param o Date and time to set in the current GlideDate object.Format:
+   * yyyy-MM-dd
+   */
+  setValue(o: string): any;
+  /**
+   * Gets the duration difference between two GlideDate values.
+   * @param start The start value.
+   * @param end The end value.
+   */
+  subtract(start: GlideDate, end: GlideDate): GlideDuration;
+}
 declare class GlideDBFunctionBuilder {
   constructor();
   /**
@@ -11584,6 +11488,7 @@ declare class GlideDBFunctionBuilder {
    * 1: Week begins on Sunday.
    *
    * 2: Week begins on Monday.
+   *
    *
    *
    *
@@ -11714,7 +11619,7 @@ declare class GlideDuration {
   add(duration: GlideDuration): GlideDuration;
   /**
    * Returns the duration value in the specified format.
-   * @param format Duration format.Format: Global date and time field format
+   * @param format Duration format.
    */
   getByFormat(format: string): string;
   /**
@@ -11741,8 +11646,7 @@ declare class GlideDuration {
   getValue(): string;
   /**
    * Sets the duration display value.
-   * @param asDisplayed Display duration value to set.Format: d HH:mm:ss where "d" is number of
-   * days
+   * @param asDisplayed Display duration value to set.Format: d HH:mm:ss
    */
   setDisplayValue(asDisplayed: string): any;
   /**
@@ -11761,34 +11665,26 @@ declare class GlideDuration {
 }
 declare class GlideElementCurrency2 {
   /**
-   * Returns an FX Currency field display string, as entered by the user, from the associated
-   * GlideRecord.
+   * Returns the currency value as entered by the user.
    */
   getAsEnteredDisplayValue(): string;
   /**
-   * Returns the display value of an FX Currency field within the associated
-   * GlideRecord.
+   * Returns the formatted currency string.
    */
   getDisplayValue(): string;
   /**
-   * Returns the reference currency value of an FX Currency field within the associated
-   * GlideRecord.
+   * Returns the reference currency value.
    */
   getReferenceDisplayValue(): string;
   /**
-   * Returns the session currency value of the associated FX Currency field within the
-   * current GlideRecord.
+   * Returns the currency value converted to the session currency.
    */
   getSessionDisplayValue(): string;
   /**
-   * Sets the display value of an FX Currency field with the specified currency
-   * value.
-   * @param displayValue Value to set in the FX Currency field in the format &lt;currency
-   * code&gt;;&lt;currency amount&gt;. You must format the &lt;currency
-   * amount&gt; field in the user's locale.For example, if the user's locale
-   * is USA/eng, the passed in &lt;currency amount&gt; would be 123.45.
-   * If the user's local is FRA/fre, the passed in &lt;currency
-   * amount&gt; would be 123,45.
+   * Sets the display value of a Currency2 field by parsing the displayValue
+   * string.
+   * @param displayValue The display value in the format "&lt;currency type&gt;;&lt;currency
+   * amount&gt;" where the amount is formatted in the user's locale.
    */
   setDisplayValue(displayValue: string): any;
 }
@@ -12078,6 +11974,7 @@ declare class GlideQuery {
    *
    *
    *
+   *
    * @param field Field on which to perform the operation.
    */
   aggregate(aggregateType: string, field: string): GlideQuery;
@@ -12151,6 +12048,7 @@ declare class GlideQuery {
    *
    *
    *
+   *
    * @param field Field on which to perform the operation.
    * @param operator Numeric operator to use in the operation. Options include:
    * &gt;: Greater than.
@@ -12184,8 +12082,7 @@ declare class GlideQuery {
    */
   insert(keyValues: any, selectedFields?: any[]): any;
   /**
-   * Updates an existing record, or inserts a new record if one does not already
-   * exist.
+   * Updates an existing record, or inserts a new record if one does not already exist.
    * @param changes Object containing name-value pairs to update or insert into the record.
    * @param selectedFields Optional. Additional fields to return in the result. Default: The system
    * always returns the sys_id.
@@ -12264,14 +12161,7 @@ declare class GlideQuery {
    */
   orWhereNull(field: string): GlideQuery;
   /**
-   * Adds an encoded query to a new GlideQuery query.
-   * @param table Table to query, such as task or incident.
-   * @param encoded_query Encoded query to apply
-   * to the records in the specified table.
-   */
-  parse(table: string, encoded_query: string): GlideQuery;
-  /**
-   * Returns the results of the query as a Stream object containing the specified fields.
+   * Returns the results of the query as a Stream object containing specified fields.
    * @param fields Optional. Fields to display in the result. You can provide any number of
    * fields as arguments, dot-walk to a desired value, or use a flag. For example:
    * select('first_name', 'location.city', 'company$DISPLAY');orselect(['first_name', 'location.city', 'company$DISPLAY']);Default:
@@ -12460,8 +12350,8 @@ declare class GlideSecurityUtils {
    */
   escapeScript(script: string): string;
   /**
-   * Check the specified URL against the system defined allow list.
-   * @param url The URL to be checked against the URL allow list.
+   * Check the specified URL against the system defined white list.
+   * @param url The URL to be checked against the URL white list.
    */
   isURLWhiteListed(url: string): boolean;
 }
@@ -12478,22 +12368,23 @@ declare class GlideServletRequest {
   /**
    * Returns a comma-separated list of header names.
    */
-  getHeaderNames(): any[];
+  getHeaderNames(): string;
   /**
    * Returns the header values.
    * @param name Names of the headers to be retrieved.
    */
-  getHeaders(name: string): any[];
+  getHeaders(name: string): string;
   /**
    * Returns the value of the parameter contained in the request URL.
    * @param name The name of the parameter to be retrieved. This can be the parameter endpoint
    * from the processor form.
    */
-  getParameter(name: string): any;
+  getParameter(name: string): string;
   /**
-   * Returns a list of URL parameters that were used in the request URI.
+   * Returns an enumeration list of URL parameters that were used in the request
+   * URI.
    */
-  getParameterNames(): any[];
+  getParameterNames(): any;
   /**
    * Returns the query string from the request.
    */
@@ -12526,9 +12417,9 @@ declare class GlideServletResponse {
 declare class GlideSPScriptable {
   /**
    * Returns true if the user can read the specified GlideRecord.
-   * @param now_GR The GlideRecord to check.
+   * @param gr The GlideRecord to check.
    */
-  canReadRecord(now_GR: GlideRecord): boolean;
+  canReadRecord(gr: GlideRecord): boolean;
   /**
    * Returns true if the user can read the specified GlideRecord.
    * @param table Name of the table to query.
@@ -12570,24 +12461,24 @@ declare class GlideSPScriptable {
   getDisplayValue(fieldName: string): string;
   /**
    * Returns information about the specified field in the specified GlideRecord.
-   * @param now_GR The GlideRecord to check
+   * @param gr The GlideRecord to check
    * @param fieldName The field to find information for
    */
-  getField(now_GR: GlideRecord, fieldName: string): any;
+  getField(gr: GlideRecord, fieldName: string): any;
   /**
    * Checks the specified list of field names, and returns an array of valid field
    * names.
-   * @param now_GR The GlideRecord to check
+   * @param gr The GlideRecord to check
    * @param field_Names A comma separated list of field names.
    */
-  getFields(now_GR: GlideRecord, field_Names: string): any[];
+  getFields(gr: GlideRecord, field_Names: string): any[];
   /**
    * Checks the specified list of field names and returns an object of valid field
    * names.
-   * @param now_GR The GlideRecord to check
+   * @param gr The GlideRecord to check
    * @param field_Names A comma separated list of field names.
    */
-  getFieldsObject(now_GR: GlideRecord, field_Names: string): any;
+  getFieldsObject(gr: GlideRecord, field_Names: string): any;
   /**
    * Return the form.
    * @param tableName The name of the table
@@ -12679,29 +12570,23 @@ declare class GlideSPScriptable {
   /**
    * Returns Service Catalog
    * variables associated with a record in String format.
-   * @param now_GR The record to retrieve Service Catalog variables
+   * @param gr The record to retrieve Service Catalog variables
    * for. Must be a record with Service Catalog variables
    * defined, such as a requested item [sc_req_item] record or an incident submitted
    * through a record producer.
    * @param includeNilResponses Optional. If true, the API includes variables with no user-defined value.
    */
-  getRecordVariables(
-    now_GR: GlideRecord,
-    includeNilResponses?: boolean,
-  ): string;
+  getRecordVariables(gr: GlideRecord, includeNilResponses?: boolean): string;
   /**
    * Returns an array of Service Catalog variables associated
    * with a record.
-   * @param now_GR The record to retrieve Service Catalog variables
+   * @param gr The record to retrieve Service Catalog variables
    * for. Must be a record with Service Catalog variables
    * defined, such as a requested item [sc_req_item] record or an incident submitted
    * through a record producer.
    * @param includeNilResponses Optional. If true, the API includes variables with no user-defined value.
    */
-  getRecordVariablesArray(
-    now_GR: GlideRecord,
-    includeNilResponses?: boolean,
-  ): any;
+  getRecordVariablesArray(gr: GlideRecord, includeNilResponses?: boolean): any;
   /**
    * Gets the activity stream for the specified record. This method works on tables that
    * extend the task table.
@@ -12753,70 +12638,69 @@ declare class GlideSPScriptable {
 declare class GlideStringUtil {
   /**
    * Replaces periods with underscore characters.
-   * @param sourceString Text to process.
+   * @param sourceString The string to be processed.
    */
   dotToUnderBar(sourceString: string): string;
   /**
-   * Removes quotes from a string.
+   * Remove quotes from a string.
    * @param sourceString The string to be processed.
    */
   escapeAllQuotes(sourceString: string): string;
   /**
-   * Replaces problem characters with escape characters.
-   * @param sourceString Text to process.
+   * Use for home pages to replace problem characters with escape characters.
+   * @param sourceString The string to be processed.
    */
   escapeForHomePage(sourceString: string): string;
   /**
-   * Replaces illegal characters with their escape codes.
-   * @param htmlString Text to process.
+   * Use to replace illegal characters with their escape codes.
+   * @param htmlString The string to be processed.
    */
   escapeHTML(htmlString: string): string;
   /**
    * Replaces non-printable characters with their printable notation.
-   * @param sourceString Text to process.
+   * @param sourceString The string to be processed.
    */
   escapeNonPrintable(sourceString: string): string;
   /**
    * Replaces query term separators "^" with their escape sequence "^^".
-   * @param sourceString Text to process.
+   * @param sourceString The string to be processed.
    */
   escapeQueryTermSeparator(sourceString: string): string;
   /**
-   * Replaces quotes with escape characters by adding a backslash before each
+   * Replace quotes with escape characters by adding a backslash before each
    * quote.
-   * @param sourceString Text to process.
+   * @param sourceString The string to be processed.
    */
   escapeTicks(sourceString: string): string;
   /**
-   * Replaces illegal HTML characters into HTML notation.
-   * @param sourceString Text to process.
+   * Use to replace illegal HTML characters into HTML notation.
+   * @param sourceString The string to be processed.
    */
   getHTMLValue(sourceString: string): string;
   /**
-   * Extracts numeric characters from a string.
-   * @param sourceString Text to process.
+   * Extract numeric characters from a string.
+   * @param sourceString The string to be processed.
    */
   getNumeric(sourceString: string): string;
   /**
-   * Validates whether the specified string is a valid base64 string.
-   * @param sourceString Text to process.
+   * Returns true if the specified string is a valid base64 string.
+   * @param sourceString The string to be processed.
    */
   isBase64(sourceString: string): boolean;
   /**
-   * Validates whether the specified string is in valid sys_id format.
-   * @param sourceString Text to process.
+   * Returns true if the specified string is in valid sys ID format.
+   * @param sourceString The string to be processed.
    */
   isEligibleSysID(sourceString: string): boolean;
   /**
-   * Replaces the new line character, /n, with a break code,
-   * &lt;br/&gt;.
-   * @param sourceString Text to process.
+   * Replaces the new line character, "/n", with a break code "".
+   * @param sourceString The string to be processed.
    */
   newLinesToBreaks(sourceString: string): string;
   /**
    * Replaces carriage returns, line feeds, and tabs with spaces, and then removes leading,
    * trailing, and duplicate spaces.
-   * @param sourceString Text to process.
+   * @param sourceString The string to be processed.
    */
   normalizeWhitespace(sourceString: string): string;
   /**
@@ -12824,6 +12708,91 @@ declare class GlideStringUtil {
    * @param htmlString String to process.
    */
   unEscapeHTML(htmlString: string): string;
+}
+declare class GlideSysAttachment {
+  constructor();
+  /**
+   * Copies attachments from the source record to the target record.
+   * @param sourceTable Name of the table with the attachments to be copied.
+   * @param sourceID Source table's sys_id.
+   * @param targetTable Name of the table on which to add the attachments.
+   * @param targetID Target table's sys_id.
+   */
+  copy(
+    sourceTable: string,
+    sourceID: string,
+    targetTable: string,
+    targetID: string,
+  ): string;
+  /**
+   * Deletes the specified attachment.
+   * @param attachmentID Attachment's sys_id.
+   */
+  deleteAttachment(attachmentID: string): any;
+  /**
+   * Returns a GlideRecord containing the matching attachment metadata such as name, type,
+   * or size.
+   * @param tableName Name of the table to which the attachment belongs; for example,
+   * incident.
+   * @param sys_id The sys_id of record to which the attachment belongs.
+   */
+  getAttachments(tableName: string, sys_id: string): GlideRecord;
+  /**
+   * Returns the attachment content as a string.
+   * @param sysAttachment Attachment record.
+   */
+  getContent(sysAttachment: GlideRecord): string;
+  /**
+   * Returns the attachment content as a string with base64 encoding.
+   * @param sysAttachment Attachment record.
+   */
+  getContentBase64(sysAttachment: GlideRecord): string;
+  /**
+   * Returns a GlideScriptableInputStream object given the sys_id of an
+   * attachment.
+   * @param sysID Attachment sys_id.
+   */
+  getContentStream(sysID: string): GlideScriptableInputStream;
+  /**
+   * Attaches a specified attachment to the specified record.
+   * @param content Attachment content.
+   * @param contentType Attachment content type.
+   * @param fileName Attachment file name.
+   * @param record Record to which to attach the attachment.
+   */
+  write(
+    content: string,
+    contentType: string,
+    fileName: string,
+    record: GlideRecord,
+  ): string;
+  /**
+   * Inserts an attachment for the specified record using base64 encoded
+   * content.
+   * @param now_GR Record to which the attachment is to be attached.
+   * @param fileName Attachment's file name.
+   * @param contentType Attachment's content type.
+   * @param content Attachment content in base64 format.
+   */
+  writeBase64(
+    now_GR: GlideRecord,
+    fileName: string,
+    contentType: string,
+    content: string,
+  ): string;
+  /**
+   * Inserts an attachment using the input stream.
+   * @param now_GR Record to which the attachment is to be attached.
+   * @param fileName Attachment's file name.
+   * @param contentType Attachment's content type.
+   * @param content Attachment content.
+   */
+  writeContentStream(
+    now_GR: GlideRecord,
+    fileName: string,
+    contentType: string,
+    content: GlideScriptableInputStream,
+  ): string;
 }
 declare class GlideSysListControl {
   constructor(tableName: string);
@@ -13035,157 +13004,6 @@ declare class GlideXMLUtil {
     forgiveUnclosed: boolean,
   ): string;
 }
-declare class GSLog {
-  constructor();
-  /**
-   * Determines if debug is turned on.
-   */
-  debugOn(): boolean;
-  /**
-   * Returns the log level.
-   * @param level Optional. Log level.
-   */
-  getLevel(level?: string): string;
-  /**
-   * Called by the Prototype JavaScript Framework during object creation to initialize a new
-   * instance of this class. Provide the input parameters, but do not call this method
-   * directly.
-   * @param traceProperty System property that contains a value indicating the level at or above which
-   * messages will be written to the log.
-   * @param caller Name of the script calling the logger.
-   */
-  initialize(traceProperty: string, caller: string): any;
-  /**
-   * Logs a message at the specified level.
-   * @param level Log level.
-   * @param msg Message to write to the log.
-   */
-  log(level: string, msg: string): any;
-  /**
-   * Logs alert events.
-   * @param msg Message to write to the log.
-   */
-  logAlert(msg: string): any;
-  /**
-   * Logs critical events.
-   * @param msg Message to write to the log.
-   */
-  logCrit(msg: string): any;
-  /**
-   * Logs debug events.
-   * @param msg Message to write to the log.
-   */
-  logDebug(msg: string): any;
-  /**
-   * Logs emergency events.
-   * @param msg Message to write to the log.
-   */
-  logEmerg(msg: string): any;
-  /**
-   * Logs error events.
-   * @param msg Message to write to the log.
-   */
-  logErr(msg: string): any;
-  /**
-   * Logs information events.
-   * @param msg Message to write to the log.
-   */
-  logInfo(msg: string): any;
-  /**
-   * Logs notice events.
-   * @param msg Message to write to the log.
-   */
-  logNotice(msg: string): any;
-  /**
-   * Logs warning events.
-   * @param msg Message to write to the log.
-   */
-  logWarning(msg: string): any;
-  /**
-   * Sets the log level.
-   * @param level Log level to set.
-   */
-  setLevel(level: string): any;
-}
-declare class IPAddress {
-  constructor(ipAddress: string);
-  /**
-   * Returns the canonical (shortened/standard) form of the specified IP address by removing
-   * any zero padding from the address.
-   * @param ipAddress IP address to canonicalize or a scoped IPAddress object that contains the IP
-   * address.
-   */
-  canonicalize(ipAddress: string): string;
-  /**
-   * Returns the expanded form of the specified IP address
-   * @param ipAddress IP address to expand.
-   */
-  getExpanded(ipAddress: string): string;
-  /**
-   * Determines whether the specified IPAddress object is a link-local IP
-   * address.
-   */
-  isLinkLocal(): boolean;
-  /**
-   * Determines whether the specified IPAddress object is the loopback IP
-   * address.
-   */
-  isLocalhost(): boolean;
-  /**
-   * Determines whether the specified IPAddress object is a multicast IP
-   * address.
-   */
-  isMulticast(): boolean;
-  /**
-   * Determines whether the specified IPAddress object is a public IP address. An IP address
-   * is considered public if it is routable, and it is not a reserved address.
-   */
-  isPublic(): boolean;
-  /**
-   * Determines whether the specified IPAddress object is a reserved IP address.
-   */
-  isReserved(): boolean;
-  /**
-   * Determines whether the specified IPAddress object is a routable IP address.
-   */
-  isRoutable(): boolean;
-  /**
-   * Determines whether the passed IPAddress object is the is the same version, IPv4 or
-   * IPv6, as the specified IP address.
-   * @param ipAddress IP address to check against the IP address in the passed IPAddress
-   * object.
-   */
-  isSameVersionAs(ipAddress: string): boolean;
-  /**
-   * Determines whether the specified IPAddress object is a unicast IP address.
-   */
-  isUnicast(): boolean;
-  /**
-   * Determines whether the specified IP address is a valid IPv4 address.
-   * @param ipAddress IP address to validate.For the non-static implementation, the IP address is passed in the IPAddress class
-   * reference instead of the method call.
-   * For example New IPAddress("::1").isV4();.
-   */
-  isV4(ipAddress: string): boolean;
-  /**
-   * Determines whether the specified IP address is a valid IPv6 address.
-   * @param ipAddress IP address to validate. For the non-static implementation, the IP address is
-   * passed in the IPAddress class reference instead of the method call.
-   * For
-   * example New IPAddress("::1").isV6();.
-   */
-  isV6(ipAddress: string): boolean;
-  /**
-   * Determines whether the specified IP address is a valid IPv4 or IPv6
-   * address.
-   * @param ipAddress IP address to validate.
-   */
-  isValid(ipAddress: string): boolean;
-  /**
-   * Returns the expanded form of an IPAddress object.
-   */
-  toExpanded(): string;
-}
 declare class NotifyConferenceUtil {
   constructor();
   /**
@@ -13377,9 +13195,9 @@ declare class PAScorecard {
    * Add a query parameter to filter the returned scores.
    * @param uuid Enter a colon-separated list of sys_id values to specify which indicators,
    * breakdowns, aggregates, and domains to query. The parameter follows this
-   * format:&lt;indicator_sys_id&gt;:&lt;breakdown_sys_id&gt;:&lt;elements_filter_sys_id or
-   * element_sys_ids&gt;:&lt;lvl-2 breakdown_sys_id&gt;:&lt;lvl-2 elements_filter_sys_id or
-   * element_sys_ids&gt;:&lt;aggregate_sys_id&gt;;&lt;domain_sys_id&gt;
+   * format:&lt;indicator sys_id&gt;:&lt;breakdown sys_id&gt;:&lt;element
+   * sys_id&gt;:&lt;lvl-2 breakdown sys_id&gt;:&lt;lvl-2 element sys_id&gt;:&lt;aggregate
+   * sys_id&gt;:&lt;domain_sys_id&gt;
    * The parameter must begin with the sys_id of an indicator record.
    * Optionally, you can append the sys_id values of a breakdown and breakdown element
    * to group the response based on the breakdown, and the sys_id of an aggregate to
@@ -13449,8 +13267,7 @@ declare class PAScorecard {
    * page. Data type: Number
    * Default: 10
    * Maximum: 100
-   * @param page Specify the page number. For example, when querying 20 indicators in the Analytics Hub with the default per_page value (10), specify a page
-   * value of 2 to retrieve the Analytics Hub for 11-20.
+   * @param page Specify the page number. For example, when querying 20 Analytics Hubs with the default per_page value (10), specify a page value of 2 to retrieve Analytics Hubs 11-20.
    * @param sortby Value to use when sorting results. Valid values:
    * bullet
    *
@@ -13531,7 +13348,7 @@ declare class PAScorecard {
    * from. Only scores from this date or later are returned. This parameter requires that include_scores is set to
    * true.
    * @param to Latest date from which to return
-   * scores. Only scores from this date or earlier are returned.This parameter requires that include_scores is set to
+   * scores. Only scores from this date or earlier are returned.  This parameter requires that include_scores is set to
    * true.
    * @param step Numeric value to skip scores, based on the indicator
    * frequency. For example, specify a value of 3 to return only scores from every third
@@ -13698,40 +13515,6 @@ declare class PASnapshot {
    */
   getQuery(sys_id: string, date: number): string;
 }
-declare class ScopedDCManager {
-  /**
-   * Assigns pre-defined or user-defined data classifications
-   * to existing dictionary entries.
-   * @param dictEntries The sys_ids of the records you want to classify. The
-   * sys_ids are from the Dictionary [sys_dictionary] table. Entered as a comma-separated list
-   * enclosed in a string.
-   * @param dataClasses The sys_ids of the data classifications you want to assign. The
-   * sys_ids are from the Data Classification [data_classification] table. Entered as a
-   * comma-separated list enclosed in a string.
-   */
-  classify(dictEntries: string, dataClasses: string): string;
-  /**
-   * Removes all data classifications for the specified
-   * dictionary entries.
-   * @param dictEntries The sys_ids of the records you want to remove
-   * classifications from. The sys_ids are from the Dictionary [sys_dictionary] table. Entered
-   * as a comma-separated list enclosed in a string.
-   */
-  clearClassification(dictEntries: string): string;
-  /**
-   * Returns a list of all data classifications
-   * available in the current domain.
-   */
-  getAllDataClasses(): any;
-  /**
-   * Retrieves all data classifications for the specified
-   * dictionary entries.
-   * @param dictEntries The sys_ids of the records you want to retrieve
-   * classifications for. The sys_ids are from the Dictionary [sys_dictionary] table. Entered as
-   * a comma-separated list enclosed in a string.
-   */
-  getClassification(dictEntries: string): any;
-}
 declare class SPScriptedFacet {
   /**
    * Adds facet items or mapped queries to a facets object.
@@ -13830,6 +13613,7 @@ declare class Stream {
    *
    *
    *
+   *
    * @param initialValue Value passed to the function as the initial value.
    */
   reduce(reducerFn: any, initialValue: any): any;
@@ -13902,7 +13686,7 @@ declare class v_table {
    * Adds rows to the remote table.
    * @param row JavaScript object containing field name and value map in which the key is the
    * field name, for example, {number: "INC0001", sys_id:
-   * "a34"}.{ "&lt;field name&gt;": "value" }
+   * "a34"}.{ &lt;field name&gt;: String }
    *
    */
   addRow(row: any): boolean;
@@ -14030,413 +13814,6 @@ declare class XMLNodeIterator {
    * the spaces/tabs if XML is "pretty formatted".
    */
   next(): any;
-}
-declare namespace sn_agent {
-  export class AccAgentsAPI {
-    constructor();
-    /**
-     * Checks the status of a grab log request.
-     * @param requestId Sys_id of a request in the Agent Client
-     * Collector Requests [sn_agent_request] table.
-     */
-    checkGrabLogRequestProgress(requestId: string): any;
-    /**
-     * Gets the information of a specified agent.
-     * @param agentID Unique ID of an agent listed in the Agent ID
-     * column of the Agent Client Collectors [sn_agent_cmdb_ci_agent] table.
-     */
-    getAgent(agentID: string): any;
-    /**
-     * Gets a list of agents with related information.
-     * @param encodedQuery Encoded query string in standard Glide format.
-     * See Encoded query
-     * strings.
-     * @param limit Optional. Restricts results to a maximum number of agents. Use null or
-     * undefined for both if they are not required.Default/Max: 20,000
-     */
-    getAgentsList(encodedQuery: string, limit?: number): any;
-    /**
-     * Restarts a specified agent with alive/up status.
-     * @param agentID Unique ID of an agent listed in the Agent ID
-     * column of the Agent Client Collectors [sn_agent_cmdb_ci_agent] table.
-     */
-    restartAgent(agentID: string): string;
-    /**
-     * Runs a discovery check to locate CIs related to an agent. The
-     * specified agent must be in alive/up status.
-     * @param agentID Unique ID of an agent listed in the Agent ID
-     * column of the Agent Client Collectors [sn_agent_cmdb_ci_agent] table.
-     */
-    runDiscovery(agentID: string): string;
-    /**
-     * Set the given data collection status (true/false if enabled or not) for a specified
-     * agent.
-     * @param agentID Unique ID of an agent listed in the Agent ID
-     * column of the Agent Client Collectors [sn_agent_cmdb_ci_agent] table.
-     * @param status Flag that indicates whether data collection is enabled for the agent.
-     *
-     * Valid values:
-     * true: Enables data collection for this agent.
-     *
-     * false: Disables data collection for this agent.
-     *
-     *
-     *
-     *
-     * Default: true
-     */
-    setDataCollectionStatus(agentID: string, status: boolean): string;
-    /**
-     * Requests the log of a specified agent with alive/up
-     * status.
-     * @param agentID Unique ID of an agent listed in the Agent ID
-     * column of the Agent Client Collectors [sn_agent_cmdb_ci_agent] table.
-     */
-    submitGrabLogRequest(agentID: string): any;
-  }
-  export class AccCheckDefsAPI {
-    /**
-     * Gets a specified check definition with
-     * details.
-     * @param checkDefId Sys_id of the check definition listed
-     * in the Check Definitions [sn_agent_check_def] table.
-     * @param withParams Flag that indicates whether existing check
-     * parameter details are returned. Information for each standard and secure check
-     * parameter is included in a JSON object.Valid values:
-     * true: Return check parameter details.
-     *
-     * false: Do not return check parameter details.
-     *
-     *
-     *
-     * Default: False
-     */
-    getCheck(checkDefId: string, withParams: boolean): any;
-    /**
-     * Gets a list of check definitions with
-     * details.
-     * @param encodedQuery An encoded query
-     * string to
-     * filter the check definition result list. Use null for an unfiltered list of check
-     * definitions in the system.
-     * @param limit Limits the number of returned records. Set to
-     * null to use the default value.Default: 20,000
-     * @param withParams Flag that indicates whether existing check
-     * parameter details are returned. Information for each standard and secure check
-     * parameter is included in a JSON object.Valid values:
-     * true: Return check parameter details.
-     *
-     * false: Do not return check parameter details.
-     *
-     *
-     *
-     * Default: False
-     */
-    getChecksList(
-      encodedQuery: string,
-      limit: number,
-      withParams: boolean,
-    ): any;
-    /**
-     * Enables changing one or more field values of a
-     * specified check definition.
-     * @param checkDefId Sys_id of the check definition listed
-     * in the Check Definitions [sn_agent_check_def] table.
-     * @param updateJson Map of check definition fields to be updated to their new values. Refer to the
-     * data dictionary for a comprehensive list of Check Definition fields and
-     * types.{
-     * "background": Boolean,
-     * "check_group": "String",
-     * "check_type": "String",
-     * "command": "String",
-     * "name": "String",
-     * "plugins": [Array],
-     * "proxy_valid": Boolean,
-     * "timeout": Number
-     * }
-     */
-    updateCheck(checkDefId: string, updateJson: any): any;
-    /**
-     * Enables changing one or more field values of a
-     * specified check parameter.
-     * @param checkDefParamId Sys_id of the check parameter listed in the Check Parameter Definitions
-     * [sn_agent_check_param_def] table.
-     * @param updateJson Map of check parameter fields to be updated to their new values.  Refer to the
-     * data dictionary for a comprehensive list of Check Secure Parameter Definition fields
-     * and types.{
-     * "active": Boolean,
-     * "default_value": "String",
-     * "mandatory": Boolean,
-     * "name": "String"
-     * }
-     */
-    updateCheckParam(checkDefParamId: string, updateJson: any): any;
-    /**
-     * Enables changing one or more field values of a
-     * specified check secure parameter.
-     * @param checkDefSecureParamId Sys_id of the secure parameter listed in the Check Secure Parameter Definitions
-     * [sn_agent_check_secure_param_def] table.
-     * @param updateJson Map of check secure parameter fields to be updated to their new values. Refer
-     * to the data dictionary for a comprehensive list of Check Secure Parameter Definition
-     * fields and types.{
-     * "active": Boolean,
-     * "name": "String",
-     * "order": Number
-     * }
-     */
-    updateCheckSecureParam(checkDefSecureParamId: string, updateJson: any): any;
-  }
-  export class AgentNowHandler {
-    constructor();
-    /**
-     * Gets status of the request with the given
-     * ID.
-     * @param requestId A check request ID generated by calling the runCheckForCis()
-     * method.
-     */
-    getRequestStatus(requestId: string): any;
-    /**
-     * Gets the test check status of the given
-     * test result.
-     * @param testResultId A test result ID generated by creating a test check request.
-     */
-    getTestResultStatus(testResultId: string): any;
-    /**
-     * Runs a check against the given
-     * configuration item.
-     * @param cis GlideRecord of any CMDB table (any application, host, or agent) that the check
-     * is working against.
-     * @param check Contains the check ID and optional check parameters. {
-     * "checkDefId": "String",
-     * "params": Object
-     * }
-     * @param priority Priority of
-     * the request to be set on the ECC queue.Possible values:
-     * 0: interactive
-     *
-     * 1: expedited
-     *
-     * 2: standard
-     *
-     *
-     *
-     * @param timeout Value of the timeout for the request in
-     * seconds.
-     */
-    runCheckForCis(
-      cis: GlideRecord,
-      check: any | undefined,
-      priority: number,
-      timeout: number,
-    ): string;
-    /**
-     * Stops a background
-     * check.
-     * @param requestId The ID of a background check request generated by calling the
-     * runCheckForCis() method.
-     */
-    stopBackgroundCheck(requestId: string): any;
-  }
-  export class CheckDefinitionTestBuilder {
-    constructor();
-    /**
-     * Builds the test check request with the arguments
-     * set.
-     */
-    build(): any;
-    /**
-     * Sets the sys_id of the check definition to
-     * test.
-     * @param checkId Sys_id of the check definition listed
-     * in the Check Definitions [sn_agent_check_def] table.
-     */
-    withCheckId(checkId: string): any;
-    /**
-     * Sets the sys_id of the configuration item to run the
-     * test against.
-     * @param ciId Sys_id of a CMDB Configuration Item.
-     */
-    withCiId(ciId: string): any;
-    /**
-     * Sets the credentials alias sys_id to use during
-     * the test.
-     * @param credentialsAliasId Sys_id of a credentials record.
-     */
-    withCredentialsAliasId(credentialsAliasId: string): any;
-    /**
-     * Sets the credentials alias name to use during the
-     * test. If the given value matches the name of multiple credentials aliases records, then one
-     * of them is chosen randomly.
-     * @param credentialsAliasName Name of a credentials alias.
-     */
-    withCredentialsAliasName(credentialsAliasName: string): any;
-    /**
-     * Sets the credentials sys_id to use during the
-     * test.
-     * @param credentialsId Sys_id of a credentials record.
-     */
-    withCredentialsId(credentialsId: string): any;
-    /**
-     * Sets the credentials name to use during the test. If
-     * the given value is the name of several credentials records, then one of them is chosen
-     * randomly.
-     * @param credentialsName Name of the credentials record.
-     */
-    withCredentialsName(credentialsName: string): any;
-  }
-  export class CheckInstanceTestBuilder {
-    constructor();
-    /**
-     * Builds the test check request with the arguments
-     * set.
-     */
-    build(): any;
-    /**
-     * Sets the sys_id of the check definition to
-     * test.
-     * @param checkId Sys_id of the check definition listed
-     * in the Check Definitions [sn_agent_check_def] table.
-     */
-    withCheckId(checkId: string): any;
-    /**
-     * Sets the sys_id of the configuration item to run the
-     * test against.
-     * @param ciId Sys_id of a CMDB Configuration Item.
-     */
-    withCiId(ciId: string): any;
-    /**
-     * Sets the credentials alias sys_id to use during
-     * the test.
-     * @param credentialsAliasId Sys_id of a credentials alias record.
-     */
-    withCredentialsAliasId(credentialsAliasId: string): any;
-    /**
-     * Sets the credentials alias name to use during the
-     * test. If the given value matches the name of multiple credentials aliases records, then one
-     * of them is chosen randomly.
-     * @param credentialsAliasName Name of a credentials alias.
-     */
-    withCredentialsAliasName(credentialsAliasName: string): any;
-    /**
-     * Sets the credentials sys_id to use during the
-     * test.
-     * @param credentialsId Sys_id of a credentials record.
-     */
-    withCredentialsId(credentialsId: string): any;
-    /**
-     * Sets the credentials name to use during the test. If
-     * the given value is the name of several credentials records, then one of them is chosen
-     * randomly.
-     * @param credentialsName Name of the credentials record.
-     */
-    withCredentialsName(credentialsName: string): any;
-    /**
-     * Sets the agent to run the test. Allowed only in case the tested check instance and
-     * policy are proxy.
-     * @param agentId Unique ID of an agent proxy to run this check. This value
-     * is listed in the Agent ID column of the Agent Client Collectors [sn_agent_cmdb_ci_agent]
-     * table.
-     */
-    withProxyAgentId(agentId: string): any;
-  }
-}
-declare namespace sn_ais {
-  export class GeniusResultAnswer {
-    /**
-     * Adds a set of arbitrary key-value pair fields to a Genius Result
-     * Script answer. You can utilize any public Now Platform API to
-     * generate these fields.
-     * @param map Defines an arbitrary set of key-value pair fields for addition to the Genius
-     * Result Script answer. All field values must be Strings.
-     *
-     * {
-     * "fieldName1": String,
-     * "fieldName2": String
-     * }
-     */
-    addDataMap(map: any): boolean;
-    /**
-     * Adds terms to the search query defined for a Genius Result Search
-     * answer.
-     * @param searchPhrases Array of arbitrary Strings to add as terms for the search query made by the
-     * Genius Result Search answer. Search treats these terms as if
-     * separated by the OR operator.
-     *
-     * Example:[
-     * "Term": String,
-     * "Quoted phrase": String
-     * ]
-     */
-    addSearchPhrases(searchPhrases: any[]): boolean;
-    /**
-     * Sets and encodes the search query for a Genius Result Search
-     * answer.
-     * @param query Query to use for the search issued by the Genius Result
-     * Search answer.
-     */
-    setEncodedQuery(query: string): boolean;
-    /**
-     * Limits the maximum number of search results returned for a Genius Result
-     * Search answer. By default, the search query returns up to three
-     * results.
-     * @param searchLimit Positive integer value for the maximum number of search results to return for a
-     * Genius Result Search answer. Values above 3 have no
-     * effect.
-     *
-     * Default: 3
-     */
-    setSearchLimit(searchLimit: number): boolean;
-    /**
-     * Specifies terms for the search query defined for a Genius Result
-     * Search answer.
-     * @param searchPhrase Terms to use for the search query made by the Genius Result
-     * Search answer.
-     *
-     * If you want to retain the original search query terms submitted by the user, set
-     * this parameter to the String value returned by the
-     * GeniusResultContext.getOriginalSearchPhrase() method.
-     */
-    setSearchPhrase(searchPhrase: string): boolean;
-    /**
-     * Limits the search query defined for a Genius Result Search answer
-     * to a specific table. The query only returns search results from the specified table as Genius
-     * Result answer cards.
-     * @param table Now Platform table name. Only indexed records on this table are
-     * included in results for the Genius Result Search
-     * answer.
-     */
-    setTable(table: string): boolean;
-    /**
-     * Specifies whether to perform typo handling auto-correction (spell checking) for a
-     * search query defined in a Genius Result Search answer.
-     * @param spellCheck Flag that indicates whether to perform typo handling auto-correction for the search
-     * query defined in a Genius Result Search answer.
-     *
-     * Valid values:
-     * true: Perform typo handling auto-correction for the search query.
-     *
-     * false: Bypass typo handling auto-correction for the search query.
-     *
-     *
-     *
-     *
-     * Default: true
-     */
-    spellCheck(spellCheck: boolean): any;
-  }
-  export class GeniusResultContext {
-    /**
-     * Retrieves the user's original search query terms from the search query. You can use
-     * these terms to populate Genius Result answers using GeniusResultAnswer API
-     * methods.
-     */
-    getOriginalSearchPhrase(): string;
-    /**
-     * Retrieves NLU model prediction results for the search
-     * query.
-     */
-    getPredictionResult(): any;
-  }
 }
 declare namespace sn_auth {
   export class AuthCredential {
@@ -14648,12 +14025,8 @@ declare namespace sn_auth {
      */
     addQueryParam(key: string, value: string): any;
     /**
-     * Returns the credential value that was included when the request was signed.
-     */
-    getCredentialValue(): string;
-    /**
-     * Returns whether the signature is applied to the request in the header, as a query
-     * parameter, or as a credential value.
+     * Returns whether the signature is applied to the request in the header or as a query
+     * parameter.
      */
     getDirective(): string;
     /**
@@ -14676,22 +14049,14 @@ declare namespace sn_auth {
      */
     getStatusMessage(): string;
     /**
-     * Sets a credential value for the HttpRequestAuthedData object.
-     * @param credential_value Text of the credential value.
-     */
-    setCredentialValue(credential_value: string): any;
-    /**
-     * Defines whether to apply the signature to the signed request in the header, as a query
-     * parameter, or as a credential value.
-     * @param directive Whether to apply the signature to the header, query parameter, or credential
-     * value of the signed request. Values include:
+     * Defines whether to apply the signature to the signed request in the header or as a
+     * query parameter.
+     * @param directive Whether to apply the signature to the header or as a query parameter of the
+     * signed request. Values include:
      *
      * query: Applies signature as a query parameter.
      *
      * header: Applies signature to the request header.
-     *
-     * credential_value:
-     * Applies signature to the credential value.
      *
      *
      */
@@ -14736,12 +14101,12 @@ declare namespace sn_auth {
      */
     deleteHeader(key: string): any;
     /**
-     * Returns the sys_id of the Connection & Credential alias associated with the Integration Hub REST step.
+     * Returns the sys_id of the Connection & Credential alias associated with the IntegrationHub REST step.
      */
     getConnectionAliasID(): string;
     /**
      * Returns the value of a connection attribute associated with the Connection &
-     * Credential alias associated with Integration Hub REST step.
+     * Credential alias associated with IntegrationHub REST step.
      * @param name Name of the connection attribute.
      */
     getConnectionExtendedAttribute(name: string): string;
@@ -14884,149 +14249,6 @@ declare namespace sn_auth {
      */
     resetAuthCredential(): any;
   }
-  export class SCIM2Client {
-    /**
-     * Deletes a specified resource from an external service provider system.
-     * @param provider Required. Name of the configured SCIM service provider. The service provider name
-     * is defined in the name field of the SCIM Provider [sys_scim_provider] table.
-     * @param resourceName Required. Name of the resource type, such as User or Group. This value is located
-     * in the resource_name field in the SCIM Provider Resource Mapping
-     * [sys_scim_provider_resource_mapping] table.
-     * @param providerResourceId Required. Unique identifier of the associated resource on the external service
-     * provider system.
-     */
-    executeDelete(
-      provider: string,
-      resourceName: string,
-      providerResourceId: string,
-    ): any;
-    /**
-     * Returns all resources from a specified external provider system that match the passed
-     * criteria.
-     * @param provider Required. Name of the configured SCIM service provider. The service provider name
-     * is defined in the name field of the SCIM Provider [sys_scim_provider] table.
-     * @param resourceName Required. Name of the resource type, such as User or Group. This value is located
-     * in the resource_name field in the SCIM Provider Resource Mapping
-     * [sys_scim_provider_resource_mapping] table.
-     * @param queryParams Required. SCIM compliant query parameters passed to the external SCIM service
-     * provider endpoint.For additional information on the available query parameters and
-     * their associated format, refer to the following sections in the Internet Engineering
-     * Task Force document: System for Cross-domain Identity Management: Protocol
-     * https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.2
-     *
-     * https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.4
-     *
-     * https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.3
-     *
-     * https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.5
-     *
-     *
-     *
-     */
-    executeGet(
-      provider: string,
-      resourceName: string,
-      queryParams: string,
-    ): any;
-    /**
-     * Returns a resource from the external provider system with the specified unique resource
-     * ID.
-     * @param provider Required. Name of the configured SCIM service provider. The service provider name
-     * is defined in the name field of the SCIM Provider [sys_scim_provider] table.
-     * @param providerResourceId Required. Unique identifier of the associated resource on the external service
-     * provider system.
-     * @param queryParams Required. SCIM compliant query parameters passed to the external SCIM service
-     * provider endpoint.For additional information on the available query parameters and
-     * their associated format, refer to the following sections in the Internet Engineering
-     * Task Force document: System for Cross-domain Identity Management: Protocol
-     * https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.2
-     *
-     * https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.4
-     *
-     * https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.3
-     *
-     * https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.5
-     *
-     *
-     *
-     */
-    executeGetById(
-      provider: string,
-      providerResourceId: string,
-      queryParams: string,
-    ): any;
-    /**
-     * Creates or updates a resource in an external service provider system for a specified
-     * sys_id.
-     * @param provider Required. Name of the configured SCIM service provider. The service provider name
-     * is defined in the name field of the SCIM Provider [sys_scim_provider] table.
-     * @param resourceName Required. Name of the resource type, such as User or Group. This value is located
-     * in the resource_name field in the SCIM Provider Resource Mapping
-     * [sys_scim_provider_resource_mapping] table.
-     * @param resourceId Required. Sys_id of the resource saved in the ServiceNow
-     * instance (the client). This value is located in the primary_table field in the SCIM
-     * Provider Resource Mapping [sys_scim_provider_resource_mapping] table.
-     */
-    provision(provider: string, resourceName: string, resourceId: string): any;
-    /**
-     * Creates a new resource in an external service provider system for a specified
-     * sys_id.
-     * @param provider Required. Name of the configured SCIM service provider. The service provider name
-     * is defined in the name field of the SCIM Provider [sys_scim_provider] table.
-     * @param resourceName Required. Name of the resource type, such as User or Group. This value is located
-     * in the resource_name field in the SCIM Provider Resource Mapping
-     * [sys_scim_provider_resource_mapping] table.
-     * @param resourceId Required. Sys_id of the resource saved in the ServiceNow
-     * instance (the client). This value is located in the primary_table field in the SCIM
-     * Provider Resource Mapping [sys_scim_provider_resource_mapping] table.
-     */
-    provisionNew(
-      provider: string,
-      resourceName: string,
-      resourceId: string,
-    ): any;
-  }
-  export class SCIM2ClientUtil {
-    /**
-     * Returns the unique identifier of a specified resource from a specified external
-     * provider system for a unique resource ID in a ServiceNow instance using a
-     * filter expression to describe the desired
-     * resource.
-     * @param provider Required. Name of the configured SCIM service provider. The service provider name
-     * is defined in the name field of the SCIM Provider [sys_scim_provider] table.
-     * @param resourceName Required. Name of the resource type, such as User or Group. This value is located
-     * in the resource_name field in the SCIM Provider Resource Mapping
-     * [sys_scim_provider_resource_mapping] table.
-     * @param filter Required. Filter expression to apply to the return results.For additional
-     * information on the available filter parameters and their associated format, refer to
-     * the following section in the Internet Engineering Task Force document: System for
-     * Cross-domain Identity Management: Protocol
-     * https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.2
-     */
-    getProviderIdByFilter(
-      provider: string,
-      resourceName: string,
-      filter: string,
-    ): string;
-    /**
-     * Returns the unique identifier of a specified resource from a specified external
-     * provider system for a unique resource ID in a ServiceNow
-     * instance.
-     * @param provider Required. Name of the configured SCIM service provider. The service provider name
-     * is defined in the name field of the SCIM Provider [sys_scim_provider] table.
-     * @param resourceName Required. Name of the resource type, such as User or Group. This value is located
-     * in the resource_name field in the SCIM Provider Resource Mapping
-     * [sys_scim_provider_resource_mapping] table.
-     * @param resourceId Required. Sys_id of the resource saved in the ServiceNow
-     * instance (the client). This value is located in the primary_table field in the SCIM
-     * Provider Resource Mapping [sys_scim_provider_resource_mapping] table.
-     */
-    getProviderIdByResourceId(
-      provider: string,
-      resourceName: string,
-      resourceId: string,
-    ): string;
-  }
 }
 declare namespace sn_cc {
   export class ConnectionInfo {
@@ -15052,16 +14274,16 @@ declare namespace sn_cc {
   export class ConnectionInfoProvider {
     constructor();
     /**
-     * Retrieves a ConnectionInfo object identified by the given aliasID in the current
-     * domain.
-     * @param aliasID Sys_id of a connection alias.
+     * This function retrieves a ConnectionInfo object identified by the given aliasID in the
+     * current domain.
+     * @param aliasID The sys_id of a connection alias.
      */
     getConnectionInfo(aliasID: string): any;
     /**
-     * Retrieves a ConnectionInfo object identified by the given aliasID for a specific
-     * domain.
-     * @param aliasID Sys_id of a connection alias.
-     * @param domainID Sys_id of a domain or global.
+     * This function retrieves a ConnectionInfo object identified by the given aliasID for a
+     * specific domain.
+     * @param aliasID The sys_id of a connection alias.
+     * @param domainID The sys_id of a domain or global.
      */
     getConnectionInfoByDomain(aliasID: string, domainID: string): any;
   }
@@ -15098,216 +14320,17 @@ declare namespace sn_cc {
     getCredentials(tags?: string, types?: any[]): any;
   }
 }
-declare namespace sn_chg_score {
-  export class ChangeSuccess {
-    /**
-     * Returns the value specified in the system property
-     * com.snc.change_management.success_score.entry_level_score.
-     */
-    getEntryLevelTeamScore(): number;
-    /**
-     * Returns the value specified in the system property
-     * com.snc.change_management.success_score.maximum_score.
-     */
-    getMaximumPermittedTeamScore(): string;
-    /**
-     * Returns the value specified in the system property
-     * com.snc.change_management.success_score.minimum_score.
-     */
-    getMinimumPermittedTeamScore(): string;
-    /**
-     * Returns the latest model success score based on the specified change request
-     * GlideRecord.
-     * @param chgGr Change request GlideRecord for which to return the model success score.
-     */
-    getModelScoreForChange(chgGr: any): void;
-    /**
-     * Returns the latest model success score for the specified model sys_id.
-     * @param sys_id Sys_id of the group for which to return the model success score. Located in the
-     * User Group [sys_user_grou]
-     * table.
-     * @param domain_id Optional. Sys_id of a domain to use when querying Performance Analytics for the
-     * model success score.
-     */
-    getModelScoreForModelId(sys_id: string, domain_id?: string): void;
-    /**
-     * Returns the latest change team success score (original change success score based on
-     * group), model success score, and type success score based on the specified change request
-     * GlideRecord.
-     * @param chgGr Change request GlideRecord.
-     */
-    getScoresForChange(chgGr: any): any;
-    /**
-     * Returns the latest change team success score (original change success score based on
-     * group) based on the specified change request GlideRecord.
-     * @param chgGr Change request GlideRecord for which to return the change team success
-     * score.
-     */
-    getTeamScoreForChange(chgGr: any): any;
-    /**
-     * Returns the latest change team success score (original change success score based on
-     * group) for the specified group.
-     * @param sys_id Sys_id of the group for which to return the change team success score. Located
-     * in the User Group [sys_user_group] table.
-     * @param domain_id Optional.
-     * Sys_id of a domain to use when querying Performance Analytics for the
-     * team success score.
-     */
-    getTeamScoreForGroupId(sys_id: string, domain_id?: string): any;
-    /**
-     * Returns the latest type success score based on the specified change request
-     * GlideRecord.
-     * @param chgGr Change request GlideRecord for which to return the type success score.
-     */
-    getTypeScoreForChange(chgGr: any): any;
-    /**
-     * Returns the latest type success score for the specified change type.
-     * @param type Type of change request for which to return the type success score, such as
-     * "emergency".
-     * @param domain_id Optional. Sys_id of a domain to use when querying Performance Analytics for the
-     * type success score.
-     */
-    getTypeScoreForType(type: string, domain_id?: string): any;
-    /**
-     * Controls whether the associated method returns the details of the Performance Analytics
-     * (PA) indicators used to generate each of the different types of scores (team, model and type).
-     * By default, this information is not returned.
-     * @param toggle Flag that indicates whether to include the details of the PA
-     * indicators.Valid values:
-     * true: Return the details of the PA indicators.
-     *
-     * false: Do not return the details of the PA indicators.
-     *
-     *
-     *
-     * Default: false
-     */
-    withIndicatorScores(toggle: boolean): any;
-    /**
-     * Only valid when called with the getScoresForChange() method.
-     * Controls whether the getScoresForChange() method returns the model score. By
-     * default the model score is returned.
-     * @param toggle Flag that indicates whether to include the model success score.
-     *
-     * Valid values:
-     * true: Return the model success score.
-     *
-     * false: Do not return the model success score.
-     *
-     *
-     *
-     *
-     * Default: true
-     */
-    withModelScore(toggle: boolean): any;
-    /**
-     * Controls whether the method validates the user calling the associated method, ensuring
-     * that they have the rights to read the requested content.
-     * @param toggle Flag that indicates whether to validate the user calling the associated
-     * method.Valid values:
-     * true: Validate the user calling the associated method.
-     *
-     * false: Do not validate the user calling the associated method.
-     *
-     *
-     *
-     * Default: true
-     */
-    withSecurity(toggle: boolean): any;
-    /**
-     * Only valid when called with the getScoresForChange() method.
-     * Controls whether the getScoresForChange() method returns the team score. By
-     * default the team score is returned.
-     * @param toggle Flag that indicates whether to include the team success score.Valid
-     * values:
-     * true: Return the team success score.
-     *
-     * false: Do not return the team success score.
-     *
-     *
-     *
-     * Default: true
-     */
-    withTeamScore(toggle: boolean): any;
-    /**
-     * Controls whether the associated method returns the details for all change success score
-     * rating records. By default, this information is not returned.
-     * @param toggle Flag that indicates whether to include the details for all team success score
-     * rating records.Valid values:
-     * true: Return the details for all change success score rating records.
-     *
-     * false: Do not return the details for all change success score rating
-     * records.
-     *
-     *
-     *
-     * Default: false
-     */
-    withTeamScoreRatings(toggle: boolean): any;
-    /**
-     * Only valid when called with the getScoresForChange() method.
-     * Controls whether the getScoresForChange() method returns the type score. By
-     * default the type score is returned.
-     * @param toggle Flag that indicates whether to include the type success score.Valid
-     * values:
-     * true: Return the type success score.
-     *
-     * false: Do not return the type success score.
-     *
-     *
-     *
-     * Default: true
-     */
-    withTypeScore(toggle: boolean): any;
-  }
-}
 declare namespace sn_clotho {
   export class Client {
     constructor();
     /**
-     * Accumulates metric values at specified timestamp and saves the
-     * result to the database rather than overwriting the value.
-     * @param now_GR Name of the series GlideRecord from which to obtain the accumulated
-     * value.See also: getSeries()
-     * @param default_value Optional. Default value for accumulation at a given
-     * timestamp. Used only during the first call to accumulate if a value is unavailable
-     * for a given timestamp.A use case could be accumulating a watts
-     * metric for a total_power. You want to accumulate watts for a router connected to an
-     * outlet without a power meter to measure it. If you know the consumption value and it
-     * is constant), you can use the constant value as a default value to accumulate
-     * total_power. For example, you would use 20 if the router is constantly plugged in
-     * and consumes 20 Watts.
-     * The timestamp value can be provided using the DataBuilder API.
-     * Default: 0
-     */
-    accumulate(now_GR: GlideRecord, default_value?: number): any;
-    /**
-     * Remove a specified metric from a specified table in the MetricBase
-     * database
-     * @param tableName The name of the table whose specified metric is to be deleted.
-     * @param metricName The name of the metric.
-     */
-    deleteMetric(tableName: string, metricName: string): any;
-    /**
      * Remove the data in the MetricBase database associated with
      * the specified metric in the specified GlideRecord. Use this method for removing test data.
-     * @param now_GR The records whose time series data for the specified metric is to be
+     * @param gr The records whose time series data for the specified metric is to be
      * deleted.
      * @param metric The name of the metric.
      */
-    deleteSeries(now_GR: GlideRecord, metric: string): any;
-    /**
-     * Get all series from a specific dimension.
-     * @param now_GR The record from which to obtain the series.
-     * @param metric The name of the metric.
-     * @param lastUpdateBefore Optional. Date in the future representing the end of the period to be
-     * evaluated.
-     */
-    getSeries(
-      now_GR: GlideRecord,
-      metric: string,
-      lastUpdateBefore?: GlideDateTime,
-    ): any[];
+    deleteSeries(gr: GlideRecord, metric: string): any;
     /**
      * Saves metric data to the MetricBase database.
      * @param metricData One of the following:
@@ -15378,18 +14401,6 @@ declare namespace sn_clotho {
      * @param value The value of the data point.
      */
     add(start: GlideDateTime, value: number): any;
-  }
-  export class MetricInfo {
-    constructor(table: string, metric: string);
-    /**
-     * Gets the retention policy schedules of the specified metric.
-     */
-    getRetentionSchedulesInMinutes(): any;
-    /**
-     * Indicates whether the specified metric is mapped to the table defined in a
-     * MetricInfo object.
-     */
-    isValid(): boolean;
   }
   export class Transformer {
     constructor(sourceRecords: GlideRecord);
@@ -15488,9 +14499,8 @@ declare namespace sn_clotho {
      */
     getResult(): any;
     /**
-     * Specify a field by which to group data. To specify multiple fields, run successive
-     * calls individually.
-     * @param field Name of a field in the table by which to group the transform results.
+     * Specify a field to be used to group the data.
+     * @param field A field in the table to be used to group the transform results.
      */
     groupBy(field: string): any;
     /**
@@ -15637,9 +14647,9 @@ declare namespace sn_cmdb {
   export class IdentificationEngine {
     /**
      * Inserts or updates
-     * configuration items (CI) and non-Configuration Management Database (CMDB) CIs
-     * (classes not extending from cmdb_ci) in the CMDB based on identification and reconciliation rules. Use this API instead of
-     * updating the CMDB directly.
+     * configuration items and non-Configuration Management Database (CMDB)
+     * configuration items (classes not extending from cmdb_ci) in the CMDB based on identification and reconciliation
+     * rules. Use this API instead of updating the CMDB directly.
      * @param input Required. Input payload. A JSON formatted string of
      * configuration items to add or update.
      * "input" {
@@ -15653,9 +14663,9 @@ declare namespace sn_cmdb {
     createOrUpdateCI(input: string, source: string): any;
     /**
      * Inserts or updates
-     * configuration items (CI) and non-Configuration Management Database (CMDB) CIs
-     * (classes not extending from cmdb_ci) in the CMDB based on identification and reconciliation rules. Use this API instead of
-     * updating the CMDB directly.
+     * configuration items and non-Configuration Management Database (CMDB)
+     * configuration items (classes not extending from cmdb_ci) in the CMDB based on identification and reconciliation
+     * rules. Use this API instead of updating the CMDB directly.
      * @param input Required. Input payload. A JSON formatted string of
      * configuration items to add or update.
      * "input" {
@@ -15673,9 +14683,7 @@ declare namespace sn_cmdb {
      * "deduplicate_payloads": "Boolean",
      * "generate_summary": "Boolean",
      * "partial_commits": "Boolean",
-     * "partial_payloads": "Boolean",
-     * "skip_updating_last_scan_to_now": "Boolean",
-     * "skip_updating_source_last_discovered_to_now": "Boolean"
+     * "partial_payloads": "Boolean"
      * }
      * @param source Data source of the CI information. This value must be one of
      * the choice values defined for the discovery_source field of the Configuration Item
@@ -15693,22 +14701,22 @@ declare namespace sn_cmdb {
      * input string is in the format  'items: [{}], relations:[{}]', where each item within
      * the items and relations lists contains name-value pairs. The possible name-value
      * pairs within the items list are:
-     * className - Sys_class_name of the CI to be created or updated.
+     * className - the sys_class_name of the CI to be created or updated.
      *
-     * values:{} - Field information for the CI as name-value pairs, where the name
-     * is the field name.
+     * values:{} - the field information for the CI as name-value pairs, where the
+     * name is the field name.
      *
-     * lookup:[{}] - List of records with each item having name-value pairs like
+     * lookup:[{}] - a list of records with each item having name-value pairs like
      * the items list.
      *
      *
      *
      * The possible name-value pairs within the relations list are:
-     * parent - Index of the parent item in the dependency relation
+     * parent - index of the parent item in the dependency relation
      *
-     * child - Index of the child item in the dependency relation
+     * child - index of the child item in the dependency relation
      *
-     * type - Relationship type. This is one of the name field values from the
+     * type - the relationship type. This is one of the name field values from the
      * cmdb_rel_type table.
      *
      *
@@ -15736,9 +14744,7 @@ declare namespace sn_cmdb {
      * "deduplicate_payloads": "Boolean",
      * "generate_summary": "Boolean",
      * "partial_commits": "Boolean",
-     * "partial_payloads": "Boolean",
-     * "skip_updating_last_scan_to_now": "Boolean",
-     * "skip_updating_source_last_discovered_to_now": "Boolean"
+     * "partial_payloads": "Boolean"
      * }
      * @param source Data source of the CI information. This value must be one of
      * the choice values defined for the discovery_source field of the Configuration Item
@@ -15752,10 +14758,10 @@ declare namespace sn_cmdb {
     /**
      * Runs an identification audit against the specified configuration item (CI) to detect
      * duplicates.
-     * @param now_GR CI on which to run the audit to detect duplicates. The CI must have independent
-     * identification rules.
+     * @param gr The CI on which to run the audit to detect duplicates. The CI must have
+     * independent identification rules.
      */
-    runIdentificationAudit(now_GR: GlideRecord): any;
+    runIdentificationAudit(gr: GlideRecord): any;
   }
 }
 declare namespace sn_cmdbgroup {
@@ -15856,7 +14862,7 @@ declare namespace sn_connect {
   export class Conversation {
     /**
      * Add a user to a conversation.
-     * @param sysID Sys_ID of the user you want to add to a conversation.
+     * @param sysID The sys_ID of the user you want to add to a conversation.
      */
     addSubscriber(sysID: string): any;
     /**
@@ -15911,74 +14917,6 @@ declare namespace sn_connect {
      * @param Question Question to add to the chat queue.
      */
     join(Question: string): any;
-  }
-}
-declare namespace sn_cs {
-  export class VoiceTranscriptObject {
-    /**
-     * Saves third-party voice conversation transcript data to tables within a ServiceNow instance that is then accessible through Customer Service Management (CSM).
-     * @param voiceConversationJson JSON that represents the voice conversation to store. This JSON is sent by
-     * another ServiceNow plugin, such as OpenFrame. Third-party
-     * vendors, such as Amazon, send the JSON to the plugin. The associated plugin parses
-     * out the voice conversation and sends the JSON in the required format to Virtual Agent.For example, the following is an example of an
-     * AmazonConnect conversation:
-     * {
-     * "interactionId":"bgr09b5a-7308-47b2-jy97-737de9f45d19",
-     * "source":"AmazonConnect",
-     * "conversationStarted":"2021-08-06 15:07:51",
-     * "transcript":[
-     * {
-     * "isEvent":"False",
-     * "isInternalMessage":"False",
-     * "beginOffsetMillis":2650,
-     * "content":"This is John. How can I help you? Yeah,",
-     * "endOffsetMillis":9380,
-     * "id":"954c4edc-31a8-48b0-8f6e-7fa0c4ca00a8",
-     * "participantId":"AGENT",
-     * "Sentiment":"NEUTRAL",
-     * "loudnessScore":"null,null",
-     * "attributes": [{
-     * "key":"key1",
-     * "value":"value1"
-     * },{
-     * "key":"key2",
-     * "value":"value2"
-     * }]
-     * },
-     * {
-     * "isEvent":"False",
-     * "isInternalMessage":"False",
-     * "beginOffsetMillis":9120,
-     * "content":"Uh, yes, John. I'm a little very frustrated right now.",
-     * "endOffsetMillis":22900,
-     * "id":"18bcf19c-4a9b-4af1-9bd7-7bfb5ba53b9f",
-     * "participantId":"CUSTOMER",
-     * "sentiment":"NEGATIVE",
-     * "loudnessScore":"null,null",
-     * "attributes": [{
-     * "key":"key1",
-     * "value":"value1"
-     * },{
-     * "key":"key2",
-     * "value":"value2"
-     * } ]
-     * },
-     * {
-     * "isEvent":"True",
-     * "isInternalMessage":"True",
-     * "beginOffsetMillis":23590,
-     * "content":"Agent asked for help in chat",
-     * "endOffsetMillis":30610,
-     * "id":"ab09b3b6-23fd-4e41-be05-6b2b53c19059",
-     * "participantId":"CUSTOMER",
-     * "sentiment":"NEUTRAL",
-     * "loudnessScore":"null,null,null,null",
-     * "attributes": []
-     * }
-     * ]
-     * }
-     */
-    saveVoiceConversationTranscript(voiceConversationJson: string): string;
   }
 }
 declare namespace sn_cti_core {
@@ -16052,8 +14990,7 @@ declare namespace sn_cti_core {
     getSubStepNotFoundBehaviour(): any;
     /**
      * Sets an authentication token on the current CTIOperationRequest object.
-     * @param id The authentication token for the associated ServiceNow
-     * Voice user.
+     * @param id The authentication token for the associated Cloud Call Center user.
      */
     setAuthToken(id: string): any;
     /**
@@ -16379,28 +15316,31 @@ declare namespace sn_currency {
      */
     setDateTime(date: GlideDateTime): any;
     /**
-     * Sets the country code of the source currency.
-     * @param from Three-letter ISO 3166 country code of the source currency.
+     * Sets the currency type to convert from.
+     * @param from Currency to convert from. Use the three-letter ISO currency code of the
+     * currency.
      */
     setFromCurrency(from: string): any;
     /**
-     * Defines the rate table to use in the currency conversion.
-     * @param rateTable Name of the rate table to use in the currency conversion.
+     * Defines the rate table to be used in currency conversions.
+     * @param rateTable The rate table used in currency conversons, which must extend
+     * fx_conversion_rate. If the value is undefined, fx_system_rate is used.
      */
     setRateTable(rateTable: string): any;
     /**
-     * Sets the country code of the destination currency.
-     * @param to Three-letter ISO 3166 country code of the source currency.
+     * Sets the currency type to convert to.
+     * @param to Currency to convert to. Use the three-letter ISO currency code of the
+     * currency.
      */
     setToCurrency(to: string): any;
   }
   export class GlideCurrencyExchangeValue {
     /**
-     * Returns the currency amount after the conversion.
+     * Returns the amount after conversion.
      */
     getAmount(): number;
     /**
-     * Returns the converted to currency type.
+     * Returns the currency type converted to.
      */
     getCurrency(): string;
     /**
@@ -16412,7 +15352,8 @@ declare namespace sn_currency {
      */
     getOriginalValue(): number;
     /**
-     * Returns the exchange rate used during the conversion.
+     * Returns the currency conversion rate used to create the GlideCurrencyExchangeValue
+     * object.
      */
     getRate(): number;
     /**
@@ -16439,17 +15380,13 @@ declare namespace sn_currency {
      */
     setLocale(language: string, country: string): any;
     /**
-     * Sets the maximum number of digits to the right of the decimal point/decimal comma to
-     * return.
-     * @param maxFractionDigits Maximum number of fraction digits to return. If this value is set to something
-     * less than the minFractionDigits value, it is overridden by
-     * minFractionDigits.
+     * Sets the maximum number of fraction digits to display.
+     * @param maxFractionDigits Sets the maximum number of fraction digits to display.
      */
     setMaxFractionDigits(maxFractionDigits: number): any;
     /**
-     * Sets the minimum number of fraction digits (right of the decimal point/decimal comma)
-     * to return.
-     * @param minFractionDigits Minimum number of fraction digits to return.
+     * Sets the minimum number of fraction digits to display.
+     * @param minFractionDigits The minimum number of fraction digits to display.
      */
     setMinFractionDigits(minFractionDigits: number): any;
   }
@@ -16492,24 +15429,6 @@ declare namespace sn_currency {
      * GlideCurrencyParser.parse() call.
      */
     getCurrencyCode(): string;
-  }
-}
-declare namespace sn_devops {
-  export class DevOpsOrchestrationToolIntegrationHandler {
-    /**
-     * Returns the value of the orchestrationTaskName parameter from the
-     * payload for POST /devops/tool/{capability}.
-     * @param payload Payload containing data from the custom tool accepted by POST
-     * /devops/tool/{capability}, where capability is
-     * orchestration.
-     */
-    getNativeIdForOrchestrationTask(payload: any): string;
-    /**
-     * Checks if this handler is valid for the specified tool.
-     * @param toolName Name of the tool. Located in the Tool Name field in the
-     * DevOps Tool Integration [sn_devops_tool_integration] table.
-     */
-    handleTool(toolName: string): boolean;
   }
 }
 declare namespace sn_discovery {
@@ -16585,321 +15504,6 @@ declare namespace sn_discovery {
     toJson(): string;
   }
 }
-declare namespace sn_doc_services {
-  export class DocumentListEntryService {
-    constructor();
-    /**
-     * Adds a document template entry to a document list.
-     * @param entry One or more properties representing fields of a document list entry
-     * object.
-     */
-    createDocumentListEntry(entry: any): any;
-    /**
-     * Removes a document list entry from the Document List Entries [ds_document_list_entry]
-     * table.
-     * @param listEntryId Sys_id of a document list record in the Document List Entries
-     * [ds_document_list_entry] table.
-     */
-    deleteDocumentListEntry(listEntryId: string): any;
-    /**
-     * Updates the field values of an existing document list entry.
-     * @param listEntryId Sys_id of a document list record in the Document List Entries
-     * [ds_document_list_entry] table.
-     * @param entry One or more properties representing fields of a document list entry
-     * object.
-     */
-    updateDocumentListEntry(listEntryId: string, entry: any): any;
-  }
-  export class DocumentListService {
-    constructor();
-    /**
-     * Creates a document list in the Document Lists [ds_document_lists] table.
-     * @param doc One or more properties representing fields of a new record. The name property
-     * is required and can be set using the SystemDocumentList
-     * constructor or name() method.
-     */
-    createDocumentList(doc: any): any;
-    /**
-     * Creates documents from a list of document templates.
-     * @param listSysId Sys_id of a document list record in the Document Lists [ds_document_lists]
-     * table.
-     * @param tableName Name of the table containing the record on which add a list of document
-     * template references.
-     * @param tableSysId Sys_id
-     * of the record containing the content from which to add a list of document template
-     * references.
-     */
-    createDocumentsFromList(
-      listSysId: string,
-      tableName: string,
-      tableSysId: string,
-    ): any;
-    /**
-     * Removes a document record from the Document Lists [ds_document_lists] table.
-     * @param listSysId Sys_id of a document list record in the Document Lists [ds_document_lists]
-     * table.
-     */
-    deleteDocumentList(listSysId: string): any;
-    /**
-     * Updates the field values of an existing document list.
-     * @param listSysId Sys_id of a document list record in the Document Lists [ds_document_lists]
-     * table.
-     * @param doc One or more properties representing document list fields to be updated.
-     */
-    updateDocumentList(listSysId: string, doc: any): any;
-  }
-  export class DocumentReferenceService {
-    constructor();
-    /**
-     * Adds a document reference to a target table record.
-     * @param docSysId Sys_id of a document record in the Documents [ds_document]
-     * table.
-     * @param targetTable Name of the target table on which to provide a document reference.
-     * @param tableSysId Sys_id of the target table record to which the document reference is to be
-     * added.
-     */
-    addDocumentReference(
-      docSysId: string,
-      targetTable: string,
-      tableSysId: string,
-    ): any;
-    /**
-     * Removes a document reference from the Document References [ds_document_reference]
-     * table.
-     * @param docSysId Sys_id of a document record in the Documents [ds_document]
-     * table.
-     * @param targetTable Name of the table containing the document reference. This information is listed
-     * with the document in the Document References [ds_document_reference] table.
-     * @param tableSysId Sys_id of the record from which the document is referenced. You can find
-     * related information listed with the document in the Document References
-     * [ds_document_reference] table.
-     */
-    removeDocumentReference(
-      docSysId: string,
-      targetTable: string,
-      tableSysId: string,
-    ): any;
-  }
-  export class DocumentService {
-    constructor();
-    /**
-     * Creates a document record in the Documents [ds_document] table.
-     * @param doc One or more properties representing fields of a new record. The name property
-     * is required and can be set using the SystemDocument constructor
-     * or name() method.
-     */
-    createDocument(doc: any): any;
-    /**
-     * Removes a document record from the Documents [ds_document] table.
-     * @param docSysId Sys_id of a document record in the Documents [ds_document]
-     * table.
-     */
-    deleteDocument(docSysId: string): any;
-    /**
-     * Updates the field values of an existing document record.
-     * @param docSysId Sys_id of a document record in the Documents [ds_document]
-     * table.
-     * @param doc One or more properties representing document fields to be updated.
-     */
-    updateDocument(docSysId: string, doc: any): any;
-  }
-  export class DocumentVersionService {
-    constructor();
-    /**
-     * Creates a document version record in the Versions [ds_document_version]
-     * table.
-     * @param docVersion One or more properties representing fields of a document version.
-     */
-    createDocumentVersion(docVersion: any): any;
-    /**
-     * Deletes a document version.
-     * @param docVersionSysId Sys_id of a document version in the Versions [ds_document_version]
-     * table.
-     */
-    deleteDocumentVersion(docVersionSysId: string): any;
-  }
-  export class SystemDocument {
-    constructor(docName: string);
-    /**
-     * Sets the Audience field of a document record to specify external or internal
-     * availability. Represents the Audience field in a Document Management
-     * form.
-     * @param audience String representing the intended audience of the document.Possible
-     * values:
-     * external
-     *
-     * internal
-     *
-     *
-     * Default: internal
-     */
-    audience(audience: string): any;
-    /**
-     * Sets the Classification field of a document record to identify the level of information
-     * sensitivity. Represents the Classification field in a Document Management
-     * form.
-     * @param classification Classification of the document.Possible values:
-     * confidential
-     *
-     * public
-     *
-     * restricted
-     *
-     *
-     * Default: public
-     */
-    classification(classification: string): string;
-    /**
-     * Sets the template from which to generate a document. When the document is
-     * generated, the specified template is listed in the Created From Template field in the Documents
-     * [ds_document_list] table.
-     * @param docTemplate Sys_id of a document listed in the Documents [ds_document_list] table. The
-     * document must have the Template checkbox selected (true). See also DocumentVersionService API.
-     */
-    createdFromTemplate(docTemplate: string): any;
-    /**
-     * Sets the Department field of a document record.
-     * @param docDept Sys_id of a department listed in the Departments [cmn_department]
-     * table.
-     */
-    department(docDept: string): any;
-    /**
-     * Sets the Description field of a document record.
-     * @param description Description of the document.
-     */
-    description(description: string): any;
-    /**
-     * Sets the Name field of a document record.
-     * @param docName Name of the document.
-     */
-    name(docName: string): any;
-    /**
-     * Sets the Owner field of a document record.
-     * @param owner Sys_id of a user listed in the Users [sys_user] table. Role required:
-     * admin
-     * Default: Current user
-     */
-    owner(owner: string): any;
-    /**
-     * Sets the Reviewers field of a document record.
-     * @param reviewers List of one or more document reviewers by sys_id. The reviewer must be a user
-     * listed in the Users [sys_user] table.
-     */
-    reviewers(reviewers: string): any;
-    /**
-     * Sets the State field of a document record.
-     * @param state State of the document representing where the document is in the
-     * workflow.Valid values:
-     * draft
-     *
-     * submit
-     *
-     * review
-     *
-     * complete
-     *
-     *
-     * Default: draft
-     */
-    state(state: string): any;
-    /**
-     * Specifies whether a document record is a template.
-     * @param template Flag that specifies whether a document record is a template.
-     *
-     * Valid values:
-     * true: The default version of this document is a template.
-     *
-     * false: This document is not a template.
-     *
-     *
-     *
-     *
-     * Default: false
-     */
-    template(template: boolean): any;
-    /**
-     * Sets the Type field of a document record.
-     * @param docType Type of document.Valid values:
-     * contract
-     *
-     * guideline
-     *
-     * policy
-     *
-     * procedure
-     *
-     *
-     * Default: None
-     */
-    type(docType: string): any;
-  }
-  export class SystemDocumentList {
-    constructor(docListName: string);
-    /**
-     * Sets the Description field of a new document list record.
-     * @param description Description of the document list.
-     */
-    description(description: string): any;
-    /**
-     * Sets the Name field of a document list record.
-     * @param docListName Name of the document list.
-     */
-    name(docListName: string): any;
-  }
-  export class SystemDocumentListEntry {
-    constructor(listSysId: string);
-    /**
-     * Sets the Description field of a document list entry record.
-     * @param description Description of the document list entry.
-     */
-    description(description: string): any;
-    /**
-     * Specifies the document template to add to a document list.
-     * @param docSysId Sys_id of a document record in the Documents [ds_document]
-     * table. The document specified must be a template and have a version.
-     */
-    document(docSysId: string): any;
-    /**
-     * Specifies the document list in which to add a document.
-     * @param listSysId Sys_id of a document list record in the Document Lists [ds_document_lists]
-     * table.
-     */
-    documentList(listSysId: string): any;
-  }
-  export class SystemDocumentVersion {
-    constructor(docSysId: string);
-    /**
-     * Specifies the document record for this version.
-     * @param docSysId Sys_id of a document record in the Documents [ds_document]
-     * table.
-     */
-    document(docSysId: string): any;
-    /**
-     * Sets the Type field of a document version.
-     * @param docType Document source type.Valid values:
-     * url
-     *
-     * attachment
-     *
-     *
-     * Default: attachment
-     * Note: An attachment can currently only be added in the
-     * Document Versions [ds_document_version] table UI and not with the
-     * API.
-     */
-    type(docType: string): any;
-    /**
-     * Sets the URL of a document version.
-     * @param url URL of the source document for this version.
-     */
-    url(url: string): any;
-    /**
-     * Sets the number of a document version.
-     * @param versionNumber Version number for this document.
-     */
-    versionNumber(versionNumber: number): any;
-  }
-}
 declare namespace sn_dt {
   export class DecisionTableAPI {
     constructor();
@@ -16910,14 +15514,15 @@ declare namespace sn_dt {
     /**
      * Returns the answers associated with the specified decision table. An answer is a record
      * on any table associated with a Decision [sys_decision_question] record.
-     * @param decisionID Sys_id of the Decision Table record from the
+     * @param decisionID Sys ID of the Decision Table record from the
      * Decision Tables [sys_decision] table.
      */
     getAnswers(decisionID: string): any;
     /**
-     * Evaluates a decision table based on the provided inputs and returns an answer. If no
-     * inputs are provided, returns the first default answer found.
-     * @param decisionID Sys_id of the Decision Table record from the
+     * Evaluates a decision table based on the provided inputs and returns an
+     * answer.
+     * If no inputs are provided, returns the first default answer found.
+     * @param decisionID Sys ID of the Decision Table record from the
      * Decision Tables [sys_decision] table.
      * @param inputs Optional. Input values for the Decision Inputs [sys_decision_input] table
      * associated with the provided decision table. Use the value of the Column
@@ -16927,9 +15532,11 @@ declare namespace sn_dt {
      */
     getDecision(decisionID: string, inputs?: any): GlideRecord;
     /**
-     * Evaluates a decision table based on the provided inputs and returns all correctly
+     * Evaluates
+     * a decision table based on the provided inputs and returns all
+     * correctly
      * evaluated answers. If no inputs are provided, returns all default answers.
-     * @param decisionID Sys_id of the Decision Table record from the
+     * @param decisionID Sys ID of the Decision Table record from the
      * Decision Tables [sys_decision] table.
      * @param inputs Optional. Input values for the Decision Inputs  [sys_decision_input] table
      * associated with the provided decision table. If no inputs are provided, returns all
@@ -16939,21 +15546,21 @@ declare namespace sn_dt {
     /**
      * Returns a single decision table from the Decision Tables [sys_decision]
      * table.
-     * @param decisionID Sys_id of the Decision Table record from the
+     * @param decisionID Sys ID of the Decision Table record from the
      * Decision Tables [sys_decision] table.
      */
     getDecisionTable(decisionID: string): any;
     /**
      * Returns the decision inputs from the Decision Inputs [sys_decision_input] table
      * associated with the passed in decision table.
-     * @param decisionID Sys_id of the Decision Table record from the
+     * @param decisionID Sys ID of the Decision Table record from the
      * Decision Tables [sys_decision] table.
      */
     getInputs(decisionID: string): any;
     /**
      * Returns the decisions from the Decision [sys_decision_question] table associated with
      * the passed in decision table.
-     * @param decisionID Sys_id of the Decision Table record from the
+     * @param decisionID Sys ID of the Decision Table record from the
      * Decision Tables [sys_decision] table.
      */
     getQuestions(decisionID: string): any;
@@ -16968,55 +15575,24 @@ declare namespace sn_dt_api {
      */
     getDetectedLanguage(text: string, parms?: any): any;
     /**
-     * Detects the languages of the passed in text strings.
-     * @param texts List of text strings to use to detect the
-     * language(s).
-     * @param parms Optional. JSON object that contains additional
-     * translation
-     * parameters."parms": {
-     * "translator": "String"
-     * }
-     */
-    getDetectedLanguages(texts: any[], parms?: any): any;
-    /**
      * Translates the passed in text to one or more languages.
      * @param textToTranslate Text to translate.
-     * @param parms Optional. JSON object that contains additional
-     * translation
-     * parameters."parms": {
-     * "additionalParameters": {Object},
-     * "sourceLanguage": "String",
-     * "targetLanguages": [Array],
-     * "translator": "String"
-     * }
+     * @param parms Optional. JSON object that contains additional translation parameters.
      */
     getTranslation(textToTranslate: string, parms?: any): any;
     /**
-     * Translates the passed in text strings to one or more languages.
-     * @param texts List of text stings to translate.
-     * @param parms Optional. JSON object that contains additional
-     * translation
-     * parameters."parms": {
-     * "additionalParameters": {Object},
-     * "sourceLanguage": "String",
-     * "targetLanguages": [Array],
-     * "translator": "String"
-     * }
-     */
-    getTranslations(texts: any[], parms?: any): any;
-    /**
-     * Determines whether the various methods in the
-     * DynamicTranslation API are enabled for a translation
-     * service.
-     * @param translator Optional. Translation service to use to verify whether
-     * the methods are active. Translation services are configured under the Translator
-     * Configuration menu.Possible values - not case-sensitive:
+     * Determines whether the
+     * getDetectedLanguage() and getTranslation()
+     * methods are enabled for a translation service.
+     * @param translator Optional. Translation service to verify whether the  methods are active.
+     * Translation services are configured under the Translator Configuration
+     * menu.Possible values - not case-sensitive:
      *
      * Google
      *
-     * Microsoft
-     *
      * IBM
+     *
+     * Microsoft
      *
      * &lt;custom&gt;
      *
@@ -17024,8 +15600,6 @@ declare namespace sn_dt_api {
      * Note: To use custom translation services you must first configure the translation
      * service in your instance. For details, see Integrate with a translation
      * service provider.
-     * Default: Default translation
-     * service.
      */
     isEnabled(translator?: string): any;
   }
@@ -17064,7 +15638,7 @@ declare namespace sn_fd {
      */
     cancel(contextId: string, reason?: string): any;
     /**
-     * Runs an action from a server-side script synchronously.
+     * Run an action from a server-side script synchronously.
      * @param name The scope and name of the action to be executed, for example
      * global.action_name.
      * @param inputs Name-value pairs that define action inputs. Use the input name, not the input
@@ -17112,7 +15686,7 @@ declare namespace sn_fd {
      */
     executeDataStreamAction(name: string, inputs: any, timeout?: number): any;
     /**
-     * Runs a flow from a server-side script synchronously.
+     * Run a flow from a server-side script synchronously.
      * @param name The scope and name of the flow to be executed, for example
      * global.flow_name.
      * @param inputs Name-value pairs that define trigger inputs. Use the input name, not the input
@@ -17124,10 +15698,10 @@ declare namespace sn_fd {
      */
     executeFlow(name: string, inputs: any, timeout?: number): any;
     /**
-     * Runs a flow, subflow, action, or Data
-     * Stream action from a server-side script synchronously or asynchronously without
-     * creating execution details or other related records. Improves performance by
-     * eliminating record-keeping overhead.
+     * Runs a flow, subflow, or action from a
+     * server-side script synchronously or asynchronously without creating execution
+     * details or other related records. Improves performance by eliminating
+     * record-keeping overhead.
      * Use this API to increase the speed of high-volume processing, for
      * example multiple executions per second, in a production environment.
      * @param name Scope and internal name of the flow to execute. For example,
@@ -17145,7 +15719,7 @@ declare namespace sn_fd {
      */
     executeFlowQuick(name: string, inputs: any, timeout?: number): any;
     /**
-     * Runs an subflow from a server-side script synchronously.
+     * Run an subflow from a server-side script synchronously.
      * @param name The scope and name of the subflow to be executed, for example
      * global.subflow_name.
      * @param inputs Name-value pairs that define subflow inputs. Use the input name, not the input
@@ -17193,12 +15767,12 @@ declare namespace sn_fd {
      */
     hasApprovals(scopedFlowName: string): string;
     /**
-     * Builds password2 values inside a script step.
+     * Build password2 values inside a script step.
      * @param password Encrypted password2 value.
      */
     setEncryptedOutput(password: string): string;
     /**
-     * Runs an action from a server-side script asynchronously.
+     * Run an action from a server-side script asynchronously.
      * @param name The scope and name of the action to be executed, for example
      * global.action_name.
      * @param inputs Name-value pairs that define action inputs. Use the input name, not the input
@@ -17206,7 +15780,7 @@ declare namespace sn_fd {
      */
     startAction(name: string, inputs: any): string;
     /**
-     * Runs an action from a server-side script asynchronously without creating execution
+     * Run an action from a server-side script asynchronously without creating execution
      * details or other related records. Improve performance by eliminating record-keeping overhead.
      * Use this API to increase the speed of high-volume processing, for
      * example multiple executions per second, in a production environment.
@@ -17221,7 +15795,7 @@ declare namespace sn_fd {
      */
     startActionQuick(name: string, inputs: any): any;
     /**
-     * Runs a flow from a server-side script.
+     * Run a flow from a server-side script.
      * @param name The scope and name of the flow to be executed, for example
      * global.flow_name.
      * @param inputs Name-value pairs that define trigger inputs. Use the input name, not the input
@@ -17229,7 +15803,7 @@ declare namespace sn_fd {
      */
     startFlow(name: string, inputs: any): string;
     /**
-     * Runs a flow from a server-side script asynchronously without creating execution details
+     * Run a flow from a server-side script asynchronously without creating execution details
      * or other related records. Improve performance by eliminating record-keeping overhead. Use this API to increase the speed of high-volume processing, for
      * example multiple executions per second, in a production environment.
      * @param name Scope and internal name of the flow to execute. For example,
@@ -17243,7 +15817,7 @@ declare namespace sn_fd {
      */
     startFlowQuick(name: string, inputs: any): any;
     /**
-     * Runs a subflow from a server-side script.
+     * Run a subflow from a server-side script.
      * @param name The scope and name of the subflow to be executed, for example
      * global.subflow_name.
      * @param inputs Name-value pairs that define subflow inputs. Use the input name, not the input
@@ -17251,7 +15825,7 @@ declare namespace sn_fd {
      */
     startSubflow(name: string, inputs: any): string;
     /**
-     * Runs a subflow from a server-side script asynchronously without creating execution
+     * Run a subflow from a server-side script asynchronously without creating execution
      * details or other related records. Improve performance by eliminating record-keeping overhead.
      * Use this API to increase the speed of high-volume processing, for
      * example multiple executions per second, in a production environment.
@@ -17337,10 +15911,10 @@ declare namespace sn_fd {
      */
     inForeground(): any;
     /**
-     * Runs a flow, subflow, action, or Data
-     * Stream action from a server-side script synchronously or asynchronously without
-     * creating execution details or other related records. Improves performance by
-     * eliminating record-keeping overhead.
+     * Runs a flow, subflow, or action from a
+     * server-side script synchronously or asynchronously without creating execution
+     * details or other related records. Improves performance by eliminating
+     * record-keeping overhead.
      * Use this API to increase the speed of high-volume processing, for
      * example multiple executions per second, in a production environment.
      */
@@ -17362,16 +15936,11 @@ declare namespace sn_fd {
     timeout(timeout: number): any;
     /**
      * Overrides the Connections and Credentials alias associated with the flow,
-     * action, or subflow. You can override the default parent alias with any of its child
-     * aliases.
-     * @param parentAliasSysID The sys_id of the parent alias, the alias you want to override.
-     * @param overrideAliasSysID The sys_id of the child alias, the alias you want to use when running the flow,
-     * subflow, or action.
+     * action, or subflow.
+     * @param aliasName The name of the alias to override.
+     * @param overrideName The name of the alias to use when running the flow, subflow, or action.
      */
-    withConnectionAliasOverride(
-      parentAliasSysID: string,
-      overrideAliasSysID: string,
-    ): any;
+    withConnectionAliasOverride(aliasName: string, overrideName: string): any;
     /**
      * Adds a collection of inputs. If a name in one of the name-value pairs already exists,
      * the new value replaces the pre-existing value.
@@ -17755,6 +16324,7 @@ declare namespace sn_ih {
      *
      *
      *
+     *
      */
     expiresAt(expiresAt: GlideDateTime): any;
     /**
@@ -17763,32 +16333,6 @@ declare namespace sn_ih {
      * a string.
      */
     withAttachment(): any;
-  }
-}
-declare namespace sn_ih_kafka {
-  export class Producer {
-    /**
-     * Sends the specified message to the specified Kafka topic.
-     * @param topic Name of the topic to send the message to. A topic stores messages of the same
-     * type. For example, a topic named Payments might store messages about recent
-     * payments.
-     * @param key Name of the key for a specific partition. Topics can be partitioned. Messages
-     * with the same key are stored in the same partition. For example, payment messages
-     * with a key of June would all be stored in the same partition of the Payments
-     * topic.
-     * @param message Message text.
-     * @param isSync Flag that indicates whether to require the flow to wait for the step to
-     * complete before continuing.Valid values:
-     * true: Wait for the step to complete before continuing the associated
-     * flow.
-     *
-     * false: Do not wait for the step to complete before continuing the associated
-     * flow.
-     *
-     *
-     *
-     */
-    send(topic: string, key: string, message: string, isSync: boolean): any;
   }
 }
 declare namespace sn_impex {
@@ -17844,10 +16388,6 @@ declare namespace sn_impex {
      */
     getRow(): any;
     /**
-     * Gets a list of all worksheet names in an Excel workbook.
-     */
-    getSheetNames(): any[];
-    /**
      * Gets table column types and max character length from a spreadsheet or CSV
      * attachment.
      */
@@ -17857,11 +16397,8 @@ declare namespace sn_impex {
      */
     next(): boolean;
     /**
-     * Parses an XLSX-formatted Excel document.
-     * @param inputStream Excel
-     * document provided as an input stream. Note: Do not set this value
-     * if using the setSource() method to parse
-     * the same source multiple times.
+     * Parse an XLSX formatted Excel document.
+     * @param inputStream The Excel document to be parsed.
      */
     parse(inputStream: GlideScriptableInputStream): boolean;
     /**
@@ -17885,12 +16422,6 @@ declare namespace sn_impex {
      * @param sheetNumber The Excel sheet number to retrieve.
      */
     setSheetNumber(sheetNumber: number): any;
-    /**
-     * Defines an input source for parsing multiple times or parsing each worksheet in an
-     * Excel file.
-     * @param inputStream Excel document provided as an input stream.
-     */
-    setSource(inputStream: GlideScriptableInputStream): any;
   }
   export class GlideImportSetTable {
     constructor(tableLabel: string);
@@ -17966,77 +16497,6 @@ declare namespace sn_impex {
      */
     create(): string;
   }
-  export class RTETransformer {
-    constructor(
-      transformDefinitionId: string,
-      verboseLogging: boolean,
-      source: string,
-      batchSize: number,
-    );
-    /**
-     * Transforms and stores an array of messages into a record in the associated ServiceNow instance based on a provided extract, transform, and load (ETL)
-     * definition.
-     * @param message Stringified JSON objects representing the records to transform based on the ETL
-     * definition.For example, if you want to transform a single user with the data
-     * active, email, first name, and last name to the sys_user table, the message would
-     * look similar to this: [
-     * {
-     * "active”:”true”,
-     * "email”:”example@servicenow.com”,
-     * "first_name”:”Jane”,
-     * "last_name”:”Doe”
-     * }
-     * ]
-     * Note: The field names must match the field/path of the source entity
-     * fields.
-     *
-     */
-    transform(message: any[]): any;
-  }
-}
-declare namespace sn_instance_scan {
-  export class Findings {
-    /**
-     * Increases the count of the current finding.
-     */
-    increment(): any;
-    /**
-     * If the current finding is from a linter check, this method increments the current
-     * finding count and simultaneously passes the linter node object to the finding.
-     * @param node Node object from the linter check.
-     */
-    incrementWithNode(node: any): any;
-    /**
-     * Sets the source of the current finding based on the provided GlideRecord.
-     * @param source The record to set as the source record for the current finding. This value is
-     * added as a reference in the Source field of the Scan Findings [scan_finding]
-     * table.
-     */
-    setCurrentSource(source: GlideRecord): any;
-  }
-  export class LinterCheckAstNode {
-    /**
-     * Retrieves the string value of a name node type. A name node represents a simple
-     * identifier that is not a keyword, such as a function or variable name.
-     */
-    getNameIdentifier(): string;
-    /**
-     * Gets the parent node object of the accessed node.
-     */
-    getParent(): any;
-    /**
-     * Gets the type of the accessed node.
-     */
-    getTypeName(): string;
-    /**
-     * Accesses each node in the subtree starting from this node and executes a given callback
-     * function on each node.
-     * @param callbackFunction Callback function to be executed on each node in the subtree of this node. This
-     * callback function takes a node as a parameter which is the node to be
-     * visited.
-     */
-    visit(callbackFunction: any): any;
-  }
 }
 declare namespace sn_interaction {
   export class Interaction {
@@ -18095,126 +16555,6 @@ declare namespace sn_interaction {
     isInSchedule(): any;
   }
 }
-declare namespace sn_kmf_ns {
-  export class KMFCryptoOperation {
-    constructor(cryptoModuleName: string, operationName: string);
-    /**
-     * Performs the cryptographic operation defined by the current KMFCryptoOperation object
-     * on the supplied data and returns the result.
-     * @param data Required except if the withSysId() builder method has
-     * previously been called on the associated KMFCryptoOperation object. Input data on
-     * which to perform the cryptographic operation.
-     */
-    doOperation(data: any): any;
-    /**
-     * Sets the additional input needed to perform the cryptographic operation.
-     * @param additionalInput Optional, except for Asymmetric Decryption operations when using EC-IES.
-     * Additional input data needed to perform the cryptographic operation specified in the
-     * KMFCryptoOperation object.Supported string formats:
-     * FORMATTED: Formatted to the Key Management Framework (KMF)
-     * specifications.
-     *
-     * KMFBASE64: Base64 encoded.
-     *
-     *
-     *
-     * KMFEncryptionPayload object
-     * format:
-     * {
-     * "ciphertext": String,
-     * "derivation_secret": String,
-     * "ephemeral_key": String,
-     * "ephemeral_key_format": String,
-     * "signature": String
-     * }
-     */
-    withAdditionalInput(additionalInput?: string): any;
-    /**
-     * Sets the algorithm associated with the key material to wrap.
-     * @param algorithm Algorithm to use.Valid values:
-     * AES: Symmetric key type
-     *
-     * EC: Asymmetric key type
-     *
-     * HMAC: Symmetric key type
-     *
-     * RSA: Asymmetric key type
-     *
-     *
-     *
-     */
-    withAlgorithm(algorithm: string): any;
-    /**
-     * Sets the data format for the input data on which the cryptographic operation will be
-     * performed. Uses the specified format when decoding the data.
-     * @param inputFormat Format of the input data.Valid values:
-     * FORMATTED: Formatted to the Key Management Framework (KMF)
-     * specifications.
-     *
-     * KMFBASE64: Base64 encoded.
-     *
-     * KMFNONE: No encoding.
-     *
-     *
-     *
-     * Default: Value determined by the operation specified when the
-     * KMFCryptoOperation object was instantiated. For more information, see KMFCryptoOperation - KMFCryptoOperation(String cryptoModuleName, String operationName).
-     */
-    withInputFormat(inputFormat: string): any;
-    /**
-     * Sets the data format of the output data that is returned by the cryptographic
-     * operation. Uses the specified format when encoding the data.
-     * @param outputFormat Format of the output data.Valid values:
-     * FORMATTED: Formatted to the Key Management Framework (KMF)
-     * specifications.
-     *
-     * KMFBASE64: Base64 encoded.
-     *
-     * KMFNONE: No decoding. Only supported for MAC_VERIFICATION and
-     * SIGNATURE_VERIFICATION.
-     *
-     *
-     *
-     * Default if this method is not called: Value determined by the
-     * operation specified when the KMFCryptoOperation object was instantiated. For more
-     * information, see KMFCryptoOperation - KMFCryptoOperation(String cryptoModuleName, String operationName).
-     */
-    withOutputFormat(outputFormat: string): any;
-    /**
-     * Sets the data type for the output data returned after the cryptographic operation is
-     * performed.
-     * @param outputType Type of output data.Not all output types are applicable to all operations.
-     * For an unsupported type, an exception is thrown.
-     * Valid values (not case-sensitive):
-     * String: Not valid for MAC_VERIFICATION or
-     * SIGNATURE_VERIFICATION operations.
-     *
-     * Boolean: Only valid for MAC_VERIFICATION or
-     * SIGNATURE_VERIFICATION operations.
-     *
-     * Payload: Only valid for the ASYMMETRIC_ENCRYPTION
-     * operation. Use this output type for EC-IES.
-     *
-     *
-     *
-     *
-     * Note: When specifying an output of Payload, the output of
-     * the doOperation() method is a KMFEncryptionPayload object.
-     * For more information on the structure of this object, see withAdditionalInput().
-     *
-     * Default: Value determined by the operation, specified when the
-     * KMFCryptoOperation object was instantiated. For more information, see KMFCryptoOperation - KMFCryptoOperation(String cryptoModuleName, String operationName).
-     */
-    withOutputType(outputType: string): any;
-    /**
-     * Sets the sys_id of the key to wrap on the KMFCryptoOperation object. Applicable to
-     * symmetric and asymmetric wrapping of keys.
-     * @param sysId Sys_id of the key to wrap. Located in the Module Key [sys_kmf_module_key]
-     * table.
-     */
-    withSysId(sysId: string): any;
-  }
-}
 declare namespace sn_nlp_sentiment {
   export class SentimentAnalyser {
     constructor();
@@ -18226,20 +16566,20 @@ declare namespace sn_nlp_sentiment {
     analyze(inputText: string): any;
     /**
      * Performs sentiment analysis on an array of strings.
-     * @param inputTextArray Array of text (string) on which to perform sentiment analysis.
+     * @param inputTextArray Array of text (string) on which sentiment analysis should be performed.
      */
     analyzeMultiple(inputTextArray: any[]): any;
     /**
      * Performs sentiment analysis on an array of strings in the specified
      * language.
-     * @param inputTextArray Array of text (string) on which to perform sentiment analysis.
+     * @param inputTextArray Array of text (string) on which sentiment analysis should be performed.
      * @param language Language for the input text. This can very for different sentiment
      * services.
      */
     analyzeMultipleWithLanguage(inputTextArray: any[], language: string): any;
     /**
      * Performs sentiment analysis on a specified text and language.
-     * @param inputText Text on which to perform sentiment analysis.
+     * @param inputText Text on which sentiment analysis should be performed.
      * @param language Language for the input text. This can very for different sentiment
      * services.
      */
@@ -18277,74 +16617,6 @@ declare namespace sn_notification {
       messagingContent: GlideRecord,
       target: GlideRecord,
     ): any;
-  }
-  export class PreferenceDestination {
-    /**
-     * Returns the channel that is used to send notifications to the destination.
-     */
-    getChannel(): GlideRecord;
-    /**
-     * Returns the identifier for the destination.
-     */
-    getDeliverTo(): string;
-    /**
-     * Returns the type of destination, such as personal email or work email.
-     */
-    getDestinationType(): GlideRecord;
-    /**
-     * Checks if the destination has permission to receive a notification.
-     * @param notification Optional. Specify a notification to check if the destination has permission to
-     * receive that notification. An exception is thrown if the notification doesn't exist
-     * or if the notification isn't readable by the destination's user. If no notification
-     * is specified, this method checks if the destination has permission to receive any
-     * notifications.
-     */
-    isActive(notification?: GlideRecord): boolean;
-    /**
-     * Checks if a notification overrides a user's preferences for the
-     * destination.
-     * @param notification Specify
-     * a notification to check if it overrides user preferences for the destination. The
-     * notification should be a GlideRecord from the Notification [sys_notification]
-     * table.
-     */
-    isOverriden(notification: GlideRecord): boolean;
-    /**
-     * Sets the user preference for a destination to receive or not receive
-     * notifications.
-     * @param notification Optional. If a notification is specified, the user preference is set for the
-     * destination to receive or not receive that notification. The notification should be
-     * a GlideRecord from the Notification [sys_notification] table. If no notification is
-     * specified, the user preference is set for the destination to receive or not receive
-     * all notifications.
-     * @param active Flag that indicates whether the destination has permission to receive a
-     * notification.
-     *
-     * Valid values:
-     * true: The destination has permission receive a notification.
-     *
-     * false: The destination doesn't have permission to receive a
-     * notification.
-     *
-     *
-     *
-     */
-    setActive(notification: GlideRecord | undefined, active: boolean): any;
-  }
-  export class Preferences {
-    constructor(recipient: GlideRecord);
-    /**
-     * Returns a user's notification destinations.
-     */
-    getDestinations(): any[];
-    /**
-     * Returns a user's notification destinations that use a specified channel.
-     * @param channel GlideRecord from the Notification Channel [sys_notification_channel] table for
-     * the
-     * channel you want to filter
-     * on.
-     */
-    getDestinationsByChannel(channel: GlideRecord): any[];
   }
 }
 declare namespace sn_notify {
@@ -18550,1313 +16822,6 @@ declare namespace sn_notify {
     supportsWebRTC(): boolean;
   }
 }
-declare namespace sn_pad {
-  export class PDAutomationProvider {
-    /**
-     * Adds a specified optional activity to a process to be run relative to another activity
-     * during process execution.
-     * @param contextID Sys_id of the activity execution in which to
-     * add the optional activity. To access, click the process listed in the Process
-     * Executions [sys_pd_context] table. The execution selected must be in a state of
-     * In Progress.
-     * @param activityId Sys_id of the optional activity listed in the
-     * Activities [sys_pd_activity] table.
-     * Note: To create an optional activity, it must have
-     * the Start rule set to Manual in
-     * the Activities [sys_pd_activity] table.
-     *
-     * @param where Indicates where to place the activity in the
-     * process.Valid values:
-     * AFTER –
-     * Execute this activity after the relative activity context.
-     *
-     * WITH –
-     * Execute the activity at the same time as another relative
-     * activity context.
-     *
-     *
-     *
-     * @param relativeToId ID of the relative activity context that the optional activity will run after
-     * or with. Listed in the Activity Context [sys_pd_activity_context] table.
-     */
-    addOptionalActivityRelativeToActivityContext(
-      contextID: string | undefined,
-      activityId: string | undefined,
-      where: string,
-      relativeToId?: string,
-    ): any[];
-    /**
-     * Assigns an optional activity to a lane to run during that lane’s execution
-     * context.
-     * @param contextID Sys_id of the activity execution in which to
-     * add the optional activity. To access, click the process listed in the Process
-     * Executions [sys_pd_context] table. The execution selected must be in a state of
-     * In Progress.
-     * @param activityId Sys_id of the optional activity listed in the
-     * Activities [sys_pd_activity] table.
-     * Note: To create an optional activity, it must have
-     * the Start rule set to Manual in
-     * the Activities [sys_pd_activity] table.
-     *
-     * @param where Indicates where to place the activity in the
-     * process.Valid values:
-     * LAST –
-     * Execute as the final activity in a lane context.
-     *
-     * NEXT –
-     * Execute in the next activity in a lane context.
-     *
-     *
-     *
-     * @param relativeToId ID of the relative lane context in which the optional activity is to run.
-     * Listed in the Lane Context [sys_pd_lane_context] table.
-     */
-    addOptionalActivityRelativeToLaneContext(
-      contextID: string | undefined,
-      activityId: string | undefined,
-      where: string,
-      relativeToId?: string,
-    ): any[];
-  }
-}
-declare namespace sn_pdfgeneratorutils {
-  export class Cell {
-    constructor(rowspan: number, colspan: number);
-    /**
-     * Adds an image to a table cell.
-     * @param image Image to add to a table cell.
-     */
-    addImage(image: any): any;
-    /**
-     * Adds text to a table cell.
-     * @param paragraph Text to add to a table cell.
-     */
-    addParagraph(paragraph: any): any;
-    /**
-     * Applies a predefined style to table cells.
-     * @param style Style to apply to this element.
-     */
-    addStyle(style: any): any;
-    /**
-     * Adds a table to a cell.
-     * @param table Table to add to a cell.
-     */
-    addTable(table: any): any;
-    /**
-     * Gets the number of the column in which the cell is located.
-     */
-    getColumn(): number;
-    /**
-     * Gets the number of rows in which the cell is located.
-     */
-    getRow(): number;
-    /**
-     * Specifies a background color for the cell.
-     * @param color Background color.
-     */
-    setBackGroundColor(color: any): any;
-    /**
-     * Sets a border for all four edges of a cell.
-     * @param width Cell border width in points.
-     */
-    setBorder(width: number): any;
-    /**
-     * Sets a border for the lower limit of a cell.
-     * @param width Cell border width in points.
-     */
-    setBorderBottom(width: number): any;
-    /**
-     * Sets a border for the left limit of a cell.
-     * @param width Cell border width in points.
-     */
-    setBorderLeft(width: number): any;
-    /**
-     * Sets a border for the right limit of a cell.
-     * @param width Cell border width in points.
-     */
-    setBorderRight(width: number): any;
-    /**
-     * Sets a border for the upper limit of a cell.
-     * @param width Cell border width in points.
-     */
-    setBorderTop(width: number): any;
-    /**
-     * Sets a colored border for all four edges of a cell.
-     * @param color Cell border color.
-     * @param width Cell border width in points.
-     */
-    setColoredBorder(color: any, width: number): any;
-    /**
-     * Sets a colored border for the lower limit of a cell.
-     * @param color Cell border color.
-     * @param width Cell border width in points.
-     */
-    setColoredBorderBottom(color: any, width: number): any;
-    /**
-     * Sets a colored border for the left limit of a cell.
-     * @param color Cell border color.
-     * @param width Cell border width in points.
-     */
-    setColoredBorderLeft(color: any, width: number): any;
-    /**
-     * Sets a colored border for the right limit of a cell.
-     * @param color Cell border color.
-     * @param width Cell border width in points.
-     */
-    setColoredBorderRight(color: any, width: number): any;
-    /**
-     * Sets a colored border for the upper limit of a cell.
-     * @param color Cell border color.
-     * @param width Cell border width in points.
-     */
-    setColoredBorderTop(color: any, width: number): any;
-    /**
-     * Sets the height of a cell.
-     * @param value Cell height in points.
-     */
-    setHeight(value: number): any;
-    /**
-     * Sets the horizontal alignment for this cell.
-     * @param alignment Horizontal alignment setting.Valid
-     * values:
-     * center: Align contents to the center.
-     *
-     * left: Align contents to the left.
-     *
-     * right: Align contents to the right.
-     *
-     *
-     *
-     */
-    setHorizontalAlignment(alignment: string): any;
-    /**
-     * Sets the maximum height of a cell.
-     * @param value Maximum cell height in points.
-     */
-    setMaxHeight(value: number): any;
-    /**
-     * Sets the maximum width of a cell.
-     * @param value Maximum cell width in points.
-     */
-    setMaxWidth(value: number): any;
-    /**
-     * Sets the minimum height of a cell.
-     * @param value Minimum cell height in points.
-     */
-    setMinHeight(value: number): any;
-    /**
-     * Sets the minimum width of a cell.
-     * @param value Minimum cell width in points.
-     */
-    setMinWidth(value: number): any;
-    /**
-     * Sets the opacity of cell content, borders, and background.
-     * @param opacity Float decimal value from 0 through 1, in which 0 is transparent and 1 is fully
-     * opaque.Default: 0
-     */
-    setOpacity(opacity: number): any;
-    /**
-     * Sets the padding of all four sides of a cell to the same width.
-     * @param padding Padding width in points as a decimal value.
-     */
-    setPadding(padding: number): any;
-    /**
-     * Sets the value of the bottom padding width of a cell.
-     * @param padding Padding width in points as a decimal value.
-     */
-    setPaddingBottom(padding: number): any;
-    /**
-     * Sets the value of the left padding width of a cell.
-     * @param padding Padding width in points as a decimal value.
-     */
-    setPaddingLeft(padding: number): any;
-    /**
-     * Sets the value of the right padding width of a cell.
-     * @param padding Padding width in points as a decimal value.
-     */
-    setPaddingRight(padding: number): any;
-    /**
-     * Sets the value of the top padding width of a cell.
-     * @param padding Padding width in points as a decimal value.
-     */
-    setPaddingTop(padding: number): any;
-    /**
-     * Sets the text alignment of this cell.
-     * @param alignment Text alignment position.Valid values:
-     * text-center: Aligns text to the center.
-     *
-     * text-justified: Modifies the space between characters to completely fill
-     * text between the left and right sides. The final line is left-aligned.
-     *
-     * text-justified-all: Justifies text alignment including the final line.
-     *
-     * text-left: Align text to the left.
-     *
-     * text-right: Align text to the right.
-     *
-     *
-     *
-     */
-    setTextAlignment(alignment: string): any;
-    /**
-     * Sets the vertical alignment for this cell.
-     * @param alignment Vertical alignment setting.Valid values:
-     * bottom: Aligns contents to the bottom.
-     *
-     * mid: Aligns contents to the center.
-     *
-     * top: Aligns contents to the top.
-     *
-     *
-     *
-     */
-    setVerticalAlignment(alignment: string): any;
-  }
-  export class Color {
-    constructor(colors: any[]);
-    /**
-     * Indicates whether the values of two different color objects match.
-     * @param color Color object to check for a match.
-     */
-    equals(color: any): boolean;
-    /**
-     * Returns a black, gray, or white color object.
-     * @param grayScale Decimal value in the range 0 through 1, in which 0 is black and 1 is
-     * white.
-     */
-    getGrayColor(grayScale: number): any;
-    /**
-     * Creates color with given values and enables you to change the values of an existing
-     * color. Each of the values must be from 0 through 1.
-     * @param colors Three numbers indicating RGB values using
-     * a decimal value from 0 through 1. For example, in [0.1, 0.9, 0.5],
-     * the value of the first position is red, second is green, and third is blue. Also,
-     * [0, 0, 0] is solid black, [0.5, 0.5, 0.5] is
-     * solid gray, and [1, 1, 1] is solid white.
-     */
-    setColorValue(colors: any[]): any;
-    /**
-     * Sets the level of color opacity.
-     * @param color Floating decimal value from 0 through 1, in which 0 is fully transparent and 1
-     * is fully opaque.
-     */
-    setOpacity(color: any): any;
-  }
-  export class Document {
-    constructor(pageSize: any);
-    /**
-     * Adds a page to the document by terminating the
-     * current page and creating a new one.
-     */
-    addAndStartNewPage(): any;
-    /**
-     * Adds a name to the author field in PDF document properties.
-     * @param author Name of the document's author.
-     */
-    addAuthor(author: string): any;
-    /**
-     * Adds an image to a document.
-     * @param image Image to add to a document.
-     */
-    addImage(image: any): any;
-    /**
-     * Adds a new empty line to the document.
-     */
-    addNewLine(): any;
-    /**
-     * Adds a new blank page to the
-     * document. Use to force a page break to start a new chapter or section in your
-     * document.
-     */
-    addNewPage(): any;
-    /**
-     * Adds a new page at the specified index of the
-     * document. For example, setting the index to 6 inserts a page six or inserts the page at
-     * the position of the existing page six in a document. The original page six becomes page
-     * seven.
-     * @param index Position at which to insert a new page.
-     */
-    addNewPageAtIndex(index: number): any;
-    /**
-     * Adds a paragraph to a document.
-     * @param paragraph Block of text provided as a paragraph object.
-     */
-    addParagraph(paragraph: any): any;
-    /**
-     * Adds a table to a document.
-     * @param table Table to be inserted into the document.
-     */
-    addTable(table: any): any;
-    /**
-     * Closes a document.
-     */
-    close(): any;
-    /**
-     * Creates a document with the specified page size.
-     * @param pageSize Document page size.
-     */
-    createDocument(pageSize: any): any;
-    /**
-     * Gets the number of pages in the document.
-     */
-    getPageCount(): number;
-    /**
-     * Gets the default page size of the document.
-     */
-    getPageSize(): string;
-    /**
-     * Indicates whether a document is closed or open.
-     */
-    isClosed(): any;
-    /**
-     * Attaches the document file to the specified target table.
-     * @param tableName Name of the table on which to attach the document.
-     * @param tableSysId Sys_id of the record on which to attach the document.
-     * @param fileName Name of the document to attach.
-     */
-    saveAsAttachment(
-      tableName: string,
-      tableSysId: string,
-      fileName: string,
-    ): string;
-    /**
-     * Sets the base text flow direction to reorder from based on character
-     * recognition
-     * @param direction Text flow direction.Valid values:
-     * LEFT_TO_RIGHT: Order text flow left to right. The text direction is only
-     * reordered if left-to-right language characters are detected.
-     *
-     * RIGHT_TO_LEFT: Order text flow right to left. The text direction is only
-     * reordered if right-to-left language characters are detected.
-     *
-     *
-     *
-     * Default: LEFT_TO_RIGHT
-     */
-    setBaseDirection(direction: string): any;
-    /**
-     * Sets the page margin sizes in the document.
-     * @param topMargin Height of the top margin in points.
-     * @param rightMargin Width of the right margin in points.
-     * @param bottomMargin Height of the bottom margin in points.
-     * @param leftMargin Width of the left margin in points.
-     */
-    setMargins(
-      topMargin: number,
-      rightMargin: number,
-      bottomMargin: number,
-      leftMargin: number,
-    ): any;
-  }
-  export class Image {
-    constructor(attachmentSysId: string);
-    /**
-     * Scales an image to absolute width and height sizes. This setting does not preserve the
-     * width-height ratio of the image and might result in undesired stretching if settings are not
-     * precise.
-     * @param width Image width in points.
-     * @param height Image height in points.
-     */
-    scaleAbsolute(width: number, height: number): any;
-    /**
-     * Scales an image to an absolute size while preserving the width-height
-     * ratio.
-     * @param width Maximum image width in points.
-     * @param height Maximum image height in points.
-     */
-    scaleToFit(width: number, height: number): any;
-    /**
-     * Enables scaling width and height to a page or cell while retaining
-     * dimensions.
-     * @param value Flag that indicates whether to automatically scale an image.
-     *
-     * Valid values:
-     * true: Automatically scales the image
-     *
-     * false: Image does not scale
-     *
-     *
-     *
-     *
-     * Default: false
-     */
-    setAutoScale(value: boolean): any;
-    /**
-     * Sets a border on a PDF in the specified color.
-     * @param color Image border color.
-     * @param width Width of the border in points.
-     */
-    setColoredBorder(color: any, width: number): any;
-    /**
-     * Sets the horizontal alignment of the image.
-     * @param alignment Positions image alignment on a page or block element.Valid values:
-     * Center
-     *
-     * Left
-     *
-     * Right
-     *
-     *
-     *
-     * Default: Left
-     */
-    setHorizontalAlignment(alignment: string): any;
-    /**
-     * Sets an image to have no border.
-     */
-    setNoBorder(): any;
-  }
-  export class Line {
-    constructor();
-    /**
-     * Places a line on a document page.
-     * @param Document Name of the document object.
-     * @param pageNo Page number on which you want to place the line.
-     * @param xPos X-coordinate area of the page on which to place the line.
-     * @param yPos Y-coordinate area of the page on which to place the line.
-     * @param width Width area of the page in which you want to draw the line. Values are in
-     * points.
-     * @param lineWidth Optional. Value of line thickness in points.Default: 1
-     */
-    drawLine(
-      Document: any,
-      pageNo: number,
-      xPos: number,
-      yPos: number,
-      width: number,
-      lineWidth?: number,
-    ): any;
-    /**
-     * Sets the color of a line.
-     * @param color Line color.
-     */
-    setColor(color: any): any;
-  }
-  export class Paragraph {
-    constructor(text: string);
-    /**
-     * Adds an empty line after a paragraph in a document.
-     */
-    addNewLine(): any;
-    /**
-     * Adds a paragraph. You can use this method to create a block of paragraphs with
-     * automatic line breaks.
-     * @param paragraph Paragraph object.
-     */
-    addParagraph(paragraph: any): any;
-    /**
-     * Adds a string of text to a paragraph. This method does not automatically insert a space
-     * preceding the content.
-     * @param content Information to include in a paragraph.
-     */
-    addString(content: string): any;
-    /**
-     * Applies a predefined style to paragraph text.
-     * @param style Style to apply to this element.
-     */
-    addStyle(style: any): any;
-    /**
-     * Sets a paragraph element to a fixed position on the page.
-     * @param left Indentation from the left side of the PDF page in points.
-     * @param bottom Position from the bottom of the PDF page in points.
-     * @param width Width of the paragraph element in points. This value determines the length at
-     * which the line breaks.
-     */
-    setFixedPosition(left: number, bottom: number, width: number): any;
-    /**
-     * Sets each paragraph margin.
-     * @param margin Value of the top, right, bottom, and left margins in points.
-     */
-    setMargin(margin: number): any;
-    /**
-     * Sets the bottom margin of a paragraph.
-     * @param margin Height of the bottom margin in points.
-     */
-    setMarginBottom(margin: number): any;
-    /**
-     * Sets the left margin of a paragraph.
-     * @param leftMargin Width of the left margin in points.
-     */
-    setMarginLeft(leftMargin: number): any;
-    /**
-     * Sets the right margin of a paragraph.
-     * @param margin Width of the right margin in points.
-     */
-    setMarginRight(margin: number): any;
-    /**
-     * Sets a size for each paragraph margin.
-     * @param topMargin Height of the top margin in points.
-     * @param rightMargin Width of the right margin in points.
-     * @param bottomMargin Height of the bottom margin in points.
-     * @param leftMargin Width of the left margin in points.
-     */
-    setMargins(
-      topMargin: number,
-      rightMargin: number,
-      bottomMargin: number,
-      leftMargin: number,
-    ): any;
-    /**
-     * Sets the top margin of a paragraph.
-     * @param margin Height of the top margin in points.
-     */
-    setMarginTop(margin: number): any;
-    /**
-     * Sets the text alignment of this paragraph.
-     * @param alignment Text alignment position.Valid values:
-     * text-center: Aligns text to the center.
-     *
-     * text-justified: Modifies the space between characters to completely fill
-     * text between the left and right sides. The final line is left-aligned.
-     *
-     * text-justified-all: Justifies text alignment including the final line.
-     *
-     * text-left: Align text to the left.
-     *
-     * text-right: Align text to the right.
-     *
-     *
-     *
-     */
-    setTextAlignment(alignment: string): any;
-  }
-  export class PDFGenerationAPI {
-    constructor();
-    /**
-     * Converts an HTML string to a PDF document.
-     * @param html HTML to convert to a PDF document.
-     * @param targetTable Name of the table on which to attach the
-     * converted PDF.
-     * @param targetTableSysId Sys_id of the record on which to attach the converted PDF.
-     * @param pdfName Name to give the PDF.Default: Sys_id of the PDF in the Attachments
-     * [sys_attachment] table.
-     * @param fontFamilySysId Optional. Sys_id of the font family to use for the PDF. This sys_id is from the
-     * PDF Generation Font Family [sys_pdf_generation_font_family] table.Default:
-     * none
-     * @param documentConfiguration Optional. Object containing a table of contents configuration and a page number
-     * configuration.{​
-     * "toc_config" : "String",​
-     * "page_number_config": "String"​
-     * }​
-     */
-    convertToPDF(
-      html: string,
-      targetTable: string,
-      targetTableSysId: string,
-      pdfName: string,
-      fontFamilySysId?: string,
-      documentConfiguration?: any,
-    ): any;
-    /**
-     * Converts an HTML string into a PDF with header and footer content.
-     * @param html HTML to convert to a PDF document.
-     * @param targetTable Name of the table on which to attach the
-     * converted PDF.
-     * @param targetTableSysId Sys_id of the record on which to attach the converted PDF.
-     * @param pdfName Name to give the PDF.Default: Sys_id of the PDF in the Attachments
-     * [sys_attachment] table.
-     * @param headerFooterInfo Defines PDF header and footer
-     * details.{
-     * "FooterImageAlignment": "String",
-     * "FooterImageAttachmentId": "String",
-     * "FooterImageHeight": "String",
-     * "FooterText": "String",
-     * "FooterTextAlignment": "String",
-     * "GeneratePageNumber": "String",
-     * "HeaderImageAlignment": "String",
-     * "HeaderImageAttachmentId": "String",
-     * "HeaderImageHeight": "String",
-     * "LeftOrRightMargin": "String",
-     * "PageOrientation": "String",
-     * "PageSize": "String",
-     * "TopOrBottomMargin": "String"
-     * }
-     * @param fontFamilySysId Optional. Sys_id of the font family to use for the PDF. This sys_id is from the
-     * PDF Generation Font Family [sys_pdf_generation_font_family] table.Default:
-     * none
-     * @param documentConfiguration Optional. Object containing a table of contents configuration and a page number
-     * configuration.{​
-     * "toc_config" : "String",​
-     * "page_number_config": "String"​
-     * }​
-     */
-    convertToPDFWithHeaderFooter(
-      html: string,
-      targetTable: string,
-      targetTableSysId: string,
-      pdfName: string,
-      headerFooterInfo: any,
-      fontFamilySysId?: string,
-      documentConfiguration?: any,
-    ): any;
-    /**
-     * Fills
-     * fields in an editable PDF and attaches it to the provided record.
-     * @param fieldsMap Optional. Key value map by PDF field name and value to fill. Use the
-     * getDocumentFields() method to get the list of available
-     * fields.
-     * @param sysId Sys_id of a
-     * PDF in the Attachments [sys_attachment] table.
-     * @param tableName Name of the table containing the record to which the PDF
-     * is attached. You can find this value in the same row as the attachment listed in the
-     * Attachments [sys_attachment] table.
-     * @param tableSysId Sys_id of the record to which the PDF is attached. You can
-     * find this value in the same row as the attachment listed in the Attachments
-     * [sys_attachment] table.
-     * @param pdfName Name to give the PDF.Default: Sys_id of the PDF in the Attachments
-     * [sys_attachment] table.
-     */
-    fillDocumentFields(
-      fieldsMap: any | undefined,
-      sysId: string,
-      tableName: string,
-      tableSysId: string,
-      pdfName: string,
-    ): any;
-    /**
-     * Fills fields in an editable PDF, flattens the data
-     * fields, and attaches it to the provided record.
-     * @param fieldsMap Optional. Key value map by PDF field name and value to fill. Use the
-     * getDocumentFields() method to get the list of available
-     * fields.
-     * @param sysId Sys_id of a
-     * PDF in the Attachments [sys_attachment] table.
-     * @param tableName Name of the table containing the record to which the PDF
-     * is attached. You can find this value in the same row as the attachment listed in the
-     * Attachments [sys_attachment] table.
-     * @param tableSysId Sys_id of the record to which the PDF is attached. You can
-     * find this value in the same row as the attachment listed in the Attachments
-     * [sys_attachment] table.
-     * @param pdfName Name to give the PDF.Default: Sys_id of the PDF in the Attachments
-     * [sys_attachment] table.
-     * @param flatten Optional. Flattening fields enable locking the fields so that other users cannot
-     * change the information. Specify the key as "FlattenType" and provide a flattening option as
-     * a string.Valid values:
-     * donot_flatten - Do not flatten any fields.
-     *
-     * partially_flatten - Flatten only the fields which are modified.
-     *
-     * fully_flatten - Flattens all the fields.
-     *
-     *
-     *
-     * Default:
-     * fully_flatten
-     * {
-     * "FlattenType": "String"
-     * }
-     */
-    fillDocumentFieldsAndFlatten(
-      fieldsMap: any | undefined,
-      sysId: string,
-      tableName: string,
-      tableSysId: string,
-      pdfName: string,
-      flatten?: any,
-    ): any;
-    /**
-     * Fills fields in an editable PDF, adds signature
-     * image, flattens the data fields, and attaches it to the provided record.
-     * @param fieldsMap Optional. Key value map by PDF field name and value to fill. Use the
-     * getDocumentFields() method to get the list of available
-     * fields.
-     * @param sysId Sys_id of a
-     * PDF in the Attachments [sys_attachment] table.
-     * @param tableName Name of the table containing the record to which the PDF
-     * is attached. You can find this value in the same row as the attachment listed in the
-     * Attachments [sys_attachment] table.
-     * @param tableSysId Sys_id of the record to which the PDF is attached. You can
-     * find this value in the same row as the attachment listed in the Attachments
-     * [sys_attachment] table.
-     * @param pdfName Name to give the PDF.Default: Sys_id of the PDF in the Attachments
-     * [sys_attachment] table.
-     * @param requestor Signature input returned from pdfMergeSignRequestor.
-     * @param flatten Optional. Flattening fields enable locking the fields so that other users cannot
-     * change the information. Specify the key as "FlattenType" and provide a flattening option as
-     * a string.Valid values:
-     * donot_flatten - Do not flatten any fields.
-     *
-     * partially_flatten - Flatten only the fields which are modified.
-     *
-     * fully_flatten - Flattens all the fields.
-     *
-     *
-     *
-     * Default:
-     * fully_flatten
-     * {
-     * "FlattenType": "String"
-     * }
-     */
-    fillFieldsAndMergeSignature(
-      fieldsMap: any | undefined,
-      sysId: string,
-      tableName: string,
-      tableSysId: string,
-      pdfName: string,
-      requestor: any,
-      flatten?: any,
-    ): any;
-    /**
-     * Gets a list of editable fields in a PDF document. Enables listing editable PDF fields
-     * without manually opening the file to check.
-     * @param sysId Sys_id of a
-     * PDF in the Attachments [sys_attachment] table.
-     */
-    getDocumentFields(sysId: string): any;
-    /**
-     * Gets the field type of set of editable fields from a PDF document.
-     * @param sysId Sys_id of a
-     * PDF in the Attachments [sys_attachment] table.
-     */
-    getDocumentFieldsType(sysId: string): any;
-    /**
-     * Fills fields in an editable PDF, creates an image, and converts it to a
-     * Base64-encoded PDF.
-     * @param fieldsMap Optional. Key value map by PDF field name and value to fill. Use the
-     * getDocumentFields() method to get the list of available
-     * fields.
-     * @param sysId Sys_id of a
-     * PDF in the Attachments [sys_attachment] table.
-     * @param requestor Signature input returned from pdfMergeSignRequestor.
-     * @param flatten Optional. Flattening fields enable locking the fields so that other users cannot
-     * change the information. Specify the key as "FlattenType" and provide a flattening option as
-     * a string.Valid values:
-     * donot_flatten - Do not flatten any fields.
-     *
-     * partially_flatten - Flatten only the fields which are modified.
-     *
-     * fully_flatten - Flattens all the fields.
-     *
-     *
-     *
-     * Default:
-     * fully_flatten
-     * {
-     * "FlattenType": "String"
-     * }
-     */
-    getFilledDocumentWithSignatureAsBase64(
-      fieldsMap: any | undefined,
-      sysId: string,
-      requestor: any,
-      flatten?: any,
-    ): any;
-    /**
-     * Gets the page size of a PDF document.
-     * @param sysId Sys_id of a
-     * PDF in the Attachments [sys_attachment] table.
-     */
-    getPdfPageSizes(sysId: string): any;
-    /**
-     * Checks if the PDF document contains editable fields.
-     * @param sysId Sys_id of a
-     * PDF in the Attachments [sys_attachment] table.
-     */
-    isDocumentFillable(sysId: string): any;
-  }
-  export class PdfMergeSignRequestor {
-    constructor();
-    /**
-     * Assigns signature size and position requirements in the PDF.
-     * @param pageNumber Number of the page on which to insert the signature.
-     * @param leftMargin Value in points representing the left margin area of the page at which to
-     * insert the signature.
-     * @param topMargin Value in points representing the top margin area of the page at which to insert
-     * the signature image.
-     * @param boxWidth Value in points representing width of the box to contain the signature.
-     * @param boxHeight Value in points representing height of the box to contain the signature
-     * image.
-     * @param sysId Sys_id of the signature image in the Attachments [sys_attachment]
-     * table.
-     */
-    addSignatureMapping(
-      pageNumber: number,
-      leftMargin: number,
-      topMargin: number,
-      boxWidth: number,
-      boxHeight: number,
-      sysId: string,
-    ): any;
-    /**
-     * Creates a signature request with source and target inputs.
-     * @param targetSysId Sys_id of a
-     * PDF in the Attachments [sys_attachment] table. Use this value as the target PDF on which to add a signature.
-     * @param targetTable Name of the table containing the record to which the PDF
-     * is attached. You can find this value in the same row as the attachment listed in the
-     * Attachments [sys_attachment] table.
-     * @param tableSysId Sys_id of the record to which the PDF is attached. You can
-     * find this value in the same row as the attachment listed in the Attachments
-     * [sys_attachment] table.
-     * @param targetFileName Name of the target PDF without extension.
-     */
-    createRequest(
-      targetSysId: string,
-      targetTable: string,
-      tableSysId: string,
-      targetFileName: string,
-    ): any;
-    /**
-     * Processes requests and adds the signatures.
-     */
-    processRequest(): any;
-  }
-  export class PdfPage {
-    constructor(pageSize: string, orientation?: string);
-    /**
-     * Gets the Y-coordinate of the lower edge of a PDF page.
-     */
-    getBottom(): number;
-    /**
-     * Gets the X-coordinate of the left edge of a PDF page.
-     */
-    getLeft(): number;
-    /**
-     * Gets the size of a PDF page
-     */
-    getPdfPageSize(): any;
-    /**
-     * Gets the X-coordinate of the right edge of a PDF page.
-     */
-    getRight(): number;
-    /**
-     * Gets the Y-coordinate of the upper edge of a PDF page.
-     */
-    getTop(): number;
-    /**
-     * Gets the width of a PDF page.
-     */
-    getWidth(): number;
-  }
-  export class Style {
-    constructor();
-    /**
-     * Specifies a background color of an element.
-     * @param color Background color.
-     */
-    setBackgroundColor(color: any): any;
-    /**
-     * Sets a style to bold font.
-     */
-    setBold(): any;
-    /**
-     * Sets the style border on all four sides of an element.
-     * @param width Style border width in points.
-     */
-    setBorder(width: number): any;
-    /**
-     * Sets the style border to the bottom of an element.
-     * @param width Style border width in points.
-     */
-    setBorderBottom(width: number): any;
-    /**
-     * Sets the style border on the left side of an element.
-     * @param width Style border width in points.
-     */
-    setBorderLeft(width: number): any;
-    /**
-     * Sets the style border on the right side of an element.
-     * @param width Style border width in points.
-     */
-    setBorderRight(width: number): any;
-    /**
-     * Sets the style border to the top of an element.
-     * @param width Style border width in points.
-     */
-    setBorderTop(width: number): any;
-    /**
-     * Sets style border with color on all four sides of an element.
-     * @param width Style border width in points.
-     * @param color Style border color.
-     */
-    setColoredBorder(width: number, color: any): any;
-    /**
-     * Sets style border with color to the bottom side of an element.
-     * @param width Style border width in points.
-     * @param color Style border color.
-     */
-    setColoredBorderBottom(width: number, color: any): any;
-    /**
-     * Sets style border with color on the left side of an element.
-     * @param width Style border width in points.
-     * @param color Style border color.
-     */
-    setColoredBorderLeft(width: number, color: any): any;
-    /**
-     * Sets style border with color on the right side of an element.
-     * @param width Style border width in points.
-     * @param color Style border color.
-     */
-    setColoredBorderRight(width: number, color: any): any;
-    /**
-     * Sets style border with color to the top side of an element.
-     * @param width Style border width in points.
-     * @param color Style border color.
-     */
-    setColoredBorderTop(width: number, color: any): any;
-    /**
-     * Sets a font color.
-     * @param color Font color.
-     */
-    setFontColor(color: any): any;
-    /**
-     * Sets a style font size.
-     * @param fontSize Font size in points.
-     */
-    setFontSize(fontSize: number): any;
-    /**
-     * Sets the horizontal alignment for a style.
-     * @param alignment Horizontal alignment setting.Valid
-     * values:
-     * center: Align contents to the center.
-     *
-     * left: Align contents to the left.
-     *
-     * right: Align contents to the right.
-     *
-     *
-     *
-     */
-    setHorizontalAlignment(alignment: string): any;
-    /**
-     * Sets a style to italic font.
-     */
-    setItalic(): any;
-    /**
-     * Sets the padding of all four sides of an element to the same width.
-     * @param padding Padding width in points as a decimal value.
-     */
-    setPadding(padding: number): any;
-    /**
-     * Sets the value of the bottom padding width of an element.
-     * @param padding Padding width in points as a decimal value.
-     */
-    setPaddingBottom(padding: number): any;
-    /**
-     * Sets the value of the left padding width of an element.
-     * @param padding Padding width in points as a decimal value.
-     */
-    setPaddingLeft(padding: number): any;
-    /**
-     * Sets the value of the right padding width of a style.
-     * @param padding Padding width in points as a decimal value.
-     */
-    setPaddingRight(padding: number): any;
-    /**
-     * Sets the value of the top padding width of an element.
-     * @param padding Padding width in points as a decimal value.
-     */
-    setPaddingTop(padding: number): any;
-    /**
-     * Sets the text alignment for a style.
-     * @param alignment Text alignment position.Valid values:
-     * text-center: Aligns text to the center.
-     *
-     * text-justified: Modifies the space between characters to completely fill
-     * text between the left and right sides. The final line is left-aligned.
-     *
-     * text-justified-all: Justifies text alignment including the final line.
-     *
-     * text-left: Align text to the left.
-     *
-     * text-right: Align text to the right.
-     *
-     *
-     *
-     */
-    setTextAlignment(alignment: string): any;
-    /**
-     * Sets the vertical alignment for this element.
-     * @param alignment Vertical alignment setting.Valid values:
-     * bottom: Aligns contents to the bottom.
-     *
-     * mid: Aligns contents to the center.
-     *
-     * top: Aligns contents to the top.
-     *
-     *
-     *
-     */
-    setVerticalAlignment(alignment: string): any;
-  }
-  export class SVGToPDFConversionAPI {
-    constructor();
-    /**
-     * Adds an SVG image to a PDF on a specified page with image size and location
-     * coordinates.
-     * @param svg SVG to convert to a PDF document.
-     * @param inputPdfSysId Sys_id of the target PDF in which to create a copy of with an SVG. The target
-     * PDF is in the Attachments [sys_attachment] table.
-     * @param targetTable Name of the table containing the record to which the PDF
-     * is attached. You can find this value in the same row as the attachment listed in the
-     * Attachments [sys_attachment] table.
-     * @param targetTableSysId Sys_id of the record to which the PDF is attached. You can
-     * find this value in the same row as the attachment listed in the Attachments
-     * [sys_attachment] table.
-     * @param pdfName Name to give the PDF.Default: Sys_id of the PDF in the Attachments
-     * [sys_attachment] table.
-     * @param pageNo Page number in the attached PDF on which to place the SVG.
-     * @param x Horizontal position of the SVG in the page. Value is in points.
-     * @param y Vertical position of the SVG in the page. Value is in points.
-     * @param svgImgWidth Width of the SVG image in pixels.
-     * @param svgImgHeight Height of the SVG image in pixels.
-     */
-    addSVGToPDF(
-      svg: string,
-      inputPdfSysId: string,
-      targetTable: string,
-      targetTableSysId: string,
-      pdfName: string,
-      pageNo: number,
-      x: number,
-      y: number,
-      svgImgWidth: number,
-      svgImgHeight: number,
-    ): any;
-    /**
-     * Converts an SVG provided as string to PDF.
-     * @param svg SVG to convert to a PDF document.
-     * @param pdfName Name to give the PDF.Default: Sys_id of the PDF in the Attachments
-     * [sys_attachment] table.
-     * @param targetTable Name of the table on which to attach the
-     * converted PDF.
-     * @param targetTableSysId Sys_id of the record on which to attach the converted PDF.
-     */
-    convertSVGToPDF(
-      svg: string,
-      pdfName: string,
-      targetTable: string,
-      targetTableSysId: string,
-    ): any;
-    /**
-     * Converts an SVG provided as string to PDF with image width and height
-     * values.
-     * @param svg SVG to convert to a PDF document.
-     * @param pdfName Name to give the PDF.Default: Sys_id of the PDF in the Attachments
-     * [sys_attachment] table.
-     * @param targetTable Name of the table on which to attach the
-     * converted PDF.
-     * @param targetTableSysId Sys_id of the record on which to attach the converted PDF.
-     * @param svgImgWidth Width of the SVG image in pixels.
-     * @param svgImgHeight Height of the SVG image in pixels.
-     */
-    convertSVGToPDFWithSize(
-      svg: string,
-      pdfName: string,
-      targetTable: string,
-      targetTableSysId: string,
-      svgImgWidth: number,
-      svgImgHeight: number,
-    ): any;
-  }
-  export class Table {
-    constructor(ltr: boolean, columnWidths: any[], largeTable: boolean);
-    /**
-     * Adds a cell element to the table.
-     * @param cell Cell element to add to the table.
-     */
-    addCell(cell: any): any;
-    /**
-     * Adds a cell element with an applied style to the table.
-     * @param cell Cell object to add to the table.
-     * @param style Style to apply to the cell.
-     */
-    addCellWithStyle(cell: any, style: any): any;
-    /**
-     * Adds a header Cell object to the table.
-     * @param cell Header cell to add to the table.
-     */
-    addHeaderCell(cell: any): any;
-    /**
-     * Adds a cell that contains an image to the table.
-     * @param image Image object to add to the cell.
-     */
-    addImageCell(image: any): any;
-    /**
-     * Adds a cell that contains a paragraph to the table.
-     * @param p Paragraph object to add to the cell.
-     */
-    addParagraphCell(p: any): any;
-    /**
-     * Adds a cell that contains a string to the table.
-     * @param text Text to add to the cell.
-     */
-    addTextCell(text: string): any;
-    /**
-     * Indicates that all the intended content has been added to a large table.
-     */
-    complete(): any;
-    /**
-     * Prevents splitting a row across two pages, when possible.
-     * @param value Flag that indicates whether to split a row across two pages, or move the entire
-     * row onto the second page. However, this property does not apply when the row spans
-     * more than a single page.Valid values:
-     * true: If the remaining part of a page is not large enough for the row, adds
-     * the entire row to a new page.
-     *
-     * false: If the remaining part of a page is not large enough for the row,
-     * splits the row across two pages.
-     *
-     *
-     *
-     * Default: false
-     */
-    donotSplitRowOnPageBreak(value: boolean): any;
-    /**
-     * Adds additional content to a table that is already added to a document.
-     */
-    flush(): any;
-    /**
-     * Returns the default style.
-     */
-    getDefaultStyle(): any;
-    /**
-     * Returns the style applied to the table's header.
-     */
-    getHeaderStyle(): any;
-    /**
-     * Sets a border of designated width around the outer edges of the table.
-     * @param width Width of the border. Unit: Points
-     */
-    setBorder(width: number): any;
-    /**
-     * Sets the table's default background color.
-     * @param color Color object used as the default background color for the table.
-     */
-    setDefaultbackGroundColor(color: any): any;
-    /**
-     * Sets the default style to apply to the table.
-     * @param defaultStyle Default style to apply to the table.
-     */
-    setDefaultStyle(defaultStyle: any): any;
-    /**
-     * Sets the table to a fixed position on the page.
-     * @param pageNumber Number of the page to add the table to.
-     * @param left Number of pixels from the left margin to add the table. Unit:
-     * Points
-     * @param bottom Number of pixels from the bottom margin to add the table. Unit:
-     * Points
-     * @param width Width of the table. Unit: Points
-     */
-    setFixedPosition(
-      pageNumber: number,
-      left: number,
-      bottom: number,
-      width: number,
-    ): any;
-    /**
-     * Sets the Style object to apply to the table's header.
-     * @param headerStyle Style object to apply to the table's header.
-     */
-    setHeaderStyle(headerStyle: any): any;
-    /**
-     * Sets the horizontal alignment of the table.
-     * @param alignment Alignment for the table. Valid
-     * values:
-     * center: Align contents to the center.
-     *
-     * left: Align contents to the left.
-     *
-     * right: Align contents to the right.
-     *
-     *
-     *
-     */
-    setHorizontalAlignment(alignment: string): any;
-    /**
-     * Sets all margins around the table to the same width.
-     * @param margin Value of the top, right, bottom, and left margins in points.
-     */
-    setMargin(margin: number): any;
-    /**
-     * Sets the margin at the bottom of the page.
-     * @param margin Height of the bottom margin in points.
-     */
-    setMarginBottom(margin: number): any;
-    /**
-     * Sets the margin at the left side of the page.
-     * @param margin Width of the left margin in points.
-     */
-    setMarginLeft(margin: number): any;
-    /**
-     * Sets the margin at the right side of the page.
-     * @param margin Width of the right margin in points.
-     */
-    setMarginRight(margin: number): any;
-    /**
-     * Sets a margin at the top of the page.
-     * @param margin Height of the top margin in points.
-     */
-    setMarginTop(margin: number): any;
-    /**
-     * Sets the table's total width.
-     * @param width Width of the table.Unit: Points
-     */
-    setWidth(width: number): any;
-    /**
-     * Expands the table to use the entire width available on the page.
-     */
-    useAllAvailableWidth(): any;
-  }
-}
-declare namespace sn_playbook {
-  export class PlaybookExperience {
-    /**
-     * Cancels playbook executions for a given parent record.
-     * @param parentRecord The parent record to cancel playbook executions for. The parent record can be
-     * any record that has playbook executions, such as an interaction record or an
-     * onboarding case record.
-     * @param cancellationReason The reason for cancelling the playbook executions.
-     * @param scopedName Optional. The scoped name of the playbook to cancel. The scoped name is from
-     * the Process Definition [sys_pd_process_definition] table in the format
-     * scope.name. If provided, only executions of this playbook are
-     * cancelled for the given parent record. If not provided, all executions of all
-     * playbooks are cancelled for the given parent record.
-     * @param playbookExperienceId Optional. Sys_id of the playbook experience record in the Playbook Experience
-     * [sys_playbook_experience] table to use for the cancellation. Use this parameter if
-     * you’ve defined custom activity state mappings. See Playbook activity state
-     * mapping.Default: Sys_id of the Global Playbook Experience
-     * record.
-     */
-    cancelPlaybooksByParentRecord(
-      parentRecord: GlideRecord,
-      cancellationReason: string,
-      scopedName?: string,
-      playbookExperienceId?: string,
-    ): any;
-    /**
-     * Gets a list of playbook executions for a given parent record.
-     * @param parentRecord The parent record to get playbook executions for. The parent record can be any
-     * record that can have playbook executions, such as an interaction record or an
-     * onboarding case record.
-     */
-    getPlaybooksForParentRecord(parentRecord: GlideRecord): any;
-    /**
-     * Checks whether a parent record has playbook executions.
-     * @param parentRecord The parent record to check for playbook executions. The parent record can be
-     * any record that can have playbook executions, such as an interaction record or an
-     * onboarding case record.
-     * @param scopedName Optional. The scoped name of the playbook to check for. The scoped name is from
-     * the Process Definition [sys_pd_process_definition] table in the format
-     * scope.name. If provided, only executions of this playbook are
-     * checked for. If not provided, executions of all playbooks are checked for.
-     */
-    parentRecordContainsPlaybook(
-      parentRecord: GlideRecord,
-      scopedName?: string,
-    ): boolean;
-    /**
-     * Initiates a playbook for a parent record.
-     * @param scopedName The scoped name of the playbook to initiate. The scoped name is from the
-     * Process Definition [sys_pd_process_definition] table in the format
-     * scope.name.
-     * @param parentRecord The parent record to initiate a playbook for. The parent record can be any
-     * record that can have playbook executions, such as an interaction record or an
-     * onboarding case record.
-     */
-    triggerPlaybook(scopedName: string, parentRecord: GlideRecord): string;
-  }
-}
 declare namespace sn_sc {
   export class CartJS {
     constructor(cartName?: string);
@@ -19904,7 +16869,7 @@ declare namespace sn_sc {
      */
     getCartDetails(): any;
     /**
-     * Returns the ID of the current cart.
+     * Returns the cart id of the current cart.
      */
     getCartID(): string;
     /**
@@ -19913,19 +16878,21 @@ declare namespace sn_sc {
      */
     getCartItems(): GlideRecord;
     /**
-     * Returns the delivery address for the current cart.
+     * Gets the delivery address for the current cart.
      */
     getDeliveryAddress(): string;
     /**
-     * Returns the sys_id of the user for whom the cart is requested.
+     * Gets the sys_id from the sys_user record of the user for whom the cart is
+     * requested.
      */
     getRequestedFor(): string;
     /**
-     * Returns the name of the user for whom the current cart is requested.
+     * Gets the name from the user record of the user for whom the current cart is
+     * requested.
      */
     getRequestedForDisplayName(): string;
     /**
-     * Returns the special instructions for the current cart.
+     * Gets the special instructions for the current cart.
      */
     getSpecialInstructions(): string;
     /**
@@ -20032,27 +16999,13 @@ declare namespace sn_sc {
     appliesToTargetRecord(flag: boolean): any;
     /**
      * Inserts the defined catalog client script in the catalog_script_client table.
-     * @param standardUpdate Flag that indicates whether to enable the running of engines and
-     * workflow.Valid values:
-     * true: Enable engines and workflow.
-     *
-     * false: Do not enable engines and workflow.
-     *
-     *
-     *
+     * @param standardUpdate Set to true to enable the running of engines and workflow.
      */
     create(standardUpdate: boolean): string;
     /**
      * Deletes the defined catalog client script.
-     * @param sys_id Sys_id of the catalog client script.
-     * @param standardUpdate Flag that indicates whether to enable the running of engines and
-     * workflow.Valid values:
-     * true: Enable engines and workflow.
-     *
-     * false: Do not enable engines and workflow.
-     *
-     *
-     *
+     * @param sys_id sys_id of the catalog client script.
+     * @param standardUpdate Set to true to enable the running of engines and workflow.
      */
     deleteRecord(sys_id: string, standardUpdate: boolean): any;
     /**
@@ -20062,74 +17015,46 @@ declare namespace sn_sc {
     setAttributes(attributes: any): any;
     /**
      * Associates a catalog item with the catalog client script.
-     * @param sys_id Sys_id of the catalog item.
+     * @param sys_id sys_id of the catalog item.
      */
     setCatalogItem(sys_id: string): any;
     /**
      * Runs the catalog client script when a variable value is updated.
-     * @param sys_id Sys_id of the variable.
+     * @param sys_id sys_id of the variable.
      */
     setOnChangeVariable(sys_id: string): any;
     /**
      * Associates a variable set with the catalog client script.
-     * @param sys_id Sys_id of the variable set.
+     * @param sys_id sys_id of the variable set.
      */
     setVariableSet(sys_id: string): any;
   }
   export class CatalogItemVariable {
     /**
-     * Inserts the specified catalog item variable.
-     * @param standardUpdate Flag that indicates whether to enable the running of engines and
-     * workflow.Valid values:
-     * true: Enable engines and workflow.
-     *
-     * false: Do not enable engines and workflow.
-     *
-     *
-     *
+     * Insert the defined catalog item variable.
+     * @param standardUpdate Set to true to enable the running of engines and workflow.
      */
     create(standardUpdate: boolean): string;
     /**
-     * Deletes the defined catalog item variable.
-     * @param standardUpdate Flag that indicates whether to enable the running of engines and
-     * workflow.Valid values:
-     * true: Enable engines and workflow.
-     *
-     * false: Do not enable engines and workflow.
-     *
-     *
-     *
+     * Delete the defined catalog item variable.
+     * @param standardUpdate Set to true to enable the running of engines and workflow.
      */
     deleteRecord(standardUpdate: boolean): any;
     /**
-     * Returns a mapping of catalog item variable attribute values.
-     * @param columns Set of columns for which to return values.
-     * @param standardUpdate Flag that indicates whether to enable the running of engines and
-     * workflow.Valid values:
-     * true: Enable engines and workflow.
-     *
-     * false: Do not enable engines and workflow.
-     *
-     *
-     *
+     * Get a mapping of catalog item variable attribute values.
+     * @param columns Specify the set of columns that you would like the values for.
+     * @param standardUpdate Set to true to enable the running of engines and workflow.
      */
     read(columns: any, standardUpdate: boolean): any;
     /**
-     * Defines attribute values for this catalog item variable.
+     * Define attribute values for this catalog item variable.
      * @param attributes An object mapping column names to values.
      */
     setAttributes(attributes: any): any;
     /**
-     * Updates current catalog item variable with set values.
+     * Use to update current catalog item variable with set values.
      * @param columnValues An object mapping column names to values.
-     * @param standardUpdate Flag that indicates whether to enable the running of engines and
-     * workflow.Valid values:
-     * true: Enable engines and workflow.
-     *
-     * false: Do not enable engines and workflow.
-     *
-     *
-     *
+     * @param standardUpdate Set to true to enable the running of engines and workflow.
      */
     update(columnValues: any, standardUpdate: boolean): any;
   }
@@ -20147,128 +17072,69 @@ declare namespace sn_sc {
      */
     create(standardUpdate: boolean): string;
     /**
-     * Deletes a variable set.
-     * @param standardUpdate Flag that indicates whether to enable the running of engines and
-     * workflow.Valid values:
-     * true: Enable engines and workflow.
-     *
-     * false: Do not enable engines and workflow.
-     *
-     *
-     *
+     * Delete the defined catalog item variable.
+     * @param standardUpdate Set to true to enable the running of engines and workflow.
      */
     deleteRecord(standardUpdate: boolean): any;
     /**
-     * Returns a mapping of catalog item variable set attribute values.
+     * Get a mapping of catalog item variable set attribute values.
      * @param columns Specify the set of columns that you would like the values for.
-     * @param standardUpdate Flag that indicates whether to enable the running of engines and
-     * workflow.Valid values:
-     * true: Enable engines and workflow.
-     *
-     * false: Do not enable engines and workflow.
-     *
-     *
-     *
+     * @param standardUpdate Set to true to enable the running of engines and workflow.
      */
     read(columns: any, standardUpdate: boolean): any;
     /**
-     * Sets attributes for a variable set.
+     * Define attribute values for this catalog item variable set.
      * @param attributes An object mapping column names to values.
      */
     setAttributes(attributes: any): any;
     /**
-     * Updates a variable set.
+     * Use to update current catalog item variable set with set values.
      * @param columnValues An object mapping column names to values.
-     * @param standardUpdate Flag that indicates whether to enable the running of engines and
-     * workflow.Valid values:
-     * true: Enable engines and workflow.
-     *
-     * false: Do not enable engines and workflow.
-     *
-     *
-     *
+     * @param standardUpdate Set to true to enable the running of engines and workflow.
      */
     update(columnValues: any, standardUpdate: boolean): any;
   }
   export class CatalogItemVariableSetM2M {
     /**
-     * Inserts the defined catalog item variable set M2M.
-     * @param standardUpdate Flag that indicates whether to enable the running of engines and
-     * workflow.Valid values:
-     * true: Enable engines and workflow.
-     *
-     * false: Do not enable engines and workflow.
-     *
-     *
-     *
+     * Insert the defined catalog item variable set M2M.
+     * @param standardUpdate Set to true to enable the running of engines and workflow.
      */
     create(standardUpdate: boolean): string;
     /**
-     * Deletes the defined catalog item variable set M2M.
-     * @param standardUpdate Flag that indicates whether to enable the running of engines and
-     * workflow.Valid values:
-     * true: Enable engines and workflow.
-     *
-     * false: Do not enable engines and workflow.
-     *
-     *
-     *
+     * Delete the defined catalog item variable set M2M.
+     * @param standardUpdate Set to true to enable the running of engines and workflow.
      */
     deleteRecord(standardUpdate: boolean): any;
     /**
-     * Returns a mapping of catalog item variable set M2M attribute values.
-     * @param columns Set of columns that you would like the values for.
-     * @param standardUpdate Flag that indicates whether to enable the running of engines and
-     * workflow.Valid values:
-     * true: Enable engines and workflow.
-     *
-     * false: Do not enable engines and workflow.
-     *
-     *
-     *
+     * Get a mapping of catalog item variable set M2M attribute values.
+     * @param columns Specify the set of columns that you would like the values for.
+     * @param standardUpdate Set to true to enable the running of engines and workflow.
      */
     read(columns: any, standardUpdate: boolean): any;
     /**
-     * Defines attribute values for this catalog item variable set M2M.
+     * Define attribute values for this catalog item variable set M2M.
      * @param attributes An object mapping column names to values.
      */
     setAttributes(attributes: any): any;
     /**
      * Updates current catalog item variable set M2M with set values.
      * @param columnValues An object mapping column names to values.
-     * @param standardUpdate Flag that indicates whether to enable the running of engines and
-     * workflow.Valid values:
-     * true: Enable engines and workflow.
-     *
-     * false: Do not enable engines and workflow.
-     *
-     *
-     *
+     * @param standardUpdate Set to true to enable the running of engines and workflow.
      */
     update(columnValues: any, standardUpdate: boolean): any;
   }
   export class CatalogJS {
-    constructor(now_GR: any);
+    constructor(gr: any);
     constructor(sys_id: string);
     /**
-     * Determines whether a user can view the current category on a mobile device or
-     * desktop.
-     * @param mobile Flag that indicates whether to check if the user can view the current catalog on
-     * a mobile view or desktop view.
-     *
-     * Valid values:
-     * true: Mobile view
-     *
-     * false: Desktop view
-     *
-     *
-     *
-     * @param userId Optional. Sys_id of the user to check if they can view the catalog.Default:
-     * Current user
+     * Specifies if the catalog is viewable for the user.
+     * @param mobile True if the view is mobile view. Else, false.
      */
-    canView(mobile: boolean, userId?: string): boolean;
+    canView(mobile: boolean): boolean;
     /**
-     * Returns the available active catalog.
+     * If only one active catalog exists, that catalog is returned. Else, the earliest catalog
+     * created is returned, from the list of the catalogs that the user can view. If no catalog is
+     * available, null is returned.
      */
     getAvailableCatalog(): any;
     /**
@@ -20276,51 +17142,51 @@ declare namespace sn_sc {
      */
     getBackgroundColor(): string;
     /**
-     * Returns the number of catalogs active in the catalog table.
+     * Specifies the number of catalogs active in the catalog table.
      */
     getCatalogCount(): number;
     /**
-     * Returns the categories for the current catalog.
+     * Returns the categories for the specified catalog.
      */
     getCategories(): any;
     /**
-     * Specifies the sys_ids of the categories in the current catalog.
+     * Specifies the sys_ids of the categories in the specified catalog.
      */
     getCategoryIds(): any;
     /**
-     * Returns the description of the current catalog.
+     * Specifies the catalog description.
      */
     getDescription(): string;
     /**
-     * Returns the catalog desktop image file name.
+     * Returns the catalog desktop image value.
      */
     getDesktopImageSRC(): string;
     /**
-     * Returns the current catalog's GlideRecord.
+     * Returns the catalog gliderecord.
      */
     getGr(): GlideRecord;
     /**
-     * Returns the current catalog's header icon.
+     * Returns the catalog header icon.
      */
     getHeaderIconSRC(): string;
     /**
-     * Returns the sys_id of the current catalog.
+     * Specifies the sys_id of the catalog.
      */
     getID(): string;
     /**
-     * Returns the title of the current catalog.
+     * Returns the title of the catalog.
      */
     getTitle(): string;
     /**
-     * Specifies if the current catalog has categories.
+     * Specifies if the catalog has categories.
      */
     hasCategories(): boolean;
     /**
-     * Specifies if the current catalog has catalog items.
+     * Specifies if the catalog has catalog items.
      */
     hasItems(): boolean;
     /**
-     * Specifies if the wish list is enabled for the current catalog.
+     * Specifies if the wish list is enabled for a catalog.
      */
     isWishlistEnabled(): boolean;
   }
@@ -20331,7 +17197,6 @@ declare namespace sn_sc {
      * catalog category level.
      * @param catalogID Identifier of the catalog to search.
      * @param categoryID Identifier of the catalog category to search.
-     * @param term Search term.
      * @param mobile Flag that indicates whether catalog items exposed for mobile are
      * searched.Valid values:
      * true: Search for mobile catalog items.
@@ -20340,7 +17205,8 @@ declare namespace sn_sc {
      *
      *
      *
-     * @param noDepthSearch Flag that indicates whether to search subcategories.Valid values:
+     * @param term Search term.
+     * @param depthSearch Flag that indicates whether to search subcategories.Valid values:
      * true: Do not search subcategories.
      *
      * false: Search subcategories.
@@ -20351,129 +17217,90 @@ declare namespace sn_sc {
     search(
       catalogID: string,
       categoryID: string,
-      term: string,
       mobile: boolean,
-      noDepthSearch: boolean,
+      term: string,
+      depthSearch: boolean,
     ): GlideRecord;
   }
   export class CatCategory {
     /**
-     * Adds the Available For user criteria to the current catalog
+     * Adds the Available For user criteria to a catalog
      * category.
-     * @param action Action to perform.
-     * add: Adds the user criteria to the Available
-     * For list.
-     *
-     * delete: Deletes the user criteria from the
+     * @param action Specify add to add the user criteria to the
+     * Available For list. Specify
+     * delete to delete the user criteria from the
      * Available For list.
-     *
-     *
      * @param criteriaIDs Array of the user criteria sys_ids.
      */
     availableForUserCriteria(action: string, criteriaIDs: any[]): any;
     /**
      * Determines whether a specified user can view a specified category on a mobile device or
      * desktop.
-     * @param isMobile Flag that indicates whether to verify the user for access on a mobile device or desktop.
-     * true: Validate for mobile.
+     * @param isMobile Flag that indicates whether to verify the user for access on a mobile device or
+     * desktop.
+     * true: validate for mobile.
      *
-     * false: Validate for desktop.
+     * false: validate for desktop.
      *
      *
-     * @param userSysId Sys_id of the user to validate.
+     * @param userSysId Unique identifier of the user to validate.
      */
     canView(isMobile: boolean, userSysId: string): boolean;
     /**
      * Insert the defined category.
-     * @param standardUpdate Flag that indicates whether to enable the running of engines and
-     * workflow.Valid values:
-     * true: Enable engines and workflow.
-     *
-     * false: Do not enable engines and workflow.
-     *
-     *
-     *
+     * @param standardUpdate Set to true to enable the running of engines and workflow.
      */
     create(standardUpdate: boolean): string;
     /**
      * Deletes the category record on which the CatCategory class was initially
      * instantiated.
-     * @param standardUpdate Flag that indicates whether to enable the running of engines and
-     * workflow.Valid values:
-     * true: Enable engines and workflow.
-     *
-     * false: Do not enable engines and workflow.
-     *
-     *
-     *
+     * @param standardUpdate Set to true to enable the running of engines and workflow.
      */
     deleteRecord(standardUpdate: boolean): any;
     /**
-     * Returns the sys_id of the current category.
+     * Returns the sys_id of the category.
      */
     getID(): string;
     /**
      * Adds the Not Available For user criteria to a catalog
      * category.
-     * @param action Action to perform.
-     * add: Adds the user criteria to the Not
-     * Available For list.
-     *
-     * delete: Deletes the user criteria from the
+     * @param action Specify add to add the user criteria to the
+     * Not Available For list. Specify
+     * delete to delete the user criteria from the
      * Not Available For list.
-     *
-     *
      */
     notAvailableForUserCriteria(action: string): any;
     /**
-     * Returns a mapping of the category.
-     * @param columns Set of columns that you would like the values for.
-     * @param standardUpdate Flag that indicates whether to enable the running of engines and
-     * workflow.Valid values:
-     * true: Enable engines and workflow.
-     *
-     * false: Do not enable engines and workflow.
-     *
-     *
-     *
+     * Get a mapping of the category.
+     * @param columns Specify the set of columns that you would like the values for.
+     * @param standardUpdate Set to true to enable the running of engines and workflow.
      */
     read(columns: any, standardUpdate: boolean): any;
     /**
-     * Defines the attribute values for this category.
-     * @param attributes Attributes for the new field and value pairs.
+     * Define attribute values for this category.
+     * @param attributes Set the attributes for new field and value pairs.
      */
     setAttributes(attributes: any): any;
     /**
-     * Defines the table name for this category.
-     * @param tableName Name of the table that extends sc_category.
+     * Define the table name for this category.
+     * @param tableName Specify the name of the table that extends sc_category.
      */
     setTableName(tableName: string): any;
     /**
-     * Updates the current category with the specified name-value pairs.
-     * @param columnValues Mapping of column names to values.
-     * @param standardUpdate Flag that indicates whether to enable the running of engines and
-     * workflow.Valid values:
-     * true: Enable engines and workflow.
-     *
-     * false: Do not enable engines and workflow.
-     *
-     *
-     *
+     * Use to update current category.
+     * @param columnValues Object mapping column names to values.
+     * @param standardUpdate Set to true to enable the running of engines and workflow.
      */
     update(columnValues: any, standardUpdate: boolean): any;
   }
   export class CatItem {
     /**
-     * Adds the Available For user criteria to the current catalog
+     * Adds the Available For user criteria to a catalog
      * item.
-     * @param action Action to perform.
-     * add: Adds the user criteria to the Available
-     * For list.
-     *
-     * delete: Deletes the user criteria from the
+     * @param action Specify add to add the user criteria to the
+     * Available For list. Specify
+     * delete to delete the user criteria from the
      * Available For list.
-     *
-     *
      * @param criteriaIDs Array of the user criteria sys_ids.
      */
     availableForUserCriteria(action: string, criteriaIDs: any[]): any;
@@ -20483,18 +17310,8 @@ declare namespace sn_sc {
      */
     canViewInDomain(): boolean;
     /**
-     * Determines if the user has access to view the catalog item on global
-     * search.
-     * @param isMobile Flag that indicates whether to perform the search for the mobile or desktop
-     * view.
-     *
-     * Valid values:
-     * true: Perform the search for the mobile view.
-     *
-     * false: Perform the search for the desktop view.
-     *
-     *
-     *
+     * Specifies if the user has access to view the catalog item on global search.
+     * @param isMobile True if the search is in mobile view. Else, false.
      */
     canViewOnSearch(isMobile: boolean): boolean;
     /**
@@ -20511,20 +17328,13 @@ declare namespace sn_sc {
      */
     create(standardUpdate: boolean): string;
     /**
-     * Deletes a catalog item.
-     * @param standardUpdate Flag that indicates whether to enable the running of engines and
-     * workflow.Valid values:
-     * true: Enable the running of engines and workflow.
-     *
-     * false: Do not enable the running of engines and workflow.
-     *
-     *
-     *
+     * Delete the defined catalog item.
+     * @param standardUpdate Set to true to enable the running of engines and workflow.
      */
     deleteRecord(standardUpdate: boolean): any;
     /**
-     * Returns the first category that the user can view in a catalog.
-     * @param catalogId Sys_id of the catalog.
+     * Specifies the first category that the user can view in a catalog.
+     * @param catalogId sys_id of the catalog.
      */
     getFirstAccessibleCategoryForSearch(catalogId: string): string;
     /**
@@ -20544,95 +17354,61 @@ declare namespace sn_sc {
      * service catalog item.
      * @param delegatedUser Optional. Sys_id of the user to request the service catalog item for
      * (delegate). The method verifies whether the user has acquisition rights to the
-     * item.Default: Checks whether the calling user has acquisition rights to the
+     * item. Default: Checks whether the calling user has acquisition rights to the
      * item.
      */
     isDelegationAllowed(delegatedUser?: string): boolean;
     /**
-     * Determines if the current catalog item is available in service portal.
+     * Specifies if the catalog item is available in service portal.
      */
     isVisibleServicePortal(): boolean;
     /**
      * Adds the Not Available For user criteria to a catalog
      * item.
-     * @param action Action to perform.
-     * add: Adds the user criteria to the Not
-     * Available For list.
-     *
-     * delete: Deletes the user criteria from the
+     * @param action Specify add to add the user criteria to the
+     * Not Available For list. Specify
+     * delete to delete the user criteria from the
      * Not Available For list.
-     *
-     *
      */
     notAvailableForUserCriteria(action: string): any;
     /**
-     * Returns a mapping of catalog item attribute values.
-     * @param columns Name-value pairs of columns for which to return values.
-     * @param standardUpdate Flag that indicates whether to enable the running of engines and
-     * workflow.Valid values:
-     * true: Enable the running of engines and workflow.
-     *
-     * false: Do not enable the running of engines and workflow.
-     *
-     *
-     *
+     * Get a mapping of catalog item attribute values.
+     * @param standardUpdate Set to true to enable the running of engines and workflow.
+     * @param columns Specify the set of columns that you would like the values for.
      */
-    read(columns: any, standardUpdate: boolean): any;
+    read(standardUpdate: boolean, columns: any): any;
     /**
-     * Sets attributes for a catalog item.
-     * @param attributes Name-value pairs of the columns for which to set.
+     * Define attribute values for this catalog item.
+     * @param attributes An object mapping column names to values.
      */
     setAttributes(attributes: any): any;
     /**
-     * Defines the catalogs that this catalog item is associated with.
-     * @param catalogs Comma-separated list of sys_ids of the catalogs to associate with the item the
-     * item.
+     * Define the catalogs that this catalog item is associated with.
+     * @param catalogs Specify comma-separated list of catalogs that you would like the item to be
+     * associated with.
      */
     setCatalogs(catalogs: string): any;
     /**
-     * Defines the categories that this catalog item is associated with.
-     * @param categories Comma-separated list of sys_ids of the categories to associate with the item
-     * the item.
+     * Define the categories that this catalog item is associated with.
+     * @param categories Specify comma-separated list of categories that you would like the item to be
+     * associated with.
      */
     setCategories(categories: string): any;
     /**
-     * Adds an image to a catalog item.
-     * @param dbImageSysId Sys_id of the image from the Images table [db_image].
-     * @param type Type of image. Valid values:
-     * picture
-     *
-     * icon
-     *
-     *
-     *
+     * Set the image of a catalog item to a database image record.
+     * @param dbImageSysId sys_id of an attachment referencing the db_image.
+     * @param type Type can be picture or an icon.
      */
     setImage(dbImageSysId: string, type: string): any;
     /**
-     * Defines the table name for this catalog item.
-     * @param tableName Name of the table that extends Catalog Item [sc_cat_item].
+     * Define the table name for this catalog item.
+     * @param tableName Specify the name of the table that extends sc_cat_item.
      */
     setTableName(tableName: string): any;
     /**
-     * Creates a record using a specified Service Catalog record
-     * producer.
-     * @param values Contains the field values and record producer to use when creating the
-     * record.{
-     * "variables": {Object},
-     * "sysparm_id": "String"
-     * }
-     */
-    submitProducer(values: any): any;
-    /**
-     * Updates the values for specified fields of a catalog item.
-     * @param columnValues Name-value pairs of the fields to update and their associated values.
-     * @param standardUpdate Flag that indicates whether to enable the running of engines and
-     * workflow.Valid values:
-     * true: Enable the running of engines and workflow.
-     *
-     * false: Do not enable the running of engines and workflow.
-     *
-     *
-     *
+     * Use to update current catalog item with set values.
+     * @param columnValues An object mapping column names to values.
+     * @param standardUpdate Set to true to enable the running of engines and workflow.
      */
     update(columnValues: any, standardUpdate: boolean): any;
   }
@@ -20675,16 +17451,16 @@ declare namespace sn_skill_rule {
     /**
      * Assigns an array of active skill objects to a work item.
      * @param skills Array of active skill objects to be assigned.
-     * @param now_GR GlideRecord of the work item on which to assign skills.
+     * @param gr GlideRecord of the work item on which to assign skills.
      */
-    assignSkillsToWorkItem(skills: any[], now_GR: GlideRecord): any;
+    assignSkillsToWorkItem(skills: any[], gr: GlideRecord): any;
     /**
      * Gets skills for a specified work item, indicates if the skills are mandatory, and lists
      * any skill levels.
-     * @param now_GR GlideRecord of a work item from any interaction or task table
+     * @param gr GlideRecord of a work item from any interaction or task table
      * extension.
      */
-    determineWorkItemSkills(now_GR: GlideRecord): any[];
+    determineWorkItemSkills(gr: GlideRecord): any[];
   }
 }
 declare namespace sn_sms_pref {
@@ -21143,99 +17919,12 @@ declare namespace sn_uc {
     update(columnValues: any, reason: string): string;
   }
 }
-declare namespace sn_ui {
-  export class PolarisUI {
-    /**
-     * Checks if the current page can use the Next Experience UI.
-     */
-    canUsePolarisCSS(): boolean;
-    /**
-     * Returns a list of CSS class names used by the Next Experience UI.
-     */
-    getBodyClassNames(): string;
-    /**
-     * Checks if the Next Experience UI is enabled for the current user.
-     */
-    isEnabled(): boolean;
-  }
-}
-declare namespace sn_uni_req {
-  export class UniversalRequestUtilsSNC {
-    /**
-     * Creates a universal request and returns the sys_id of the newly created universal
-     * request record.
-     * @param copyFields JSON object containing field names and values to set on a new record in the
-     * Universal Requests [universal_request] table.Provide details by field name and
-     * field value in the format { '&lt;field_name&gt;': '&lt;field_value&gt;'
-     * }. The following fields are considered the most useful details to
-     * assign to a primary
-     * ticket.
-     *
-     * {
-     * 'assignment_group': 'String',
-     * 'assigned_to': 'String',
-     * 'contact_type': 'String',
-     * 'description': 'String',
-     * 'opened_by': 'String',
-     * 'opened_for': 'String',
-     * 'priority': 'String',
-     * 'restricted': Boolean,
-     * 'short_description': 'String'
-     * };Other
-     * fields not listed might be eligible for your use case. For a
-     * list of table fields and related fields in the system, view the data
-     * dictionary.
-     * Note: Do not include the primary_ticket or sys_id fields in
-     * the copyFields JSON object.
-     */
-    createUniversalRequest(copyFields: any): string;
-  }
-}
-declare namespace sn_uni_task {
-  export class UniversalTaskUtils {
-    /**
-     * Applies the specified universal task template to the specified universal task
-     * record.
-     * @param templateSysId Sys_id of universal task template to apply to the specified universal task
-     * record. Located in the Universal Task Template [sn_uni_task_template] table.
-     * @param uniTaskGr GlideRecord of the universal task record to which to apply the
-     * template.
-     */
-    applyTemplate(templateSysId: string, uniTaskGr: GlideRecord): any;
-    /**
-     * Returns the active child task records, in the form of a GlideRecord, for the specified
-     * parent ticket.
-     * @param parentSysId Sys_id of the parent ticket whose active child tickets to return.
-     */
-    getActiveChildTasks(parentSysId: string): GlideRecord;
-    /**
-     * Checks whether the specified parent ticket has any universal tasks that are in the
-     * work-in progress or complete state.
-     * @param current GlideRecord of the parent ticket to check.
-     */
-    hasTasksToShow(current: GlideRecord): any;
-    /**
-     * Changes the state of all active universal tasks under the specified parent ticket to
-     * "Cancelled".
-     * @param parentSysId Sys_id of the parent ticket whose active child universal tasks' state should be
-     * changed to "Cancelled".
-     */
-    markActiveChildTasksCancelled(parentSysId: string): any;
-    /**
-     * Changes the state of all active child universal tasks associated with the specified
-     * parent ticket to "Complete".
-     * @param parentSysId Sys_id of the parent ticket whose active child universal tasks' state should be
-     * changed to "Complete".
-     */
-    markActiveChildTasksCompleted(parentSysId: string): any;
-  }
-}
 declare namespace sn_ws {
   export class RESTAPIRequest {
     body: any;
     headers: any;
     pathParams: any;
-    queryParams: any[];
+    queryParams: any;
     queryString: string;
     uri: string;
     url: string;
@@ -21327,29 +18016,29 @@ declare namespace sn_ws {
     constructor();
     constructor(name: string, methodName: string);
     /**
-     * Sends the REST message to the endpoint.
+     * Send the REST message to the endpoint.
      */
     execute(): any;
     /**
-     * Sends the REST message to the endpoint asynchronously. The instance does not wait for a
+     * Send the REST message to the endpoint asynchronously. The instance does not wait for a
      * response from the web service provider when making asynchronous calls.
      */
     executeAsync(): any;
     /**
-     * Gets the URL of the endpoint for the REST message.
+     * Get the URL of the endpoint for the REST message.
      */
     getEndpoint(): string;
     /**
-     * Gets the content of the REST message body.
+     * Get the content of the REST message body.
      */
     getRequestBody(): string;
     /**
-     * Gets the value for an HTTP header specified in the REST message.
-     * @param headerName Request header you want to get the value for.
+     * Get the value for an HTTP header specified in the REST message.
+     * @param headerName The request header you want to get the value for.
      */
     getRequestHeader(headerName: string): string;
     /**
-     * Gets HTTP headers that were set by the REST client and the associated
+     * Get HTTP headers that were set by the REST client and the associated
      * values.
      */
     getRequestHeaders(): any;
@@ -21383,7 +18072,7 @@ declare namespace sn_ws {
       encryptContext: string,
     ): any;
     /**
-     * Sets the credentials for the REST message using an existing basic auth or OAuth 2.0
+     * Set the credentials for the REST message using an existing basic auth or OAuth 2.0
      * profile.
      * @param type The type of authentication profile to use. Valid values are 'basic' to use
      * basic authentication, or 'oauth2' to use OAuth 2.0.
@@ -21395,102 +18084,102 @@ declare namespace sn_ws {
     setAuthenticationProfile(type: string, profileId: string): any;
     /**
      * Sets basic authentication headers for the REST message.
-     * @param userName Username you want to use to authenticate the REST message.
-     * @param userPass Password for the specified user.
+     * @param userName The username you want to use to authenticate the REST message.
+     * @param userPass The password for the specified user.
      */
     setBasicAuth(userName: string, userPass: string): any;
     /**
-     * Associates outbound requests and the resulting response record in the ECC queue. This
+     * Associate outbound requests and the resulting response record in the ECC queue. This
      * method only applies to REST messages sent through a MID Server.
-     * @param correlator Unique identifier
+     * @param correlator A unique identifier
      */
     setEccCorrelator(correlator: string): any;
     /**
-     * Overrides a value from the database by writing to the REST message payload. This method
+     * Override a value from the database by writing to the REST message payload. This method
      * only applies to REST messages sent through a MID Server.
      * @param name The name of the parameter, such as source.
      * @param value The value to assign to the specified parameter.
      */
     setEccParameter(name: string, value: string): any;
     /**
-     * Sets the endpoint for the REST message.
+     * Set the endpoint for the REST message.
      * @param endpoint The URL of the REST provider you want to interface with.
      */
     setEndpoint(endpoint: string): any;
     /**
-     * Sets the HTTP method this REST message performs, such as GET or PUT.
-     * @param method HTTP method to perform.
+     * The HTTP method this REST message performs, such as GET or PUT.
+     * @param method The HTTP method to perform.
      */
     setHttpMethod(method: string): any;
     /**
-     * Sets the amount of time the REST message waits for a response from the web service
+     * Set the amount of time the REST message waits for a response from the web service
      * provider before the request times out.
-     * @param timeoutMs Amount of time, in milliseconds, before the call to the REST provider times
+     * @param timeoutMs The amount of time, in milliseconds, before the call to the REST provider times
      * out.
      */
     setHttpTimeout(timeoutMs: number): any;
     /**
-     * Sets the log level for this message and the corresponding response.
+     * Set the log level for this message and the corresponding response.
      * @param level The log level. Valid values are basic, elevated, and all.
      */
     setLogLevel(level: string): any;
     /**
-     * Configures the REST message to communicate through a MID Server.
-     * @param midServer Name of the MID Server to use. Your instance must have an active
-     * MID Server with the specified name.
+     * Configure the REST message to communicate through a MID Server.
+     * @param midServer The name of the MID Server to use. Your instance must have an active MID Server
+     * with the specified name.
      */
     setMIDServer(midServer: string): any;
     /**
-     * Sets the mutual authentication protocol profile for the REST message.
+     * Set the mutual authentication protocol profile for the REST message.
      * @param profileName The Name of the protocol profile to use for mutual
      * authentication.
      */
     setMutualAuth(profileName: string): any;
     /**
-     * Appends a parameter to the end of the request URL with the form name=value.
-     * @param name Name of the URL parameter to pass.
-     * @param value Value to assign the URL parameter.
+     * Append a parameter to the end of the request URL with the form name=value.
+     * @param name The name of the URL parameter to pass.
+     * @param value The value to assign the URL parameter.
      */
     setQueryParameter(name: string, value: string): any;
     /**
-     * Sets the body content to send to the web service provider when using PUT or POST HTTP
+     * Set the body content to send to the web service provider when using PUT or POST HTTP
      * methods.
-     * @param body Request body to send.
+     * @param body The request body to send.
      */
     setRequestBody(body: string): any;
     /**
      * Sets the request body using an existing attachment record.
-     * @param attachmentSysId Sys_id of the Attachment [sys_attachment] record you want to send in this REST
-     * message.
+     * @param attachmentSysId The sys_id of the Attachment [sys_attachment] record you want to send in this
+     * REST message.
      */
     setRequestBodyFromAttachment(attachmentSysId: string): any;
     /**
-     * Sets an HTTP header in the REST message to the specified value.
-     * @param name Name of the header.
-     * @param value Value to assign to the specified header.
+     * Set an HTTP header in the REST message to the specified value.
+     * @param name The name of the header.
+     * @param value The value to assign to the specified header.
      */
     setRequestHeader(name: string, value: string): any;
     /**
-     * Overrides the default requestor profile for the REST message in order to retrieve an
+     * Override the default requestor profile for the REST message in order to retrieve an
      * OAuth access token associated with a different requestor.
      * @param requestorContext
      * @param requestorId
      */
     setRequestorProfile(requestorContext: string, requestorId: string): any;
     /**
-     * Sets a REST message function variable with the specified name from the REST message
+     * Set a REST message function variable with the specified name from the REST message
      * record to the specified value.
-     * @param name Name of the REST message variable. This parameter must be defined in the REST
-     * message record before you can assign a value to it.
-     * @param value Value to assign the variable.
+     * @param name The name of the REST message variable. This parameter must be defined in the
+     * REST message record before you can assign a value to it.
+     * @param value The value to assign the variable.
      */
     setStringParameter(name: string, value: string): any;
     /**
-     * Sets a REST message function variable with the specified name from the REST message
+     * Set a REST message function variable with the specified name from the REST message
      * record to the specified value.
-     * @param name Name of the REST message variable. This parameter must be defined in the REST
-     * message record before you can assign a value to it.
-     * @param value Value to assign the variable.
+     * @param name The name of the REST message variable. This parameter must be defined in the
+     * REST message record before you can assign a value to it.
+     * @param value The value to assign the variable.
      */
     setStringParameterNoEscape(name: string, value: string): any;
   }
@@ -21501,7 +18190,7 @@ declare namespace sn_ws {
      */
     getAllHeaders(): any;
     /**
-     * Gets the content of the REST response body.
+     * Get the content of the REST response body.
      */
     getBody(): string;
     /**
@@ -21509,37 +18198,37 @@ declare namespace sn_ws {
      */
     getCookies(): any;
     /**
-     * Gets the numeric error code if there was an error during the REST transaction.
+     * Get the numeric error code if there was an error during the REST transaction.
      */
     getErrorCode(): number;
     /**
-     * Gets the error message if there was an error during the REST transaction.
+     * Get the error message if there was an error during the REST transaction.
      */
     getErrorMessage(): string;
     /**
-     * Gets the value for a specified header.
-     * @param name Name of the header that you want the value for, such as Set-Cookie.
+     * Get the value for a specified header.
+     * @param name The name of the header that you want the value for, such as Set-Cookie.
      */
     getHeader(name: string): string;
     /**
-     * Gets all headers returned in the REST response and the associated values.
+     * Get all headers returned in the REST response and the associated values.
      */
     getHeaders(): any;
     /**
-     * Gets the fully-resolved query sent to the REST endpoint..
+     * Get the fully-resolved query sent to the REST endpoint..
      */
     getQueryString(): string;
     /**
-     * Gets the sys_id value of the attachment created from the response body
+     * Get the sys_id value of the attachment created from the response body
      * content.
      */
     getResponseAttachmentSysid(): string;
     /**
-     * Gets the numeric HTTP status code returned by the REST provider.
+     * Get the numeric HTTP status code returned by the REST provider.
      */
     getStatusCode(): number;
     /**
-     * Indicates if there was an error during the REST transaction.
+     * Indicate if there was an error during the REST transaction.
      */
     haveError(): boolean;
     /**
@@ -21553,15 +18242,16 @@ declare namespace sn_ws {
     constructor();
     constructor(soapMessage: string, soapFunction: string);
     /**
-     * Sends the SOAP message to the endpoint.
+     * Send the SOAP message to the endpoint.
      */
     execute(): any;
     /**
-     * Sends the SOAP message to the ECC queue.
+     * Send the SOAP message to
+     * the ECC queue.
      */
     executeAsync(): any;
     /**
-     * Gets the endpoint for the SOAP message.
+     * Get the endpoint for the SOAP message.
      */
     getEndpoint(): string;
     /**
@@ -21569,42 +18259,42 @@ declare namespace sn_ws {
      */
     getRequestBody(): string;
     /**
-     * Gets the value for an HTTP header specified by the SOAP client.
-     * @param headerName Request header you want to get the value for.
+     * Get the value for an HTTP header specified by the SOAP client.
+     * @param headerName The request header you want to get the value for.
      */
     getRequestHeader(headerName: string): string;
     /**
-     * Gets HTTP headers that were set by the SOAP client and the associated
+     * Get HTTP headers that were set by the SOAP client and the associated
      * values.
      */
     getRequestHeaders(): any;
     /**
-     * Sets basic authentication headers for the SOAP message.
-     * @param userName Username to use when authenticating the SOAP message.
-     * @param userPass Password for the specified user.
+     * Set basic authentication headers for the SOAP message.
+     * @param userName The username to use when authenticating the SOAP message.
+     * @param userPass The password for the specified user.
      */
     setBasicAuth(userName: string, userPass: string): any;
     /**
-     * Associates outbound requests and the resulting response record in the ECC
+     * Associate outbound requests and the resulting response record in the ECC
      * queue.
-     * @param correlator Unique identifier
+     * @param correlator A unique identifier.
      */
     setEccCorrelator(correlator: string): any;
     /**
-     * Overrides a value from the database by writing to the SOAP message payload.
-     * @param name Name of the ECC parameter.
-     * @param value Value to assign to the specified ECC parameter.
+     * Override a value from the database by writing to the SOAP message payload.
+     * @param name The name of the ECC parameter.
+     * @param value The value to assign to the specified ECC parameter.
      */
     setEccParameter(name: string, value: string): any;
     /**
-     * Sets the endpoint for the SOAP message.
-     * @param endpoint URL of the SOAP web service provider you want to interface with.
+     * Set the endpoint for the SOAP message.
+     * @param endpoint The URL of the SOAP web service provider you want to interface with.
      */
     setEndpoint(endpoint: string): any;
     /**
-     * Sets the amount of time the SOAP message waits for a response from the web service
+     * Set the amount of time the SOAP message waits for a response from the web service
      * provider before the request times out.
-     * @param timeoutMs Amount of time to wait for a response from the web service provider, in
+     * @param timeoutMs The amount of time to wait for a response from the web service provider, in
      * milliseconds.
      */
     setHttpTimeout(timeoutMs: number): any;
@@ -21614,53 +18304,54 @@ declare namespace sn_ws {
      */
     setLogLevel(level: string): any;
     /**
-     * Configures the SOAP message to be sent through a MID Server.
-     * @param midServerName Name of the MID Server you want to send the SOAP message
-     * through. Your instance must have an active MID Server with the
-     * specified name.
+     * Configure the SOAP message to be sent through a MID Server.
+     * @param midServerName The name of the MID Server you want to send the SOAP message through. Your
+     * instance must have an active MID Server with the specified name.
      */
     setMIDServer(midServerName: string): any;
     /**
-     * Sets the mutual authentication protocol profile for the SOAP message.
-     * @param profileName Name of the protocol profile to use for mutual authentication.
+     * Set the mutual authentication
+     * protocol
+     * profile for the SOAP message.
+     * @param profileName The name of the protocol profile to use for mutual authentication.
      */
     setMutualAuth(profileName: string): any;
     /**
-     * Sets the body content to send to the web service provider.
-     * @param requestBody Body of the SOAP message.
+     * Set the body content to send to the web service provider.
+     * @param requestBody The body of the SOAP message.
      */
     setRequestBody(requestBody: string): any;
     /**
-     * Sets an HTTP header in the SOAP message to the specified value.
-     * @param headerName Name of the header.
-     * @param headerValue Value to assign to the specified header.
+     * Set an HTTP header in the SOAP message to the specified value.
+     * @param headerName The name of the header.
+     * @param headerValue The value to assign to the specified header.
      */
     setRequestHeader(headerName: string, headerValue: string): any;
     /**
-     * Defines the SOAP action this SOAP message performs.
-     * @param soapAction SOAP action this SOAP message performs.
+     * Define the SOAP action this SOAP message performs.
+     * @param soapAction The SOAP action this SOAP message performs.
      */
     setSOAPAction(soapAction: string): any;
     /**
-     * Sets a variable with the specified name from the SOAP message record to the specified
+     * Set a variable with the specified name from the SOAP message record to the specified
      * value.
-     * @param name Name of the SOAP message variable.
-     * @param value Value to assign to the specified variable.
+     * @param name The name of the SOAP message variable.
+     * @param value The value to assign to the specified variable.
      */
     setStringParameter(name: string, value: string): any;
     /**
-     * Sets a variable with the specified name from the SOAP message record to the specified
+     * Set a variable with the specified name from the SOAP message record to the specified
      * value.
-     * @param name Name of the SOAP message variable.
-     * @param value Value to assign to the specified variable.
+     * @param name The name of the SOAP message variable.
+     * @param value The value to assign to the specified variable.
      */
     setStringParameterNoEscape(name: string, value: string): any;
     /**
      * Sets web service security values for the SOAP message.
-     * @param keystoreId Sys_id of the Java or PKCS12 key store to use.
-     * @param keystoreAlias Alias that identifies the public and private keys.
-     * @param keystorePassword Password assigned to the key store record.
-     * @param certificateId Sys_id of the trusted server certificate.
+     * @param keystoreId The sys_id of the Java or PKCS12 key store to use.
+     * @param keystoreAlias The alias that identifies the public and private keys.
+     * @param keystorePassword The password assigned to the key store record.
+     * @param certificateId The sys_id of the trusted server certificate.
      */
     setWSSecurity(
       keystoreId: string,
@@ -21671,12 +18362,12 @@ declare namespace sn_ws {
   }
   export class SOAPResponseV2 {
     /**
-     * Returns all headers contained in the response, including any duplicate
+     * Return all headers contained in the response, including any duplicate
      * headers.
      */
     getAllHeaders(): any;
     /**
-     * Gets the content of the SOAP response body.
+     * Get the content of the SOAP response body.
      */
     getBody(): string;
     /**
@@ -21684,36 +18375,36 @@ declare namespace sn_ws {
      */
     getCookies(): any;
     /**
-     * Gets the numeric error code if there was an error during the SOAP
+     * Get the numeric error code if there was an error during the SOAP
      * transaction.
      */
     getErrorCode(): number;
     /**
-     * Gets the error message if there was an error during the SOAP transaction.
+     * Get the error message if there was an error during the SOAP transaction.
      */
     getErrorMessage(): string;
     /**
-     * Gets the value for a specified HTTP header.
-     * @param name Name of the header that you want the value for, such as Set-Cookie.
+     * Get the value for a specified HTTP header.
+     * @param name The name of the header that you want the value for, such as Set-Cookie.
      */
     getHeader(name: string): string;
     /**
-     * Gets all HTTP headers returned in the SOAP response and the associated
+     * Get all HTTP headers returned in the SOAP response and the associated
      * values.
      */
     getHeaders(): any;
     /**
-     * Gets the numeric HTTP status code returned by the SOAP provider.
+     * Get the numeric HTTP status code returned by the SOAP provider.
      */
     getStatusCode(): number;
     /**
-     * Indicates if there was an error during the SOAP transaction.
+     * Indicate if there was an error during the SOAP transaction.
      */
     haveError(): boolean;
     /**
-     * Sets the amount of time the instance waits for a response from the web service
+     * Set the amount of time the instance waits for a response from the web service
      * provider.
-     * @param timeoutSecs Amount of time, in seconds, to wait for this response.
+     * @param timeoutSecs The amount of time, in seconds, to wait for this response.
      */
     waitForResponse(timeoutSecs: number): any;
   }

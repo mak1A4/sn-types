@@ -256,7 +256,7 @@ declare class ActivityHistoryRecord {
    */
   getUnSatisfiedJoinActivities(): string;
   /**
-   * Determines if this activity is one of the rollback activities.
+   * Determines if this activity is one of the Rollback activities.
    */
   isARollback(): boolean;
   /**
@@ -482,8 +482,8 @@ declare class BusinessServiceManager {
    * cmdb_ci_service_discovered.
    * @param source_id Sys ID of the CI whose outgoing connection joins the target CI.
    * @param target_id Sys ID of the CI to add to the service. Cannot be an excluded item. Excluded
-   * items are CIs configured in the Manual CI Inclusions / Exclusions
-   * [svc_manual_ci_exclusions_inclusions.list] table.
+   * items are CIs added to the sa.mapping.user.manual.citype.blacklist system property
+   * that are excluded from specific operations.
    */
   addCI(service_id: string, source_id: string, target_id: string): any;
   /**
@@ -686,7 +686,7 @@ declare class CIData {
    */
   loadFromCI(cmdb_ci: string): any;
   /**
-   * Converts the name of this CIData instance to a string.
+   * Converts the name of this instance to a string.
    */
   toString(): string;
   /**
@@ -3477,24 +3477,17 @@ declare class GlideAggregate {
    * Adds an aggregate to a database
    * query.
    * @param agg Name of an aggregate to use.Valid values:
-   * AVG: Average value of the expression.
+   * AVG
    *
-   * COUNT: Count of the number of non-null values.
+   * COUNT
    *
-   * GROUP_CONCAT: Concatenates all non-null values of the group in ascending
-   * order, joins them with a comma (‘,’), and returns the result as a String.
+   * MIN
    *
-   * GROUP_CONCAT_DISTINCT: Concatenates all non-null values of the group in
-   * ascending order, removes duplicates, joins them with a comma (‘,’), and returns
-   * the result as a String.
+   * MAX
    *
-   * MAX: Largest, or maximum, value.
+   * STDDEV
    *
-   * MIN: Minimum value.
-   *
-   * STDDEV: Population standard deviation.
-   *
-   * SUM: Sum of all values.
+   * SUM
    *
    *
    *
@@ -3546,24 +3539,17 @@ declare class GlideAggregate {
   /**
    * Gets the value of an aggregate from the current record.
    * @param agg Type of the aggregate.Valid values:
-   * AVG: Average value of the expression.
+   * AVG
    *
-   * COUNT: Count of the number of non-null values.
+   * COUNT
    *
-   * GROUP_CONCAT: Concatenates all non-null values of the group in ascending
-   * order, joins them with a comma (‘,’), and returns the result as a String.
+   * MIN
    *
-   * GROUP_CONCAT_DISTINCT: Concatenates all non-null values of the group in
-   * ascending order, removes duplicates, joins them with a comma (‘,’), and returns
-   * the result as a String.
+   * MAX
    *
-   * MAX: Largest, or maximum, value.
+   * STDDEV
    *
-   * MIN: Minimum value.
-   *
-   * STDDEV: Population standard deviation.
-   *
-   * SUM: Sum of all values.
+   * SUM
    *
    *
    *
@@ -3577,24 +3563,17 @@ declare class GlideAggregate {
   /**
    * Returns the number of records by summing an aggregate.
    * @param agg Name of an aggregate to use.Valid values:
-   * AVG: Average value of the expression.
+   * AVG
    *
-   * COUNT: Count of the number of non-null values.
+   * COUNT
    *
-   * GROUP_CONCAT: Concatenates all non-null values of the group in ascending
-   * order, joins them with a comma (‘,’), and returns the result as a String.
+   * MIN
    *
-   * GROUP_CONCAT_DISTINCT: Concatenates all non-null values of the group in
-   * ascending order, removes duplicates, joins them with a comma (‘,’), and returns
-   * the result as a String.
+   * MAX
    *
-   * MAX: Largest, or maximum, value.
+   * STDDEV
    *
-   * MIN: Minimum value.
-   *
-   * STDDEV: Population standard deviation.
-   *
-   * SUM: Sum of all values.
+   * SUM
    *
    *
    *
@@ -3619,28 +3598,7 @@ declare class GlideAggregate {
   orderBy(name: string): any;
   /**
    * Orders the aggregates based on the specified aggregate and field.
-   * @param agg Type of aggregation.Valid values:
-   * AVG: Average value of the expression.
-   *
-   * COUNT: Count of the number of non-null values.
-   *
-   * GROUP_CONCAT: Concatenates all non-null values of the group in ascending
-   * order, joins them with a comma (‘,’), and returns the result as a String.
-   *
-   * GROUP_CONCAT_DISTINCT: Concatenates all non-null values of the group in
-   * ascending order, removes duplicates, joins them with a comma (‘,’), and returns
-   * the result as a String.
-   *
-   * MAX: Largest, or maximum, value.
-   *
-   * MIN: Minimum value.
-   *
-   * STDDEV: Population standard deviation.
-   *
-   * SUM: Sum of all values.
-   *
-   *
-   *
+   * @param agg Type of aggregation, for example SUM, COUNT, MIN, MAX.
    * @param fieldName Name of the field to aggregate.
    */
   orderByAggregate(agg: string, fieldName: string): any;
@@ -3648,15 +3606,6 @@ declare class GlideAggregate {
    * Issues the query and gets the results.
    */
   query(): any;
-  /**
-   * Limits the number of rows from the table
-   * to include in the aggregate query.
-   * @param firstRow Zero-based index of the first row to include in the aggregate query,
-   * inclusive.
-   * @param lastRow Zero-based index of the last row to include in the aggregate query,
-   * exclusive.
-   */
-  setAggregateWindow(firstRow: number, lastRow: number): any;
   /**
    * Sets whether to group the results.
    * @param b Flag that indicates whether to group the results.Valid values:
@@ -4415,10 +4364,6 @@ declare class GlideElement {
    * Retrieves the display value for the associated field and escapes the HTML.
    */
   getTextAreaDisplayValue(): string;
-  /**
-   * Returns the value of the field in the database.
-   */
-  getValue(): string;
   /**
    * Retrieves the XHTML value of a field.
    */
@@ -5230,11 +5175,6 @@ declare class GlideRecord {
    */
   getTableName(): string;
   /**
-   * Gets the primary key of the record, which is usually the sys_id unless otherwise
-   * specified.
-   */
-  getUniqueValue(): string;
-  /**
    * Retrieves the string value of a specified field.
    * @param fieldName Name of a field for which to retrieve its value.
    */
@@ -5778,66 +5718,6 @@ declare class GlideSPSearchAnalytics {
    */
   publish(payload: string): any;
 }
-declare class GlideSysAttachment {
-  constructor();
-  /**
-   * Copies attachments from the source record to the target record.
-   * @param sourceTable Name of the table with the attachments to be copied.
-   * @param sourceID Source table's sys_id.
-   * @param targetTable Name of the table on which to add the attachments.
-   * @param targetID Target table's sys_id.
-   */
-  copy(
-    sourceTable: string,
-    sourceID: string,
-    targetTable: string,
-    targetID: string,
-  ): string;
-  /**
-   * Deletes the specified attachment.
-   * @param attachmentID Attachment's sys_id.
-   */
-  deleteAttachment(attachmentID: string): any;
-  /**
-   * Returns a GlideRecord containing the matching attachment metadata such as name, type,
-   * or size.
-   * @param tableName Name of the table to which the attachment belongs; for example, incident.
-   * @param sys_id The sys_id of record to which the attachment belongs.
-   */
-  getAttachments(tableName: string, sys_id: string): GlideRecord;
-  /**
-   * Returns a GlideScriptableInputStream object given the sys_id of an
-   * attachment.
-   * @param sysID Attachment sys_id.
-   */
-  getContentStream(sysID: string): GlideScriptableInputStream;
-  /**
-   * Attaches a specified attachment to the specified record.
-   * @param record Record to which to attach the attachment.
-   * @param fileName Attachment file name.
-   * @param contentType Attachment content type.
-   * @param content Attachment content.
-   */
-  write(
-    record: GlideRecord,
-    fileName: string,
-    contentType: string,
-    content: string,
-  ): string;
-  /**
-   * Inserts an attachment using the input stream.
-   * @param now_GR Record to which the attachment is to be attached.
-   * @param fileName Attachment's file name.
-   * @param contentType Attachment's content type.
-   * @param content Attachment content.
-   */
-  writeContentStream(
-    now_GR: GlideRecord,
-    fileName: string,
-    contentType: string,
-    content: GlideScriptableInputStream,
-  ): string;
-}
 declare class GlideSystem {
   /**
    * Adds an error message for the current session.
@@ -6195,9 +6075,8 @@ declare class GlideSystem {
    */
   getUserName(): string;
   /**
-   * Returns the user display name based on a provided user login name.
-   * @param user_id Login name of the user from which to retrieve the associated display
-   * name.
+   * Returns the user name based on a user ID.
+   * @param user_id User ID of the user whose user name to return.
    */
   getUserNameByUserID(user_id: string): string;
   /**
@@ -11249,7 +11128,7 @@ declare class WorkflowModelManager {
   /**
    * Retrieves the history activity that is cached by the
    * wf_history.sys_id provided in the argument.
-   * @param haRecordSysId Sys_id of the desired Activity History  [wf_history] record.
+   * @param haRecordSysId Sys_id of the desired Activity History [wf_history] record.
    */
   getActivityHistoryRecordById(haRecordSysId: string): any;
   /**
@@ -11307,9 +11186,15 @@ declare class WorkflowModelManager {
    */
   getNextByExecutedOrderId(haRecordSysId: string): any;
   /**
-   * Retrieves the history activity that executed just after the one identified by the sys_id
-   * provided in the argument.
-   * @param haRecordSysId Sys_id of the desired Activity History  [wf_history] record.
+   * Retrieves the history activity that executed just after to the one identified by the
+   * sys_id provided in the argument. This function retreives the cached history record associated with the provided
+   * wf_history.sys_id and then calls
+   * getNextByTransition. The return values are based on which transitions
+   * came before the haRecord submitted and not necessarily the activities
+   * that executed just prior to the haRecord in time. To get the activity
+   * that executed prior to this activity in time, use
+   * getNextByExecutedOrder.
+   * @param haRecordSysId sys_id of the activity history (table wf_history).
    */
   getNextByTransitionId(haRecordSysId: string): any;
   /**
@@ -11470,7 +11355,7 @@ declare class CertificateEncryption {
    * @param alias Alias name for the certificate.
    * @param algorithm Algorithm to use to create the hash, such as SHA-1, SHA-256, and so on.
    */
-  getThumbPrintFromKeyStore(
+  getThumbPrintFromKeystore(
     certificateID: string,
     alias: string,
     algorithm: string,
@@ -12825,6 +12710,91 @@ declare class GlideStringUtil {
    */
   unEscapeHTML(htmlString: string): string;
 }
+declare class GlideSysAttachment {
+  constructor();
+  /**
+   * Copies attachments from the source record to the target record.
+   * @param sourceTable Name of the table with the attachments to be copied.
+   * @param sourceID Source table's sys_id.
+   * @param targetTable Name of the table on which to add the attachments.
+   * @param targetID Target table's sys_id.
+   */
+  copy(
+    sourceTable: string,
+    sourceID: string,
+    targetTable: string,
+    targetID: string,
+  ): string;
+  /**
+   * Deletes the specified attachment.
+   * @param attachmentID Attachment's sys_id.
+   */
+  deleteAttachment(attachmentID: string): any;
+  /**
+   * Returns a GlideRecord containing the matching attachment metadata such as name, type,
+   * or size.
+   * @param tableName Name of the table to which the attachment belongs; for example,
+   * incident.
+   * @param sys_id The sys_id of record to which the attachment belongs.
+   */
+  getAttachments(tableName: string, sys_id: string): GlideRecord;
+  /**
+   * Returns the attachment content as a string.
+   * @param sysAttachment Attachment record.
+   */
+  getContent(sysAttachment: GlideRecord): string;
+  /**
+   * Returns the attachment content as a string with base64 encoding.
+   * @param sysAttachment Attachment record.
+   */
+  getContentBase64(sysAttachment: GlideRecord): string;
+  /**
+   * Returns a GlideScriptableInputStream object given the sys_id of an
+   * attachment.
+   * @param sysID Attachment sys_id.
+   */
+  getContentStream(sysID: string): GlideScriptableInputStream;
+  /**
+   * Attaches a specified attachment to the specified record.
+   * @param record Record to which to attach the attachment.
+   * @param fileName Attachment file name.
+   * @param contentType Attachment content type.
+   * @param content Attachment content.
+   */
+  write(
+    record: GlideRecord,
+    fileName: string,
+    contentType: string,
+    content: string,
+  ): string;
+  /**
+   * Inserts an attachment for the specified record using base64 encoded
+   * content.
+   * @param now_GR Record to which the attachment is to be attached.
+   * @param fileName Attachment's file name.
+   * @param contentType Attachment's content type.
+   * @param content Attachment content in base64 format.
+   */
+  writeBase64(
+    now_GR: GlideRecord,
+    fileName: string,
+    contentType: string,
+    content: string,
+  ): string;
+  /**
+   * Inserts an attachment using the input stream.
+   * @param now_GR Record to which the attachment is to be attached.
+   * @param fileName Attachment's file name.
+   * @param contentType Attachment's content type.
+   * @param content Attachment content.
+   */
+  writeContentStream(
+    now_GR: GlideRecord,
+    fileName: string,
+    contentType: string,
+    content: GlideScriptableInputStream,
+  ): string;
+}
 declare class GlideSysListControl {
   constructor(tableName: string);
   /**
@@ -13034,157 +13004,6 @@ declare class GlideXMLUtil {
     nsAware: boolean,
     forgiveUnclosed: boolean,
   ): string;
-}
-declare class GSLog {
-  constructor();
-  /**
-   * Determines if debug is turned on.
-   */
-  debugOn(): boolean;
-  /**
-   * Returns the log level.
-   * @param level Optional. Log level.
-   */
-  getLevel(level?: string): string;
-  /**
-   * Called by the Prototype JavaScript Framework during object creation to initialize a new
-   * instance of this class. Provide the input parameters, but do not call this method
-   * directly.
-   * @param traceProperty System property that contains a value indicating the level at or above which
-   * messages will be written to the log.
-   * @param caller Name of the script calling the logger.
-   */
-  initialize(traceProperty: string, caller: string): any;
-  /**
-   * Logs a message at the specified level.
-   * @param level Log level.
-   * @param msg Message to write to the log.
-   */
-  log(level: string, msg: string): any;
-  /**
-   * Logs alert events.
-   * @param msg Message to write to the log.
-   */
-  logAlert(msg: string): any;
-  /**
-   * Logs critical events.
-   * @param msg Message to write to the log.
-   */
-  logCrit(msg: string): any;
-  /**
-   * Logs debug events.
-   * @param msg Message to write to the log.
-   */
-  logDebug(msg: string): any;
-  /**
-   * Logs emergency events.
-   * @param msg Message to write to the log.
-   */
-  logEmerg(msg: string): any;
-  /**
-   * Logs error events.
-   * @param msg Message to write to the log.
-   */
-  logErr(msg: string): any;
-  /**
-   * Logs information events.
-   * @param msg Message to write to the log.
-   */
-  logInfo(msg: string): any;
-  /**
-   * Logs notice events.
-   * @param msg Message to write to the log.
-   */
-  logNotice(msg: string): any;
-  /**
-   * Logs warning events.
-   * @param msg Message to write to the log.
-   */
-  logWarning(msg: string): any;
-  /**
-   * Sets the log level.
-   * @param level Log level to set.
-   */
-  setLevel(level: string): any;
-}
-declare class IPAddress {
-  constructor(ipAddress: string);
-  /**
-   * Returns the canonical (shortened/standard) form of the specified IP address by removing
-   * any zero padding from the address.
-   * @param ipAddress IP address to canonicalize or a scoped IPAddress object that contains the IP
-   * address.
-   */
-  canonicalize(ipAddress: string): string;
-  /**
-   * Returns the expanded form of the specified IP address
-   * @param ipAddress IP address to expand.
-   */
-  getExpanded(ipAddress: string): string;
-  /**
-   * Determines whether the specified IPAddress object is a link-local IP
-   * address.
-   */
-  isLinkLocal(): boolean;
-  /**
-   * Determines whether the specified IPAddress object is the loopback IP
-   * address.
-   */
-  isLocalhost(): boolean;
-  /**
-   * Determines whether the specified IPAddress object is a multicast IP
-   * address.
-   */
-  isMulticast(): boolean;
-  /**
-   * Determines whether the specified IPAddress object is a public IP address. An IP address
-   * is considered public if it is routable, and it is not a reserved address.
-   */
-  isPublic(): boolean;
-  /**
-   * Determines whether the specified IPAddress object is a reserved IP address.
-   */
-  isReserved(): boolean;
-  /**
-   * Determines whether the specified IPAddress object is a routable IP address.
-   */
-  isRoutable(): boolean;
-  /**
-   * Determines whether the passed IPAddress object is the is the same version, IPv4 or
-   * IPv6, as the specified IP address.
-   * @param ipAddress IP address to check against the IP address in the passed IPAddress
-   * object.
-   */
-  isSameVersionAs(ipAddress: string): boolean;
-  /**
-   * Determines whether the specified IPAddress object is a unicast IP address.
-   */
-  isUnicast(): boolean;
-  /**
-   * Determines whether the specified IP address is a valid IPv4 address.
-   * @param ipAddress IP address to validate.For the non-static implementation, the IP address is passed in the IPAddress class
-   * reference instead of the method call.
-   * For example New IPAddress("::1").isV4();.
-   */
-  isV4(ipAddress: string): boolean;
-  /**
-   * Determines whether the specified IP address is a valid IPv6 address.
-   * @param ipAddress IP address to validate. For the non-static implementation, the IP address is
-   * passed in the IPAddress class reference instead of the method call.
-   * For
-   * example New IPAddress("::1").isV6();.
-   */
-  isV6(ipAddress: string): boolean;
-  /**
-   * Determines whether the specified IP address is a valid IPv4 or IPv6
-   * address.
-   * @param ipAddress IP address to validate.
-   */
-  isValid(ipAddress: string): boolean;
-  /**
-   * Returns the expanded form of an IPAddress object.
-   */
-  toExpanded(): string;
 }
 declare class NotifyConferenceUtil {
   constructor();
@@ -14884,149 +14703,6 @@ declare namespace sn_auth {
      */
     resetAuthCredential(): any;
   }
-  export class SCIM2Client {
-    /**
-     * Deletes a specified resource from an external service provider system.
-     * @param provider Required. Name of the configured SCIM service provider. The service provider name
-     * is defined in the name field of the SCIM Provider [sys_scim_provider] table.
-     * @param resourceName Required. Name of the resource type, such as User or Group. This value is located
-     * in the resource_name field in the SCIM Provider Resource Mapping
-     * [sys_scim_provider_resource_mapping] table.
-     * @param providerResourceId Required. Unique identifier of the associated resource on the external service
-     * provider system.
-     */
-    executeDelete(
-      provider: string,
-      resourceName: string,
-      providerResourceId: string,
-    ): any;
-    /**
-     * Returns all resources from a specified external provider system that match the passed
-     * criteria.
-     * @param provider Required. Name of the configured SCIM service provider. The service provider name
-     * is defined in the name field of the SCIM Provider [sys_scim_provider] table.
-     * @param resourceName Required. Name of the resource type, such as User or Group. This value is located
-     * in the resource_name field in the SCIM Provider Resource Mapping
-     * [sys_scim_provider_resource_mapping] table.
-     * @param queryParams Required. SCIM compliant query parameters passed to the external SCIM service
-     * provider endpoint.For additional information on the available query parameters and
-     * their associated format, refer to the following sections in the Internet Engineering
-     * Task Force document: System for Cross-domain Identity Management: Protocol
-     * https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.2
-     *
-     * https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.4
-     *
-     * https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.3
-     *
-     * https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.5
-     *
-     *
-     *
-     */
-    executeGet(
-      provider: string,
-      resourceName: string,
-      queryParams: string,
-    ): any;
-    /**
-     * Returns a resource from the external provider system with the specified unique resource
-     * ID.
-     * @param provider Required. Name of the configured SCIM service provider. The service provider name
-     * is defined in the name field of the SCIM Provider [sys_scim_provider] table.
-     * @param providerResourceId Required. Unique identifier of the associated resource on the external service
-     * provider system.
-     * @param queryParams Required. SCIM compliant query parameters passed to the external SCIM service
-     * provider endpoint.For additional information on the available query parameters and
-     * their associated format, refer to the following sections in the Internet Engineering
-     * Task Force document: System for Cross-domain Identity Management: Protocol
-     * https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.2
-     *
-     * https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.4
-     *
-     * https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.3
-     *
-     * https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.5
-     *
-     *
-     *
-     */
-    executeGetById(
-      provider: string,
-      providerResourceId: string,
-      queryParams: string,
-    ): any;
-    /**
-     * Creates or updates a resource in an external service provider system for a specified
-     * sys_id.
-     * @param provider Required. Name of the configured SCIM service provider. The service provider name
-     * is defined in the name field of the SCIM Provider [sys_scim_provider] table.
-     * @param resourceName Required. Name of the resource type, such as User or Group. This value is located
-     * in the resource_name field in the SCIM Provider Resource Mapping
-     * [sys_scim_provider_resource_mapping] table.
-     * @param resourceId Required. Sys_id of the resource saved in the ServiceNow
-     * instance (the client). This value is located in the primary_table field in the SCIM
-     * Provider Resource Mapping [sys_scim_provider_resource_mapping] table.
-     */
-    provision(provider: string, resourceName: string, resourceId: string): any;
-    /**
-     * Creates a new resource in an external service provider system for a specified
-     * sys_id.
-     * @param provider Required. Name of the configured SCIM service provider. The service provider name
-     * is defined in the name field of the SCIM Provider [sys_scim_provider] table.
-     * @param resourceName Required. Name of the resource type, such as User or Group. This value is located
-     * in the resource_name field in the SCIM Provider Resource Mapping
-     * [sys_scim_provider_resource_mapping] table.
-     * @param resourceId Required. Sys_id of the resource saved in the ServiceNow
-     * instance (the client). This value is located in the primary_table field in the SCIM
-     * Provider Resource Mapping [sys_scim_provider_resource_mapping] table.
-     */
-    provisionNew(
-      provider: string,
-      resourceName: string,
-      resourceId: string,
-    ): any;
-  }
-  export class SCIM2ClientUtil {
-    /**
-     * Returns the unique identifier of a specified resource from a specified external
-     * provider system for a unique resource ID in a ServiceNow instance using a
-     * filter expression to describe the desired
-     * resource.
-     * @param provider Required. Name of the configured SCIM service provider. The service provider name
-     * is defined in the name field of the SCIM Provider [sys_scim_provider] table.
-     * @param resourceName Required. Name of the resource type, such as User or Group. This value is located
-     * in the resource_name field in the SCIM Provider Resource Mapping
-     * [sys_scim_provider_resource_mapping] table.
-     * @param filter Required. Filter expression to apply to the return results.For additional
-     * information on the available filter parameters and their associated format, refer to
-     * the following section in the Internet Engineering Task Force document: System for
-     * Cross-domain Identity Management: Protocol
-     * https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.2
-     */
-    getProviderIdByFilter(
-      provider: string,
-      resourceName: string,
-      filter: string,
-    ): string;
-    /**
-     * Returns the unique identifier of a specified resource from a specified external
-     * provider system for a unique resource ID in a ServiceNow
-     * instance.
-     * @param provider Required. Name of the configured SCIM service provider. The service provider name
-     * is defined in the name field of the SCIM Provider [sys_scim_provider] table.
-     * @param resourceName Required. Name of the resource type, such as User or Group. This value is located
-     * in the resource_name field in the SCIM Provider Resource Mapping
-     * [sys_scim_provider_resource_mapping] table.
-     * @param resourceId Required. Sys_id of the resource saved in the ServiceNow
-     * instance (the client). This value is located in the primary_table field in the SCIM
-     * Provider Resource Mapping [sys_scim_provider_resource_mapping] table.
-     */
-    getProviderIdByResourceId(
-      provider: string,
-      resourceName: string,
-      resourceId: string,
-    ): string;
-  }
 }
 declare namespace sn_cc {
   export class ConnectionInfo {
@@ -15096,169 +14772,6 @@ declare namespace sn_cc {
      * of the types is returned.
      */
     getCredentials(tags?: string, types?: any[]): any;
-  }
-}
-declare namespace sn_chg_score {
-  export class ChangeSuccess {
-    /**
-     * Returns the value specified in the system property
-     * com.snc.change_management.success_score.entry_level_score.
-     */
-    getEntryLevelTeamScore(): number;
-    /**
-     * Returns the value specified in the system property
-     * com.snc.change_management.success_score.maximum_score.
-     */
-    getMaximumPermittedTeamScore(): string;
-    /**
-     * Returns the value specified in the system property
-     * com.snc.change_management.success_score.minimum_score.
-     */
-    getMinimumPermittedTeamScore(): string;
-    /**
-     * Returns the latest model success score based on the specified change request
-     * GlideRecord.
-     * @param chgGr Change request GlideRecord for which to return the model success score.
-     */
-    getModelScoreForChange(chgGr: any): void;
-    /**
-     * Returns the latest model success score for the specified model sys_id.
-     * @param sys_id Sys_id of the group for which to return the model success score. Located in the
-     * User Group [sys_user_grou]
-     * table.
-     * @param domain_id Optional. Sys_id of a domain to use when querying Performance Analytics for the
-     * model success score.
-     */
-    getModelScoreForModelId(sys_id: string, domain_id?: string): void;
-    /**
-     * Returns the latest change team success score (original change success score based on
-     * group), model success score, and type success score based on the specified change request
-     * GlideRecord.
-     * @param chgGr Change request GlideRecord.
-     */
-    getScoresForChange(chgGr: any): any;
-    /**
-     * Returns the latest change team success score (original change success score based on
-     * group) based on the specified change request GlideRecord.
-     * @param chgGr Change request GlideRecord for which to return the change team success
-     * score.
-     */
-    getTeamScoreForChange(chgGr: any): any;
-    /**
-     * Returns the latest change team success score (original change success score based on
-     * group) for the specified group.
-     * @param sys_id Sys_id of the group for which to return the change team success score. Located
-     * in the User Group [sys_user_group] table.
-     * @param domain_id Optional.
-     * Sys_id of a domain to use when querying Performance Analytics for the
-     * team success score.
-     */
-    getTeamScoreForGroupId(sys_id: string, domain_id?: string): any;
-    /**
-     * Returns the latest type success score based on the specified change request
-     * GlideRecord.
-     * @param chgGr Change request GlideRecord for which to return the type success score.
-     */
-    getTypeScoreForChange(chgGr: any): any;
-    /**
-     * Returns the latest type success score for the specified change type.
-     * @param type Type of change request for which to return the type success score, such as
-     * "emergency".
-     * @param domain_id Optional. Sys_id of a domain to use when querying Performance Analytics for the
-     * type success score.
-     */
-    getTypeScoreForType(type: string, domain_id?: string): any;
-    /**
-     * Controls whether the associated method returns the details of the Performance Analytics
-     * (PA) indicators used to generate each of the different types of scores (team, model and type).
-     * By default, this information is not returned.
-     * @param toggle Flag that indicates whether to include the details of the PA
-     * indicators.Valid values:
-     * true: Return the details of the PA indicators.
-     *
-     * false: Do not return the details of the PA indicators.
-     *
-     *
-     *
-     * Default: false
-     */
-    withIndicatorScores(toggle: boolean): any;
-    /**
-     * Only valid when called with the getScoresForChange() method.
-     * Controls whether the getScoresForChange() method returns the model score. By
-     * default the model score is returned.
-     * @param toggle Flag that indicates whether to include the model success score.
-     *
-     * Valid values:
-     * true: Return the model success score.
-     *
-     * false: Do not return the model success score.
-     *
-     *
-     *
-     *
-     * Default: true
-     */
-    withModelScore(toggle: boolean): any;
-    /**
-     * Controls whether the method validates the user calling the associated method, ensuring
-     * that they have the rights to read the requested content.
-     * @param toggle Flag that indicates whether to validate the user calling the associated
-     * method.Valid values:
-     * true: Validate the user calling the associated method.
-     *
-     * false: Do not validate the user calling the associated method.
-     *
-     *
-     *
-     * Default: true
-     */
-    withSecurity(toggle: boolean): any;
-    /**
-     * Only valid when called with the getScoresForChange() method.
-     * Controls whether the getScoresForChange() method returns the team score. By
-     * default the team score is returned.
-     * @param toggle Flag that indicates whether to include the team success score.Valid
-     * values:
-     * true: Return the team success score.
-     *
-     * false: Do not return the team success score.
-     *
-     *
-     *
-     * Default: true
-     */
-    withTeamScore(toggle: boolean): any;
-    /**
-     * Controls whether the associated method returns the details for all change success score
-     * rating records. By default, this information is not returned.
-     * @param toggle Flag that indicates whether to include the details for all team success score
-     * rating records.Valid values:
-     * true: Return the details for all change success score rating records.
-     *
-     * false: Do not return the details for all change success score rating
-     * records.
-     *
-     *
-     *
-     * Default: false
-     */
-    withTeamScoreRatings(toggle: boolean): any;
-    /**
-     * Only valid when called with the getScoresForChange() method.
-     * Controls whether the getScoresForChange() method returns the type score. By
-     * default the type score is returned.
-     * @param toggle Flag that indicates whether to include the type success score.Valid
-     * values:
-     * true: Return the type success score.
-     *
-     * false: Do not return the type success score.
-     *
-     *
-     *
-     * Default: true
-     */
-    withTypeScore(toggle: boolean): any;
   }
 }
 declare namespace sn_clotho {
@@ -16910,14 +16423,15 @@ declare namespace sn_dt {
     /**
      * Returns the answers associated with the specified decision table. An answer is a record
      * on any table associated with a Decision [sys_decision_question] record.
-     * @param decisionID Sys_id of the Decision Table record from the
+     * @param decisionID Sys ID of the Decision Table record from the
      * Decision Tables [sys_decision] table.
      */
     getAnswers(decisionID: string): any;
     /**
-     * Evaluates a decision table based on the provided inputs and returns an answer. If no
-     * inputs are provided, returns the first default answer found.
-     * @param decisionID Sys_id of the Decision Table record from the
+     * Evaluates a decision table based on the provided inputs and returns an
+     * answer.
+     * If no inputs are provided, returns the first default answer found.
+     * @param decisionID Sys ID of the Decision Table record from the
      * Decision Tables [sys_decision] table.
      * @param inputs Optional. Input values for the Decision Inputs [sys_decision_input] table
      * associated with the provided decision table. Use the value of the Column
@@ -16927,9 +16441,11 @@ declare namespace sn_dt {
      */
     getDecision(decisionID: string, inputs?: any): GlideRecord;
     /**
-     * Evaluates a decision table based on the provided inputs and returns all correctly
+     * Evaluates
+     * a decision table based on the provided inputs and returns all
+     * correctly
      * evaluated answers. If no inputs are provided, returns all default answers.
-     * @param decisionID Sys_id of the Decision Table record from the
+     * @param decisionID Sys ID of the Decision Table record from the
      * Decision Tables [sys_decision] table.
      * @param inputs Optional. Input values for the Decision Inputs  [sys_decision_input] table
      * associated with the provided decision table. If no inputs are provided, returns all
@@ -16939,21 +16455,21 @@ declare namespace sn_dt {
     /**
      * Returns a single decision table from the Decision Tables [sys_decision]
      * table.
-     * @param decisionID Sys_id of the Decision Table record from the
+     * @param decisionID Sys ID of the Decision Table record from the
      * Decision Tables [sys_decision] table.
      */
     getDecisionTable(decisionID: string): any;
     /**
      * Returns the decision inputs from the Decision Inputs [sys_decision_input] table
      * associated with the passed in decision table.
-     * @param decisionID Sys_id of the Decision Table record from the
+     * @param decisionID Sys ID of the Decision Table record from the
      * Decision Tables [sys_decision] table.
      */
     getInputs(decisionID: string): any;
     /**
      * Returns the decisions from the Decision [sys_decision_question] table associated with
      * the passed in decision table.
-     * @param decisionID Sys_id of the Decision Table record from the
+     * @param decisionID Sys ID of the Decision Table record from the
      * Decision Tables [sys_decision] table.
      */
     getQuestions(decisionID: string): any;
@@ -17362,16 +16878,11 @@ declare namespace sn_fd {
     timeout(timeout: number): any;
     /**
      * Overrides the Connections and Credentials alias associated with the flow,
-     * action, or subflow. You can override the default parent alias with any of its child
-     * aliases.
-     * @param parentAliasSysID The sys_id of the parent alias, the alias you want to override.
-     * @param overrideAliasSysID The sys_id of the child alias, the alias you want to use when running the flow,
-     * subflow, or action.
+     * action, or subflow.
+     * @param aliasName The name of the alias to override.
+     * @param overrideName The name of the alias to use when running the flow, subflow, or action.
      */
-    withConnectionAliasOverride(
-      parentAliasSysID: string,
-      overrideAliasSysID: string,
-    ): any;
+    withConnectionAliasOverride(aliasName: string, overrideName: string): any;
     /**
      * Adds a collection of inputs. If a name in one of the name-value pairs already exists,
      * the new value replaces the pre-existing value.
@@ -17965,33 +17476,6 @@ declare namespace sn_impex {
      * Creates a new transform map.
      */
     create(): string;
-  }
-  export class RTETransformer {
-    constructor(
-      transformDefinitionId: string,
-      verboseLogging: boolean,
-      source: string,
-      batchSize: number,
-    );
-    /**
-     * Transforms and stores an array of messages into a record in the associated ServiceNow instance based on a provided extract, transform, and load (ETL)
-     * definition.
-     * @param message Stringified JSON objects representing the records to transform based on the ETL
-     * definition.For example, if you want to transform a single user with the data
-     * active, email, first name, and last name to the sys_user table, the message would
-     * look similar to this: [
-     * {
-     * "active”:”true”,
-     * "email”:”example@servicenow.com”,
-     * "first_name”:”Jane”,
-     * "last_name”:”Doe”
-     * }
-     * ]
-     * Note: The field names must match the field/path of the source entity
-     * fields.
-     *
-     */
-    transform(message: any[]): any;
   }
 }
 declare namespace sn_instance_scan {

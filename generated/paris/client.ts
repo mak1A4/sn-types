@@ -15,63 +15,28 @@ declare class DynamicTranslation {
   /**
    * Detects the language of the passed in text.
    * @param text Text to use to detect the language.
-   * @param parms Optional. JSON object that contains additional
-   * translation
-   * parameters."parms": {
-   * "translator": "String"
-   * }
+   * @param parms Optional. JSON object that contains additional translation parameters.
    */
   getDetectedLanguage(text: string, parms?: any): any;
   /**
-   * Detects the languages of the passed in text strings.
-   * @param parms Optional. JSON object that contains additional
-   * translation
-   * parameters."parms": {
-   * "translator": "String"
-   * }
-   * @param texts List of text strings to use to detect the
-   * language(s).
-   */
-  getDetectedLanguages(parms: any | undefined, texts: any[]): any;
-  /**
    * Translates the passed in text to one or more languages.
    * @param textToTranslate Text to translate.
-   * @param parms Optional. JSON object that contains additional
-   * translation
-   * parameters."parms": {
-   * "additionalParameters": {Object},
-   * "sourceLanguage": "String",
-   * "targetLanguages": [Array],
-   * "translator": "String"
-   * }
+   * @param parms Optional. JSON object that contains additional translation parameters.
    */
   getTranslation(textToTranslate: string, parms?: any): any;
   /**
-   * Translates the passed in text strings to one or more languages.
-   * @param texts List of text stings to translate.
-   * @param parms Optional. JSON object that contains additional
-   * translation
-   * parameters."parms": {
-   * "additionalParameters": {Object},
-   * "sourceLanguage": "String",
-   * "targetLanguages": [Array],
-   * "translator": "String"
-   * }
-   */
-  getTranslations(texts: any[], parms?: any): any;
-  /**
-   * Determines whether the various methods in the
-   * DynamicTranslation API are enabled for a translation
-   * service.
-   * @param translator Optional. Translation service to use to verify whether
-   * the methods are active. Translation services are configured under the Translator
-   * Configuration menu.Possible values - not case-sensitive:
+   * Determines whether the
+   * getDetectedLanguage() and getTranslation()
+   * methods are enabled for a translation service.
+   * @param translator Optional. Translation service to verify whether the  methods are active.
+   * Translation services are configured under the Translator Configuration
+   * menu.Possible values - not case-sensitive:
    *
    * Google
    *
-   * Microsoft
-   *
    * IBM
+   *
+   * Microsoft
    *
    * &lt;custom&gt;
    *
@@ -79,8 +44,6 @@ declare class DynamicTranslation {
    * Note: To use custom translation services you must first configure the translation
    * service in your instance. For details, see Integrate with a translation
    * service provider.
-   * Default: Default translation
-   * service.
    */
   isEnabled(translator?: string): any;
 }
@@ -138,6 +101,65 @@ declare class GlideAjax {
    * GlideAjax object.
    */
   getXMLWait(): any;
+}
+declare class GlideAjaxV3 {
+  constructor(processor: string);
+  constructor(processor: string, targetURL?: string);
+  /**
+   * Set a name-value pair to be sent to the processor.
+   * @param name The name of the parameter. This usually has the prefix 'sysparm_'.
+   * @param value The parameter value.
+   */
+  addParam(name: string, value: string): any;
+  /**
+   * Call the processor asynchronously and get the answer element of the response in JSON
+   * format.
+   * @param callback The callback function. The function receives the answer element of the response
+   * as a JSON object.
+   */
+  getJSON(callback: any): any;
+  /**
+   * Returns the value of the specified parameter.
+   * @param name The name of the parameter to return.
+   */
+  getParam(name: string): string;
+  /**
+   * Returns the name-value pairs for the request.
+   */
+  getParams(): any;
+  /**
+   * Returns the server-side script that the request is going to use.
+   */
+  getProcessor(): string;
+  /**
+   * Returns the target URL.
+   */
+  getURL(): string;
+  /**
+   * Call the processor asynchronously and get the response in XML format.
+   * @param callback The callback function. The function receives the response as an
+   * argument.
+   */
+  getXML(callback: any): any;
+  /**
+   * Call the processor asynchronously and get the answer element of the response in XML
+   * format.
+   * @param callback The callback function. The function receives the answer element of the response
+   * in XML format as an argument.
+   */
+  getXMLAnswer(callback: any): any;
+  /**
+   * Sets a callback function to be called if the Ajax request fails.
+   * @param callback The function to be called if the Ajax request fails. The callback function has
+   * one parameter, the XMLHttpRequest object.
+   */
+  setErrorCallback(callback: any): any;
+  /**
+   * Sets the request's server-side script. The server-side script is also called the
+   * processor.
+   * @param serverScript The server-side script (processor) to receive the request.
+   */
+  setProcessor(serverScript: string): any;
 }
 declare class GlideDialogWindow {
   constructor(id: string, readOnly?: boolean, width?: number, height?: number);
@@ -257,21 +279,6 @@ declare class GlideForm {
    */
   addErrorMessage(message: string): any;
   /**
-   * Displays a floating form message at the top of the form detail section. The message
-   * does not cover UI actions.
-   * @param message Message to display.
-   * @param type The type of message.Valid values:
-   * error
-   *
-   * info
-   *
-   * warning
-   *
-   *
-   *
-   */
-  addFormMessage(message: string, type: string): any;
-  /**
    * Adds the specified informational message to the top of the form.
    * @param message Message to display.
    */
@@ -296,23 +303,6 @@ declare class GlideForm {
     choiceLabel: string,
     choiceIndex: number,
   ): any;
-  /**
-   * Removes all form messages of any type.
-   */
-  clearAllFormMessages(): any;
-  /**
-   * Removes all form messages of a given type.
-   * @param type The type of message.Valid values:
-   * error
-   *
-   * info
-   *
-   * warning
-   *
-   *
-   *
-   */
-  clearFormMessages(type: string): any;
   /**
    * Removes all informational and error messages from the top of the form.
    */
@@ -411,7 +401,8 @@ declare class GlideForm {
    */
   getReference(fieldName: string, callBack: any): GlideRecord;
   /**
-   * Returns an array of related list names from the current form.
+   * Returns an array of related lists from the current form in the order in which they
+   * appear on that form.
    */
   getRelatedListNames(): any[];
   /**
@@ -441,13 +432,7 @@ declare class GlideForm {
   hideAllFieldMsgs(): any;
   /**
    * Hides all field messages.
-   * @param type The type of message.Valid values:
-   * error
-   *
-   * info
-   *
-   *
-   *
+   * @param type The type of message, info or error.
    */
   hideAllFieldMsgs(type: string): any;
   /**
@@ -570,7 +555,7 @@ declare class GlideForm {
    */
   setMandatory(fieldName: string, mandatory?: boolean): any;
   /**
-   * Makes the specified field read-only or editable.
+   * Makes the specified field read only or editable.
    * @param fieldName Name of the field.
    * @param readOnly Flag that determines whether the associate field is editable or
    * read-only.Possible values:
@@ -607,7 +592,7 @@ declare class GlideForm {
    * values are used to update the contents of the specified field (related
    * list).
    * @param displayValue Field within the specified reference record to use to update the specified
-   * field. For example, in the User [sys_user] table it might be userName.If the
+   * field. For example, in the User [sys_user] table it might be userName. If the
    * specified field is a GlideList, this parameter can contain an array of display
    * value names.
    * For additional information on display values, see Display
@@ -695,138 +680,10 @@ declare class GlideGuidV3 {
   generate(stringLength?: number): string;
 }
 declare var g_guid = new GlideGuidV3();
-declare class GlideList {
-  /**
-   * Adds a single term to the list query
-   * filter.
-   * @param filter Encoded query string in standard Glide format. See
-   * Encoded query
-   * strings.
-   */
-  addFilter(filter: string): any;
-  /**
-   * Returns a comma-separated list of the
-   * sys_ids for the items that are checked in the associated list.
-   */
-  getChecked(): string;
-  /**
-   * Returns the fixed query.
-   */
-  getFixedQuery(): string;
-  /**
-   * Returns the field or comma-separated list
-   * of fields that are used to group the list.
-   */
-  getGroupBy(): string;
-  /**
-   * Returns the name of the list, which is
-   * usually the table name.
-   */
-  getListName(): string;
-  /**
-   * Returns the first field used to order the
-   * list.
-   */
-  getOrderBy(): string;
-  /**
-   * Returns the name of the parent table
-   * for a related list (the table associated with the form).
-   */
-  getParentTable(): string;
-  /**
-   * Returns the encoded query string for the
-   * list.
-   * @param <object> Optional. By default, this method includes orderBy, groupBy, and fixed query in
-   * the results. You can set object properties to restrict results to one or more of the
-   * three available options.
-   */
-  getQuery(paramObj?: any): string;
-  /**
-   * Returns the related list field that
-   * associates the related list to the parent form.
-   */
-  getRelated(): string;
-  /**
-   * Returns the table name for the
-   * list.
-   */
-  getTableName(): string;
-  /**
-   * Returns the list title.
-   */
-  getTitle(): string;
-  /**
-   * Returns the view used to display the
-   * list.
-   */
-  getView(): string;
-  /**
-   * Refreshes the list. The
-   * orderBy part of the list filter is ignored so that the list
-   * uses its natural ordering when it is refreshed.
-   * @param firstRow The first row to appear in the list.Default:
-   * First row of the current view.
-   */
-  refresh(firstRow: number): any;
-  /**
-   * Refreshes the list. The
-   * orderBy part of the list filter is included if it is
-   * specified for the list.
-   * @param firstRow The first row to appear in the list.Default:
-   * First row of the current view.
-   */
-  refreshWithOrderBy(firstRow: number): any;
-  /**
-   * Sets the encoded query string for the list,
-   * ignoring the orderBy and groupBy parts
-   * of the query string.
-   * @param filter Encoded query string in standard Glide format. See
-   * Encoded query
-   * strings.
-   */
-  setFilter(filter: string): any;
-  /**
-   * Sets the list groupBy
-   * criteria for a single field.
-   * @param groupBy The groupBy criteria for the
-   * list.
-   */
-  setGroupBy(groupBy: string): any;
-  /**
-   * Sets the orderBy
-   * criteria for the list.
-   * @param orderBy Single
-   * or multiple orderBy fields.
-   */
-  setOrderBy(orderBy: string): any;
-  /**
-   * Sets the number of rows per page to
-   * display.
-   * @param rows The number of rows to display.
-   */
-  setRowsPerPage(rows: number): any;
-  /**
-   * Sorts the list in ascending order and sets the
-   * field as an orderBy
-   * column.
-   * @param field Field to use to sort the list.
-   */
-  sort(field: string): any;
-  /**
-   * Sorts a single field in the list in descending
-   * order and sets the field as an orderByDescField
-   * column.
-   * @param field Field to use to sort the list.
-   */
-  sortDescending(field: string): any;
-}
 declare class GlideList2 {
   /**
-   * Adds a single term to the list query
-   * filter.
-   * @param filter Encoded query string in standard Glide format. See
-   * Encoded query
-   * strings.
+   * Adds a single term to the list query filter.
+   * @param filter Query string condition to add.
    */
   addFilter(filter: string): any;
   /**
@@ -844,88 +701,52 @@ declare class GlideList2 {
    */
   get(ListID: string): any;
   /**
-   * Returns a comma-separated list of the
-   * sys_ids for the items that are checked in the associated list.
+   * Returns a comma-separated list of the sys_ids for the items that are checked in the list.
    */
   getChecked(): string;
   /**
-   * Returns the fixed query.
+   * Returns the sysparm_fixed query.
    */
   getFixedQuery(): string;
   /**
-   * Returns the field or comma-separated list
-   * of fields that are used to group the list.
+   * Returns the field or comma-separated list of fields that are used to group the list.
    */
   getGroupBy(): string;
   /**
-   * Returns the name of the list, which is
-   * usually the table name.
+   * Returns the name of the list, which is usually the table name.
    */
   getListName(): string;
   /**
-   * Returns the first field used to order the
-   * list.
+   * Returns the first field used to order the list.
    */
   getOrderBy(): string;
   /**
-   * Returns the name of the parent table
-   * for a related list (the table associated with the form).
+   * Returns the name of the parent table for a related list (the table associated with the form).
    */
   getParentTable(): string;
   /**
-   * Returns the encoded query string for the
-   * list.
-   * @param orderBy Optional. Flag that indicates whether to include
-   * orderBy in results.Valid values:
-   * true: Include orderBy in results.
-   *
-   * false: Do not include orderBy in results.
-   *
-   *
-   *
-   * Default: false
-   * @param groupBy Optional. Flag that indicates whether to include
-   * groupBy in results.Valid values:
-   * true: Include groupBy in results.
-   *
-   * false: Do not include groupBy in results.
-   *
-   *
-   *
-   * Default: false
-   * @param fixed Optional. Flag that indicates whether to include
-   * fixed query in results.Valid values:
-   * true: Include fixed query in results.
-   *
-   * false: Do not include fixed query in results.
-   *
-   *
-   *
-   * Default: false
-   * @param all Default. Flag that indicates whether to include
-   * orderBy, groupBy, and fixed query in results.Valid values:
-   * true: Include orderBy, groupBy, and fixed query in results.
-   *
-   * false: Do not include all three options in results.
-   *
-   *
-   *
-   * Default: true
+   * Returns the encoded query string for the list.
+   * @param orderBy (Optional) If true, includes the orderBy in the encoded
+   * query string.
+   * @param groupBy (Optional) If true, includes the groupBy in the encoded
+   * query string.
+   * @param fixed (Optional) If true, includes fixed query in the encoded
+   * query string.
+   * @param all (Optional) If true, includes orderBy, groupBy, and fixed
+   * query.
    */
   getQuery(
-    orderBy: boolean | undefined,
-    groupBy: boolean | undefined,
-    fixed: boolean | undefined,
-    all: boolean,
+    orderBy?: boolean,
+    groupBy?: boolean,
+    fixed?: boolean,
+    all?: boolean,
   ): string;
   /**
-   * Returns the related list field that
-   * associates the related list to the parent form.
+   * Returns the related list field that associates the related list to the parent form.
    */
   getRelated(): string;
   /**
-   * Returns the table name for the
-   * list.
+   * Returns the table name for the list.
    */
   getTableName(): string;
   /**
@@ -933,8 +754,7 @@ declare class GlideList2 {
    */
   getTitle(): string;
   /**
-   * Returns the view used to display the
-   * list.
+   * Returns the view used to display the list.
    */
   getView(): string;
   /**
@@ -943,33 +763,25 @@ declare class GlideList2 {
    */
   isUserList(): boolean;
   /**
-   * Refreshes the list. The
-   * orderBy part of the list filter is ignored so that the list
-   * uses its natural ordering when it is refreshed.
-   * @param firstRow The first row to appear in the list.Default:
-   * First row of the current view.
-   * @param additionalParms Optional
-   * name-value pairs that are submitted with the list refresh
+   * Refreshes the list.  The orderBy part of the list filter is ignored
+   * so that the list uses its natural ordering when it is refreshed.
+   * @param firstRow (Optional) The first row to appear in the list. If not specified, the first row
+   * of the current is used.
+   * @param additionalParms (Optional) name-value pairs that are submitted with the list refresh
    * request.
    */
-  refresh(firstRow: number, additionalParms?: string): any;
+  refresh(firstRow?: number, additionalParms?: string): any;
   /**
-   * Refreshes the list. The
-   * orderBy part of the list filter is included if it is
-   * specified for the list.
-   * @param firstRow The first row to appear in the list.Default:
-   * First row of the current view.
-   * @param description Optional
-   * name-value pairs that are submitted with the list refresh request.
+   * Refreshes the list. The orderBy part of the list filter is included
+   * if it is specified for the list.
+   * @param firstRow (Optional) The first row to appear in the list.
+   * @param description (Optional)  name=value pairs that are submitted with the list refresh request.
    */
-  refreshWithOrderBy(firstRow: number, description?: string): any;
+  refreshWithOrderBy(firstRow?: number, description?: string): any;
   /**
-   * Sets the encoded query string for the list,
-   * ignoring the orderBy and groupBy parts
-   * of the query string.
-   * @param filter Encoded query string in standard Glide format. See
-   * Encoded query
-   * strings.
+   * Sets the encoded query string for the list, ignoring the orderBy and
+   * groupBy parts of the query string.
+   * @param filter Encoded query string.
    */
   setFilter(filter: string): any;
   /**
@@ -985,23 +797,18 @@ declare class GlideList2 {
    */
   setFirstRow(rowNum: number): any;
   /**
-   * Sets the list groupBy
-   * criteria for a single field.
-   * @param groupBy The groupBy criteria for the
-   * list.
+   * Sets the list groupBy criteria for a single field.
+   * @param groupBy Optional. The groupBy criteria for the list.
    */
-  setGroupBy(groupBy: string): any;
+  setGroupBy(groupBy?: string): any;
   /**
-   * Sets the orderBy
-   * criteria for the list.
-   * @param orderBy Single
-   * or multiple orderBy fields.
+   * Sets the orderBy criteria for the list.
+   * @param orderBy Single or multiple order by fields.
    */
   setOrderBy(orderBy: string): any;
   /**
-   * Sets the number of rows per page to
-   * display.
-   * @param rows The number of rows to display.
+   * Sets the number of rows per page to display.
+   * @param rows The number of rows to display
    */
   setRowsPerPage(rows: number): any;
   /**
@@ -1016,17 +823,13 @@ declare class GlideList2 {
    */
   showHideList(showFlag: boolean): any;
   /**
-   * Sorts the list in ascending order and sets the
-   * field as an orderBy
-   * column.
-   * @param field Field to use to sort the list.
+   * Sorts the list in ascending order and saves the choice.
+   * @param field Specifies the field used to sort the list.
    */
   sort(field: string): any;
   /**
-   * Sorts a single field in the list in descending
-   * order and sets the field as an orderByDescField
-   * column.
-   * @param field Field to use to sort the list.
+   * Sorts the list in descending order and saves the choice.
+   * @param field Specifies the field used to sort the list.
    */
   sortDescending(field: string): any;
   /**
@@ -1286,46 +1089,28 @@ declare class GlideMenu {
 }
 declare var g_menu = new GlideMenu();
 declare class GlideModalFormV3 {
-  constructor(
-    title: string,
-    tableName: string,
-    onCompletionCallback: any,
-    readOnly?: boolean,
-  );
+  constructor(title: string, tableName: string, onCompletionCallback: any);
   /**
-   * Sets the specified form field to the specified value.
-   * @param name Form field name. If the specified name is not a field in the associated modal
-   * form, it is ignored.
-   * @param value Value to set the specified form field to.
+   * Sets the specified parameter to the specified value.
+   * @param name The parameter name.
+   * @param value The parameter value.
    */
   addParm(name: string, value: string): any;
   /**
-   * Shows the modal form.
+   * Shows the form.
    */
   render(): any;
   /**
    * Sets the function to be called when the form has been successfully submitted and
    * processed by the server.
-   * @param callbackFunction Callback function to call when the form has been successfully processed. The
-   * callback function has the form callbackFunction(String action_verb, String
-   * sys_id, String table, String displayValue) where:
-   * action_verb: action_name from a sys_ui_action
-   * record
-   *
-   * sys_id: Sys_id of the affected record
-   *
-   * table: Name of the table containing the record
-   *
-   * displayValue: Value that appears on the form
-   *
-   *
-   *
+   * @param callbackFunction The callback function to be called when the form has been successfully
+   * processed.
    */
   setCompletionCallback(callbackFunction: any): any;
   /**
    * Sets the function to be called after the form has been loaded.
-   * @param callbackFunction Function to call after the form has been loaded. The callback function has the
-   * form callBackFunction(GlideModalForm obj)
+   * @param callbackFunction The function to be called after the form has been loaded. The callback function
+   * has the form callBackFunction(GlideModalForm obj)
    */
   setOnloadCallback(callbackFunction: any): any;
   /**
@@ -1399,10 +1184,10 @@ declare class GlideNavigationV3 {
    */
   open(url: string, target?: string): any;
   /**
-   * Opens the specified URL in a popup window.
+   * Opens a popup window.
    * @param url URL to open.
    * @param name Window name.
-   * @param features Comma separated list of features for the popup window.
+   * @param features Comma-separated list of features for the popup window.
    * @param noStack Flag that indicates whether to append sysparm_stack=no to the
    * URL. This parameter helps prevent unexpected behavior when using the form back
    * button.Valid values:
@@ -1485,13 +1270,13 @@ declare class GlideRecord {
    * Adds a filter to return records where the field meets the specified condition (field,
    * operator, value).
    * @param name Name of the field to check.
-   * @param value The value or list of values on which to query.
+   * @param value Value on which to query.
    */
   addQuery(name: string, value: any): any;
   /**
    * Deletes the current record and calls the specified response function when
    * complete.
-   * @param responseFunction Response function for the  callback.
+   * @param responseFunction Response function for the Ajax callback.
    */
   deleteRecord(responseFunction: any): any;
   /**
@@ -1500,7 +1285,7 @@ declare class GlideRecord {
    * returning.
    * @param sys_id The sys_id of the record to be found.
    */
-  get(sys_id: string): boolean;
+  get(sys_id: any): boolean;
   /**
    * Retrieves the query condition of the current result set as an encoded query
    * string.
@@ -1535,14 +1320,11 @@ declare class GlideRecord {
    */
   orderBy(column: string): any;
   /**
-   * Runs the query to the server against the table based on the addQuery() filter. This
-   * method queries the GlideRecord table as well as any references of the table.
-   * @param name Optional. The name of a field to query.
-   * @param responseFunction The function called when the query results are available.
-   * @param value Optional. The field value to query for. Any pair of literals is considered a
-   * query pair (field : value).
+   * Runs the query against the table based on the addQuery() filter. This queries the
+   * GlideRecord table as well as any references of the table.
+   * @param responseFunction The response function for the Ajax callback.
    */
-  query(name: string | undefined, responseFunction: any, value?: string): any;
+  query(responseFunction: any): any;
   /**
    * Adds a specified encoded query string to the current query clause.
    * @param encodedQuery Encoded query string to add to the current query clause.
@@ -1553,6 +1335,76 @@ declare class GlideRecord {
    * @param maxQuery The limit for the number of records to retrieve.
    */
   setLimit(maxQuery: number): any;
+}
+declare class GlideRecordV3 {
+  constructor(tableName: string);
+  /**
+   * Adds a column to order by in the query.
+   * @param column The column by which to order the result set.
+   */
+  addOrderBy(column: string): any;
+  /**
+   * Adds a filter to return records where the field meets the specified condition (field,
+   * operator, value).
+   * @param fieldName Name of the field to be checked.
+   * @param operator An operator for the query.
+   * @param value The value to use.
+   */
+  addQuery(fieldName: string, operator: any, value: any): any;
+  /**
+   * Adds a filter to return records where the field meets the specified condition (field,
+   * operator, value).
+   * @param fieldName Name of the field to be checked.
+   * @param value The value or list of values on which to query.
+   */
+  addQuery(fieldName: string, value: any): any;
+  /**
+   * Deletes the current record.
+   * @param responseFunction The response function.
+   */
+  deleteRecord(responseFunction: any): boolean;
+  /**
+   * Get a record by sysID.
+   * @param sysId The sysID of the record for which to search.
+   */
+  get(sysId: string): boolean;
+  /**
+   * Retrieves all query conditions as an encoded query string.
+   */
+  getEncodedQuery(): string;
+  /**
+   * Gets the name of the table associated with the GlideRecord.
+   */
+  getTableName(): string;
+  /**
+   * Determines if there are any more records in the GlideRecord.
+   */
+  hasNext(): boolean;
+  /**
+   * Inserts a new record using the field values that have been set for the current
+   * record.
+   * @param responseFunction The response function.
+   */
+  insert(responseFunction: any): string;
+  /**
+   * Moves to the next record in the GlideRecord.
+   */
+  next(): boolean;
+  /**
+   * Specifies an orderBy column. May be called more than once to order by multiple
+   * columns.
+   * @param column The column to add to sort the result set.
+   */
+  orderBy(column: string): any;
+  /**
+   * Performs a query using the current query conditions. Takes zero or more parameters.
+   * Parameters may be in any order. Any function is considered to be a response function. Any pair
+   * of literals is considered a query pair (field : value).
+   * @param name The name of a field to query. (optional)
+   * @param responseFunction The function called when the query results are available. (optional)
+   * @param value The field value to query for. (optional)
+   */
+  query(name?: string, responseFunction?: any, value?: string): any;
 }
 declare class GlideUIScripts {
   /**
@@ -1596,7 +1448,7 @@ declare class GlideUser {
   getFullName(): string;
   /**
    * Returns true if the current user has the specified role or the admin role.
-   * @param role Role to check.
+   * @param role Role to check
    * @param includeDefaults Optional. Flag that indicates whether to include default roles, such as
    * snc_internal and snc_external, in the request. For additional information on roles,
    * see Roles.
@@ -1682,15 +1534,6 @@ declare class Guided {
    */
   startTour(tour_id: string, step_number?: number, cb_function?: any): any;
 }
-declare class g_service_catalog {
-  /**
-   * Returns the value of the specified field on the catalog item form when used in a client
-   * script on multi-row variable sets (MRVS).
-   * @param variableName Name of the variable in the catalog item form to return.
-   */
-  getValue(variableName: string): any[];
-}
-declare class helpers {}
 declare class i18NV3 {
   /**
    * Formats a string containing named tokens with values from a map.
@@ -2107,21 +1950,9 @@ declare class openFrameAPI {
   /**
    * Subscribes to the event.
    * @param event One of the following events:
-   * openframe_agent_off_interaction: Indicates the presence of an agent on chat as
-   * off or available.
-   *
    * openframe_awa_agent_presence: In Advanced Work Assignment (AWA), this event occurs when there is any change
    * in the agent presence state. Computer Telephony Integration (CTI) developers can
    * subscribe to the this event to receive presence state changes.
-   *
-   * openframe_awa_workitem_accepted: Occurs when a work item is accepted by an
-   * agent.
-   *
-   * openframe_awa_workitem_offered: Occurs when a work item is offered to an
-   * agent.
-   *
-   * openframe_awa_workitem_rejected: Occurs when a work item is rejected by an
-   * agent.
    *
    * openframe_before_destroy: Occurs before the TopFrame is unloaded.
    *
@@ -2159,12 +1990,6 @@ declare class openFrameAPI {
    */
   version(): string;
 }
-declare class ScopedSessionDomain {
-  /**
-   * Returns the sys_id of the current domain for the logged-in user session.
-   */
-  getCurrentDomainID(): string;
-}
 declare class ScriptLoader {
   /**
    * Loads scripts asynchronously.
@@ -2181,98 +2006,6 @@ declare class ScriptLoader {
    */
   getScripts(filePath: string, callback: any): any;
 }
-declare class SNAnalytics {
-  /**
-   * Stores the specified event information in the analytics data store.
-   * @param payload Event to store in the analytics data store.Data type:
-   * Object
-   * "payload": {
-   * "data": [Array],
-   * "name": String
-   * }
-   */
-  addEvent(payload: any): any;
-  /**
-   * Appends the specified string to the specified user string property in the analytics
-   * data store.
-   * @param name Name of the property to append the specified string to. Special characters are
-   * not allowed.Note: The associated property must be a string or
-   * string[].
-   * Maximum length: The length of the property name and property
-   * value cannot exceed 300 bytes.
-   * @param value Value to append to the string property.The following values are automatically converted by this
-   * method:
-   * String value of "yes": Boolean value of "true"
-   *
-   * String value of "no": Boolean value of "false
-   *
-   *
-   *
-   */
-  appendToUserProperty(name: string, value: string): any;
-  /**
-   * Increments or decrements the specified user property value with the specified number
-   * value in the analytics data store.
-   * @param name Name of the property to increment. Value is case-sensitive.Note: The associated
-   * property must be a number.
-   * @param value Amount to increment the property by. If you enter a negative number, the value
-   * is decremented.
-   */
-  incUserProperty(name: string, value: number): any;
-  /**
-   * Removes the specified property for the current user from the analytics data
-   * store.
-   * @param name Name of the property to remove. Value is case-sensitive.
-   */
-  removeUserProperty(name: string): any;
-  /**
-   * Sets the specified properties with the specified values for the current user in the
-   * analytics data store.
-   * @param properties Object that contains the name-value pairs of the user properties to set, such as:
-   * {
-   * level: 7,
-   * lastPurchase: new Date(),
-   * lastPurchaseId: '41563cd2-1666-4855-8c0d-b9ca778aed23',
-   * isPremium: true,
-   * tags: ['chair', 'table'],
-   * }
-   * The following values are automatically converted by this
-   * method:
-   * String value of "yes": Boolean value of "true"
-   *
-   * String value of "no": Boolean value of "false
-   *
-   *
-   *
-   */
-  setUserProperties(properties: any): any;
-  /**
-   * Sets the specified property with the specified value for the current user in the
-   * analytics data store.
-   * @param name Name of the property to update. This name appears as the label for the
-   * property. For example, in the prior screenshot, Domain, Instance Name, Company,
-   * Role, and User Type are all name parameters. Special characters are not
-   * allowed.Maximum length: The length of the property name and property value
-   * cannot exceed 300 bytes.
-   * @param value Value to set in the specified property.The following values are automatically converted by this
-   * method:
-   * String value of "yes": Boolean value of "true"
-   *
-   * String value of "no": Boolean value of "false
-   *
-   *
-   *
-   */
-  setUserProperty(name: string, value: any): any;
-  /**
-   * Saves the name and description of a page in the analytics data store.
-   * @param name Descriptive name of the page or page section. Special characters are not
-   * allowed.
-   * @param description Optional. Description of the page to appear in the timeline and analytics
-   * dashboard. Default: name parameter value
-   */
-  startPage(name: string, description?: string): any;
-}
 declare class spAriaUtil {
   /**
    * Announce a message to a screen reader.
@@ -2285,9 +2018,13 @@ declare class spContextManager {
    * Initializes a key and adds widget data as the value. For example, add data to the
    * 'agent-chat' key to make it available to Agent Chat.
    * @param key Name of the key to send the data. Available keys
-   * includeagent-chat: Sends widget data to Agent Chat when it opens in a
-   * Service Portal
+   * include:
+   * agent-chat: Sends widget data to Agent Chat when it opens
+   * in a Service Portal
    * page.
+   *
+   *
+   *
    * @param context Widget data in JSON format to send to the
    * application or service specified in the key parameter. For example,
    * {'approval_count': 5}.
@@ -2302,6 +2039,13 @@ declare class spContextManager {
    * Returns the widget data associated with a key.
    * @param key Name of the key to get context from. Available keys include:
    *
+   * agent-chat: Sends widget data to Agent Chat when it opens
+   * in a Service Portal
+   * page.
+   *
+   *
+   *
+   *
    * @param returnPromise Flag that determines whether to return the data associated with a key as a
    * promise or an object. Values include:
    *
@@ -2314,6 +2058,7 @@ declare class spContextManager {
    *
    *
    *
+   *
    */
   getContextForKey(key: string, returnPromise: boolean): any;
   /**
@@ -2322,9 +2067,13 @@ declare class spContextManager {
    * update the context of the key rather than using the addContext()
    * method.
    * @param key Name of the key to send the data. Available keys
-   * includeagent-chat: Sends widget data to Agent Chat when it opens in a
-   * Service Portal
+   * include:
+   * agent-chat: Sends widget data to Agent Chat when it opens
+   * in a Service Portal
    * page.
+   *
+   *
+   *
    * @param context Widget data in JSON format to send to the
    * application or service specified in the key parameter. For example,
    * {'approval_count': 5}.

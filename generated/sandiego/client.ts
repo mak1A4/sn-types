@@ -1485,13 +1485,13 @@ declare class GlideRecord {
    * Adds a filter to return records where the field meets the specified condition (field,
    * operator, value).
    * @param name Name of the field to check.
-   * @param value The value or list of values on which to query.
+   * @param value Value on which to query.
    */
   addQuery(name: string, value: any): any;
   /**
    * Deletes the current record and calls the specified response function when
    * complete.
-   * @param responseFunction Response function for the  callback.
+   * @param responseFunction Response function for the Ajax callback.
    */
   deleteRecord(responseFunction: any): any;
   /**
@@ -1500,7 +1500,7 @@ declare class GlideRecord {
    * returning.
    * @param sys_id The sys_id of the record to be found.
    */
-  get(sys_id: string): boolean;
+  get(sys_id: any): boolean;
   /**
    * Retrieves the query condition of the current result set as an encoded query
    * string.
@@ -1535,14 +1535,11 @@ declare class GlideRecord {
    */
   orderBy(column: string): any;
   /**
-   * Runs the query to the server against the table based on the addQuery() filter. This
-   * method queries the GlideRecord table as well as any references of the table.
-   * @param name Optional. The name of a field to query.
-   * @param responseFunction The function called when the query results are available.
-   * @param value Optional. The field value to query for. Any pair of literals is considered a
-   * query pair (field : value).
+   * Runs the query against the table based on the addQuery() filter. This queries the
+   * GlideRecord table as well as any references of the table.
+   * @param responseFunction The response function for the Ajax callback.
    */
-  query(name: string | undefined, responseFunction: any, value?: string): any;
+  query(responseFunction: any): any;
   /**
    * Adds a specified encoded query string to the current query clause.
    * @param encodedQuery Encoded query string to add to the current query clause.
@@ -1553,6 +1550,76 @@ declare class GlideRecord {
    * @param maxQuery The limit for the number of records to retrieve.
    */
   setLimit(maxQuery: number): any;
+}
+declare class GlideRecordV3 {
+  constructor(tableName: string);
+  /**
+   * Adds a column to order by in the query.
+   * @param column The column by which to order the result set.
+   */
+  addOrderBy(column: string): any;
+  /**
+   * Adds a filter to return records where the field meets the specified condition (field,
+   * operator, value).
+   * @param fieldName Name of the field to be checked.
+   * @param operator An operator for the query.
+   * @param value The value to use.
+   */
+  addQuery(fieldName: string, operator: any, value: any): any;
+  /**
+   * Adds a filter to return records where the field meets the specified condition (field,
+   * operator, value).
+   * @param fieldName Name of the field to be checked.
+   * @param value The value or list of values on which to query.
+   */
+  addQuery(fieldName: string, value: any): any;
+  /**
+   * Deletes the current record.
+   * @param responseFunction The response function.
+   */
+  deleteRecord(responseFunction: any): boolean;
+  /**
+   * Get a record by sysID.
+   * @param sysId The sysID of the record for which to search.
+   */
+  get(sysId: string): boolean;
+  /**
+   * Retrieves all query conditions as an encoded query string.
+   */
+  getEncodedQuery(): string;
+  /**
+   * Gets the name of the table associated with the GlideRecord.
+   */
+  getTableName(): string;
+  /**
+   * Determines if there are any more records in the GlideRecord.
+   */
+  hasNext(): boolean;
+  /**
+   * Inserts a new record using the field values that have been set for the current
+   * record.
+   * @param responseFunction The response function.
+   */
+  insert(responseFunction: any): string;
+  /**
+   * Moves to the next record in the GlideRecord.
+   */
+  next(): boolean;
+  /**
+   * Specifies an orderBy column. May be called more than once to order by multiple
+   * columns.
+   * @param column The column to add to sort the result set.
+   */
+  orderBy(column: string): any;
+  /**
+   * Performs a query using the current query conditions. Takes zero or more parameters.
+   * Parameters may be in any order. Any function is considered to be a response function. Any pair
+   * of literals is considered a query pair (field : value).
+   * @param name The name of a field to query. (optional)
+   * @param responseFunction The function called when the query results are available. (optional)
+   * @param value The field value to query for. (optional)
+   */
+  query(name?: string, responseFunction?: any, value?: string): any;
 }
 declare class GlideUIScripts {
   /**
@@ -2285,9 +2352,13 @@ declare class spContextManager {
    * Initializes a key and adds widget data as the value. For example, add data to the
    * 'agent-chat' key to make it available to Agent Chat.
    * @param key Name of the key to send the data. Available keys
-   * includeagent-chat: Sends widget data to Agent Chat when it opens in a
-   * Service Portal
+   * include:
+   * agent-chat: Sends widget data to Agent Chat when it opens
+   * in a Service Portal
    * page.
+   *
+   *
+   *
    * @param context Widget data in JSON format to send to the
    * application or service specified in the key parameter. For example,
    * {'approval_count': 5}.
@@ -2301,6 +2372,12 @@ declare class spContextManager {
   /**
    * Returns the widget data associated with a key.
    * @param key Name of the key to get context from. Available keys include:
+   *
+   * agent-chat: Sends widget data to Agent Chat when it opens
+   * in a Service Portal
+   * page.
+   *
+   *
    *
    * @param returnPromise Flag that determines whether to return the data associated with a key as a
    * promise or an object. Values include:
@@ -2322,9 +2399,13 @@ declare class spContextManager {
    * update the context of the key rather than using the addContext()
    * method.
    * @param key Name of the key to send the data. Available keys
-   * includeagent-chat: Sends widget data to Agent Chat when it opens in a
-   * Service Portal
+   * include:
+   * agent-chat: Sends widget data to Agent Chat when it opens
+   * in a Service Portal
    * page.
+   *
+   *
+   *
    * @param context Widget data in JSON format to send to the
    * application or service specified in the key parameter. For example,
    * {'approval_count': 5}.
